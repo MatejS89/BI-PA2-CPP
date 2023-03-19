@@ -102,22 +102,51 @@ public:
 
     bool setSalary(const string &name,
                    const string &surname,
-                   unsigned int salary);
+                   unsigned int salary) {
+        CPerson person(name, surname, "");
+        auto namePos = lower_bound(mVectorByName.begin(), mVectorByName.end(), person, cmpName);
+        if (namePos == mVectorByName.end())
+            return false;
+        namePos->mSalary = salary;
+        auto emailPos = lower_bound(mVectorByEmail.begin(), mVectorByEmail.end(), person, cmpEmail);
+        emailPos->mSalary = salary;
+        return true;
+    }
 
-//    bool setSalary(const string &email,
-//                   unsigned int salary) {
-//        CPerson person(0, 0, email);
-//        auto emailPos = lower_bound(mVectorByEmail.begin(), mVectorByEmail.end(), person, cmpEmail);
-//        if (emailPos == mVectorByEmail.end())
-//            return false;
-//    }
+    bool setSalary(const string &email,
+                   unsigned int salary) {
+        CPerson person("", "", email);
+        auto emailPos = lower_bound(mVectorByEmail.begin(), mVectorByEmail.end(), person, cmpEmail);
+        if (emailPos == mVectorByEmail.end())
+            return false;
+//        cout << emailPos->mName << " " << emailPos->mSurname << " " << emailPos->mSalary << endl;
+        emailPos->mSalary = salary;
+//        cout << emailPos->mName << " " << emailPos->mSurname << " " << emailPos->mSalary << endl;
+        person.mName = emailPos->mName;
+        person.mSurname = emailPos->mSurname;
+        auto namePos = lower_bound(mVectorByName.begin(), mVectorByName.end(), person, cmpName);
+        namePos->mSalary = salary;
+        return true;
+    }
 
 
     unsigned int getSalary(const string &name,
-                           const string &surname) const;
+                           const string &surname) const {
+        CPerson person(name, surname);
+        auto namePos = lower_bound(mVectorByName.begin(), mVectorByName.end(), person, cmpName);
+        if (namePos == mVectorByName.end())
+            return 0;
+        return namePos->mSalary;
+    }
 
     unsigned int getSalary(const string &email) const {
-    };
+        CPerson person("", "", email);
+        auto emailPos = lower_bound(mVectorByEmail.begin(), mVectorByEmail.end(), person, cmpEmail);
+        if (emailPos == mVectorByEmail.end())
+            return 0;
+        return emailPos->mSalary;
+    }
+
 
     bool getRank(const string &name,
                  const string &surname,
@@ -130,8 +159,11 @@ public:
 
     bool getFirst(string &outName,
                   string &outSurname) const {
+        if (mVectorByName.empty())
+            return false;
         outName = mVectorByName.begin()->mName;
         outSurname = mVectorByName.begin()->mSurname;
+        return true;
     }
 
 
@@ -143,7 +175,7 @@ public:
         auto namePos = lower_bound(mVectorByName.begin(), mVectorByName.end(), person, cmpName);
         if (namePos == mVectorByName.end())
             return false;
-        int index = namePos - mVectorByName.begin();
+        size_t index = namePos - mVectorByName.begin();
         ++index;
         if (index == mVectorByName.size())
             return false;
@@ -194,9 +226,10 @@ int main(void) {
             && outName == "Peter"
             && outSurname == "Smith");
     assert (!b1.getNext("Peter", "Smith", outName, outSurname));
-//    assert (b1.setSalary("john", 32000));
-//    assert (b1.getSalary("john") == 32000);
-//    assert (b1.getSalary("John", "Smith") == 32000);
+    assert (b1.setSalary("John", "Smith", 32000));
+    assert (b1.getSalary("john") == 32000);
+
+    assert (b1.getSalary("John", "Smith") == 32000);
 //    assert (b1.getRank("John", "Smith", lo, hi)
 //            && lo == 1
 //            && hi == 1);
