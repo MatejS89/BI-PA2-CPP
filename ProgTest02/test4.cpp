@@ -54,60 +54,147 @@ public:
         }
 
         auto namePos = lower_bound(mVectorByName.begin(), mVectorByName.end(), person, cmpName);
-        if ((namePos->mSurname == person.mSurname) && (namePos->mName == person.mName))
+        if (namePos == mVectorByName.end())
+            mVectorByName.push_back(person);
+        else if ((namePos->mSurname == person.mSurname) && (namePos->mName == person.mName))
             return false;
-        mVectorByName.insert(namePos, person);
+        else
+            mVectorByName.insert(namePos, person);
 
         auto emailPos = lower_bound(mVectorByEmail.begin(), mVectorByEmail.end(), person, cmpEmail);
-        if (emailPos->mEmail == person.mEmail)
+        if (emailPos == mVectorByEmail.end())
+            mVectorByEmail.push_back(person);
+        else if (emailPos->mEmail == person.mEmail)
             return false;
-        mVectorByEmail.insert(emailPos, person);
+        else
+            mVectorByEmail.insert(emailPos, person);
 
-        cout << endl;
         return true;
     }
 
-
-    void printNameVector() const {
-        cout << "/////////////NAME////////////////" << endl;
-        for (const auto &item: mVectorByName) {
-            cout << item.mName << " " << item.mSurname << " " << item.mEmail << " " << item.mSalary << endl;
-        }
-        cout << "////////////////////////" << endl;
-        cout << endl;
-    }
-
-    void printEmailVector() const {
-        cout << "/////////////EMAIL////////////////" << endl;
-        for (const auto &item: mVectorByEmail) {
-            cout << item.mName << " " << item.mSurname << " " << item.mEmail << " " << item.mSalary << endl;
-        }
-        cout << "////////////////////////" << endl;
-        cout << endl;
-    }
+//    void printNameVector() const {
+//        cout << "/////////////NAME////////////////" << endl;
+//        for (const auto &item: mVectorByName) {
+//            cout << item.mName << " " << item.mSurname << " " << item.mEmail << " " << item.mSalary << endl;
+//        }
+//        cout << "////////////////////////" << endl;
+//        cout << endl;
+//    }
+//
+//    void printEmailVector() const {
+//        cout << "/////////////EMAIL////////////////" << endl;
+//        for (const auto &item: mVectorByEmail) {
+//            cout << item.mName << " " << item.mSurname << " " << item.mEmail << " " << item.mSalary << endl;
+//        }
+//        cout << "////////////////////////" << endl;
+//        cout << endl;
+//    }
 
 
     bool del(const string &name,
-             const string &surname);
+             const string &surname) {
+        CPerson person(name, surname, "");
+        auto namePos = lower_bound(mVectorByName.begin(), mVectorByName.end(), person, cmpName);
+        if (namePos == mVectorByName.end() || (namePos->mName != name && namePos->mSurname != surname))
+            return false;
+        person.mEmail = namePos->mEmail;
 
-    bool del(const string &email);
+        mVectorByName.erase(namePos);
+        auto emailPos = lower_bound(mVectorByEmail.begin(), mVectorByEmail.end(), person, cmpEmail);
+        mVectorByEmail.erase(emailPos);
+        return true;
+    }
+
+    bool del(const string &email) {
+        CPerson person("", "", email);
+        auto emailPos = lower_bound(mVectorByEmail.begin(), mVectorByEmail.end(), person, cmpEmail);
+        if (emailPos == mVectorByEmail.end() || emailPos->mEmail != email)
+            return false;
+
+        person.mName = emailPos->mName;
+        person.mSurname = emailPos->mSurname;
+
+        mVectorByEmail.erase(emailPos);
+
+        auto namePos = lower_bound(mVectorByName.begin(), mVectorByName.end(), person, cmpName);
+        mVectorByName.erase(namePos);
+        return true;
+    }
 
     bool changeName(const string &email,
                     const string &newName,
-                    const string &newSurname);
+                    const string &newSurname) {
+        CPerson person(newName, newSurname, email);
+        auto emailPos = lower_bound(mVectorByEmail.begin(), mVectorByEmail.end(), person, cmpEmail);
+        if (emailPos == mVectorByEmail.end() || emailPos->mEmail != email)
+            return false;
+
+        auto namePos = lower_bound(mVectorByName.begin(), mVectorByName.end(), person, cmpName);
+        if ((namePos != mVectorByName.end()) && (namePos->mName == newName && namePos->mSurname == newSurname))
+            return false;
+
+        person.mName = emailPos->mName;
+        person.mSurname = emailPos->mSurname;
+        person.mSalary = emailPos->mSalary;
+
+        emailPos->mName = newName;
+        emailPos->mSurname = newSurname;
+
+        namePos = lower_bound(mVectorByName.begin(), mVectorByName.end(), person, cmpName);
+        mVectorByName.erase(namePos);
+
+        person.mName = newName;
+        person.mSurname = newSurname;
+
+        namePos = lower_bound(mVectorByName.begin(), mVectorByName.end(), person, cmpName);
+        if (namePos == mVectorByName.end())
+            mVectorByName.push_back(person);
+        else
+            mVectorByName.insert(namePos, person);
+        return true;
+    }
 
     bool changeEmail(const string &name,
                      const string &surname,
-                     const string &newEmail);
+                     const string &newEmail) {
+        CPerson person(name, surname, newEmail);
+
+        auto namePos = lower_bound(mVectorByName.begin(), mVectorByName.end(), person, cmpName);
+        if (namePos == mVectorByName.end() || !(namePos->mName == name && namePos->mSurname == surname))
+            return false;
+
+        auto emailPos = lower_bound(mVectorByEmail.begin(), mVectorByEmail.end(), person, cmpEmail);
+        if (emailPos != mVectorByEmail.end() && emailPos->mEmail == newEmail)
+            return false;
+
+        person.mEmail = namePos->mEmail;
+        person.mSalary = namePos->mSalary;
+        namePos->mEmail = newEmail;
+
+        emailPos = lower_bound(mVectorByEmail.begin(), mVectorByEmail.end(), person, cmpEmail);
+        mVectorByEmail.erase(emailPos);
+
+        person.mEmail = newEmail;
+
+        emailPos = lower_bound(mVectorByEmail.begin(), mVectorByEmail.end(), person, cmpEmail);
+        if (emailPos == mVectorByEmail.end())
+            mVectorByEmail.push_back(person);
+        else
+            mVectorByEmail.insert(emailPos, person);
+        return true;
+    }
 
     bool setSalary(const string &name,
                    const string &surname,
                    unsigned int salary) {
         CPerson person(name, surname, "");
+
         auto namePos = lower_bound(mVectorByName.begin(), mVectorByName.end(), person, cmpName);
-        if (namePos == mVectorByName.end())
+        if (namePos == mVectorByName.end() || !(namePos->mName == name && namePos->mSurname == surname))
             return false;
         namePos->mSalary = salary;
+        person.mEmail = namePos->mEmail;
+
         auto emailPos = lower_bound(mVectorByEmail.begin(), mVectorByEmail.end(), person, cmpEmail);
         emailPos->mSalary = salary;
         return true;
@@ -117,11 +204,9 @@ public:
                    unsigned int salary) {
         CPerson person("", "", email);
         auto emailPos = lower_bound(mVectorByEmail.begin(), mVectorByEmail.end(), person, cmpEmail);
-        if (emailPos == mVectorByEmail.end())
+        if (emailPos == mVectorByEmail.end() || emailPos->mEmail != email)
             return false;
-//        cout << emailPos->mName << " " << emailPos->mSurname << " " << emailPos->mSalary << endl;
         emailPos->mSalary = salary;
-//        cout << emailPos->mName << " " << emailPos->mSurname << " " << emailPos->mSalary << endl;
         person.mName = emailPos->mName;
         person.mSurname = emailPos->mSurname;
         auto namePos = lower_bound(mVectorByName.begin(), mVectorByName.end(), person, cmpName);
@@ -134,7 +219,7 @@ public:
                            const string &surname) const {
         CPerson person(name, surname);
         auto namePos = lower_bound(mVectorByName.begin(), mVectorByName.end(), person, cmpName);
-        if (namePos == mVectorByName.end())
+        if (namePos == mVectorByName.end() || (namePos->mName != name || namePos->mSurname != surname))
             return 0;
         return namePos->mSalary;
     }
@@ -142,7 +227,7 @@ public:
     unsigned int getSalary(const string &email) const {
         CPerson person("", "", email);
         auto emailPos = lower_bound(mVectorByEmail.begin(), mVectorByEmail.end(), person, cmpEmail);
-        if (emailPos == mVectorByEmail.end())
+        if (emailPos == mVectorByEmail.end() || emailPos->mEmail != email)
             return 0;
         return emailPos->mSalary;
     }
@@ -151,11 +236,35 @@ public:
     bool getRank(const string &name,
                  const string &surname,
                  int &rankMin,
-                 int &rankMax) const;
+                 int &rankMax) const {
+        CPerson person(name, surname);
+
+        auto namePos = lower_bound(mVectorByName.begin(), mVectorByName.end(), person, cmpName);
+
+        if (namePos == mVectorByName.end() || !(namePos->mName == name && namePos->mSurname == surname))
+            return false;
+
+        unsigned int val = namePos->mSalary;
+        findBounds(rankMin, rankMax, val);
+        return true;
+    }
+
 
     bool getRank(const string &email,
                  int &rankMin,
-                 int &rankMax) const;
+                 int &rankMax) const {
+        CPerson person("", "", email);
+
+        auto emailPos = lower_bound(mVectorByEmail.begin(), mVectorByEmail.end(), person, cmpEmail);
+
+        if (emailPos == mVectorByEmail.end() || emailPos->mEmail != email)
+            return false;
+
+        unsigned int val = emailPos->mSalary;
+
+        findBounds(rankMin, rankMax, val);
+        return true;
+    }
 
     bool getFirst(string &outName,
                   string &outSurname) const {
@@ -180,13 +289,24 @@ public:
         if (index == mVectorByName.size())
             return false;
         outName = mVectorByName[index].mName;
-        cout << "OUTNAME: " << outName << endl;
         outSurname = mVectorByName[index].mSurname;
-        cout << "OUTSURNAME: " << outSurname << endl;
         return true;
     }
 
 private:
+    void findBounds(int &rankMin, int &rankMax, const unsigned int val) const {
+        rankMin = 0;
+        rankMax = 0;
+
+        for (const auto &item: mVectorByName) {
+            if (item.mSalary < val)
+                ++rankMin;
+            else if (item.mSalary == val)
+                ++rankMax;
+        }
+        rankMax += rankMin - 1;
+    }
+
     static bool cmpName(const CPerson &left, const CPerson &right) {
         if (left.mSurname == right.mSurname) {
             return left.mName < right.mName;
@@ -213,9 +333,6 @@ int main(void) {
     assert (b1.add("John", "Miller", "johnm", 35000));
     assert (b1.add("Peter", "Smith", "peter", 23000));
     assert (!b1.add("Peter", "Smith", "peter", 23000));
-    b1.printNameVector();
-    b1.printEmailVector();
-
     assert (b1.getFirst(outName, outSurname)
             && outName == "John"
             && outSurname == "Miller");
@@ -230,105 +347,104 @@ int main(void) {
     assert (b1.getSalary("john") == 32000);
 
     assert (b1.getSalary("John", "Smith") == 32000);
-//    assert (b1.getRank("John", "Smith", lo, hi)
-//            && lo == 1
-//            && hi == 1);
-//    assert (b1.getRank("john", lo, hi)
-//            && lo == 1
-//            && hi == 1);
-//    assert (b1.getRank("peter", lo, hi)
-//            && lo == 0
-//            && hi == 0);
-//    assert (b1.getRank("johnm", lo, hi)
-//            && lo == 2
-//            && hi == 2);
-//    assert (b1.setSalary("John", "Smith", 35000));
-//    assert (b1.getSalary("John", "Smith") == 35000);
-//    assert (b1.getSalary("john") == 35000);
-//    assert (b1.getRank("John", "Smith", lo, hi)
-//            && lo == 1
-//            && hi == 2);
-//    assert (b1.getRank("john", lo, hi)
-//            && lo == 1
-//            && hi == 2);
-//    assert (b1.getRank("peter", lo, hi)
-//            && lo == 0
-//            && hi == 0);
-//    assert (b1.getRank("johnm", lo, hi)
-//            && lo == 1
-//            && hi == 2);
-//    assert (b1.changeName("peter", "James", "Bond"));
-//    assert (b1.getSalary("peter") == 23000);
-//    assert (b1.getSalary("James", "Bond") == 23000);
-//    assert (b1.getSalary("Peter", "Smith") == 0);
-//    assert (b1.getFirst(outName, outSurname)
-//            && outName == "James"
-//            && outSurname == "Bond");
-//    assert (b1.getNext("James", "Bond", outName, outSurname)
-//            && outName == "John"
-//            && outSurname == "Miller");
-//    assert (b1.getNext("John", "Miller", outName, outSurname)
-//            && outName == "John"
-//            && outSurname == "Smith");
-//    assert (!b1.getNext("John", "Smith", outName, outSurname));
-//    assert (b1.changeEmail("James", "Bond", "james"));
-//    assert (b1.getSalary("James", "Bond") == 23000);
-//    assert (b1.getSalary("james") == 23000);
-//    assert (b1.getSalary("peter") == 0);
-//    assert (b1.del("james"));
-//    assert (b1.getRank("john", lo, hi)
-//            && lo == 0
-//            && hi == 1);
-//    assert (b1.del("John", "Miller"));
-//    assert (b1.getRank("john", lo, hi)
-//            && lo == 0
-//            && hi == 0);
-//    assert (b1.getFirst(outName, outSurname)
-//            && outName == "John"
-//            && outSurname == "Smith");
-//    assert (!b1.getNext("John", "Smith", outName, outSurname));
-//    assert (b1.del("john"));
-//    assert (!b1.getFirst(outName, outSurname));
-//    assert (b1.add("John", "Smith", "john", 31000));
-//    assert (b1.add("john", "Smith", "joHn", 31000));
-//    assert (b1.add("John", "smith", "jOhn", 31000));
-//
-//    CPersonalAgenda b2;
-//    assert (!b2.getFirst(outName, outSurname));
-//    assert (b2.add("James", "Bond", "james", 70000));
-//    assert (b2.add("James", "Smith", "james2", 30000));
-//    assert (b2.add("Peter", "Smith", "peter", 40000));
-//    assert (!b2.add("James", "Bond", "james3", 60000));
-//    assert (!b2.add("Peter", "Bond", "peter", 50000));
-//    assert (!b2.changeName("joe", "Joe", "Black"));
-//    assert (!b2.changeEmail("Joe", "Black", "joe"));
-//    assert (!b2.setSalary("Joe", "Black", 90000));
-//    assert (!b2.setSalary("joe", 90000));
-//    assert (b2.getSalary("Joe", "Black") == 0);
-//    assert (b2.getSalary("joe") == 0);
-//    assert (!b2.getRank("Joe", "Black", lo, hi));
-//    assert (!b2.getRank("joe", lo, hi));
-//    assert (!b2.changeName("joe", "Joe", "Black"));
-//    assert (!b2.changeEmail("Joe", "Black", "joe"));
-//    assert (!b2.del("Joe", "Black"));
-//    assert (!b2.del("joe"));
-//    assert (!b2.changeName("james2", "James", "Bond"));
-//    assert (!b2.changeEmail("Peter", "Smith", "james"));
-//    assert (!b2.changeName("peter", "Peter", "Smith"));
-//    assert (!b2.changeEmail("Peter", "Smith", "peter"));
-//    assert (b2.del("Peter", "Smith"));
-//    assert (!b2.changeEmail("Peter", "Smith", "peter2"));
-//    assert (!b2.setSalary("Peter", "Smith", 35000));
-//    assert (b2.getSalary("Peter", "Smith") == 0);
-//    assert (!b2.getRank("Peter", "Smith", lo, hi));
-//    assert (!b2.changeName("peter", "Peter", "Falcon"));
-//    assert (!b2.setSalary("peter", 37000));
-//    assert (b2.getSalary("peter") == 0);
-//    assert (!b2.getRank("peter", lo, hi));
-//    assert (!b2.del("Peter", "Smith"));
-//    assert (!b2.del("peter"));
-//    assert (b2.add("Peter", "Smith", "peter", 40000));
-//    assert (b2.getSalary("peter") == 40000);
+    assert (b1.getRank("John", "Smith", lo, hi)
+            && lo == 1
+            && hi == 1);
+    assert (b1.getRank("john", lo, hi)
+            && lo == 1
+            && hi == 1);
+    assert (b1.getRank("peter", lo, hi)
+            && lo == 0
+            && hi == 0);
+    assert (b1.getRank("johnm", lo, hi)
+            && lo == 2
+            && hi == 2);
+    assert (b1.setSalary("John", "Smith", 35000));
+    assert (b1.getSalary("John", "Smith") == 35000);
+    assert (b1.getSalary("john") == 35000);
+    assert (b1.getRank("John", "Smith", lo, hi)
+            && lo == 1
+            && hi == 2);
+    assert (b1.getRank("john", lo, hi)
+            && lo == 1
+            && hi == 2);
+    assert (b1.getRank("peter", lo, hi)
+            && lo == 0
+            && hi == 0);
+    assert (b1.getRank("johnm", lo, hi)
+            && lo == 1
+            && hi == 2);
+    assert (b1.changeName("peter", "James", "Bond"));
+    assert (b1.getSalary("peter") == 23000);
+    assert (b1.getSalary("James", "Bond") == 23000);
+    assert (b1.getSalary("Peter", "Smith") == 0);
+    assert (b1.getFirst(outName, outSurname)
+            && outName == "James"
+            && outSurname == "Bond");
+    assert (b1.getNext("James", "Bond", outName, outSurname)
+            && outName == "John"
+            && outSurname == "Miller");
+    assert (b1.getNext("John", "Miller", outName, outSurname)
+            && outName == "John"
+            && outSurname == "Smith");
+    assert (!b1.getNext("John", "Smith", outName, outSurname));
+    assert (b1.changeEmail("James", "Bond", "james"));
+    assert (b1.getSalary("James", "Bond") == 23000);
+    assert (b1.getSalary("james") == 23000);
+    assert (b1.getSalary("peter") == 0);
+    assert (b1.del("james"));
+    assert (b1.getRank("john", lo, hi)
+            && lo == 0
+            && hi == 1);
+    assert (b1.del("John", "Miller"));
+    assert (b1.getRank("john", lo, hi)
+            && lo == 0
+            && hi == 0);
+    assert (b1.getFirst(outName, outSurname)
+            && outName == "John"
+            && outSurname == "Smith");
+    assert (!b1.getNext("John", "Smith", outName, outSurname));
+    assert (b1.del("john"));
+    assert (!b1.getFirst(outName, outSurname));
+    assert (b1.add("John", "Smith", "john", 31000));
+    assert (b1.add("john", "Smith", "joHn", 31000));
+    assert (b1.add("John", "smith", "jOhn", 31000));
+    CPersonalAgenda b2;
+    assert (!b2.getFirst(outName, outSurname));
+    assert (b2.add("James", "Bond", "james", 70000));
+    assert (b2.add("James", "Smith", "james2", 30000));
+    assert (b2.add("Peter", "Smith", "peter", 40000));
+    assert (!b2.add("James", "Bond", "james3", 60000));
+    assert (!b2.add("Peter", "Bond", "peter", 50000));
+    assert (!b2.changeName("joe", "Joe", "Black"));
+    assert (!b2.changeEmail("Joe", "Black", "joe"));
+    assert (!b2.setSalary("Joe", "Black", 90000));
+    assert (!b2.setSalary("joe", 90000));
+    assert (b2.getSalary("Joe", "Black") == 0);
+    assert (b2.getSalary("joe") == 0);
+    assert (!b2.getRank("Joe", "Black", lo, hi));
+    assert (!b2.getRank("joe", lo, hi));
+    assert (!b2.changeName("joe", "Joe", "Black"));
+    assert (!b2.changeEmail("Joe", "Black", "joe"));
+    assert (!b2.del("Joe", "Black"));
+    assert (!b2.del("joe"));
+    assert (!b2.changeName("james2", "James", "Bond"));
+    assert (!b2.changeEmail("Peter", "Smith", "james"));
+    assert (!b2.changeName("peter", "Peter", "Smith"));
+    assert (!b2.changeEmail("Peter", "Smith", "peter"));
+    assert (b2.del("Peter", "Smith"));
+    assert (!b2.changeEmail("Peter", "Smith", "peter2"));
+    assert (!b2.setSalary("Peter", "Smith", 35000));
+    assert (b2.getSalary("Peter", "Smith") == 0);
+    assert (!b2.getRank("Peter", "Smith", lo, hi));
+    assert (!b2.changeName("peter", "Peter", "Falcon"));
+    assert (!b2.setSalary("peter", 37000));
+    assert (b2.getSalary("peter") == 0);
+    assert (!b2.getRank("peter", lo, hi));
+    assert (!b2.del("Peter", "Smith"));
+    assert (!b2.del("peter"));
+    assert (b2.add("Peter", "Smith", "peter", 40000));
+    assert (b2.getSalary("peter") == 40000);
 
     return EXIT_SUCCESS;
 }
