@@ -140,7 +140,7 @@ public:
             return false;
         string bits;
         utf8_to_bits(bits);
-        ofs.write(reinterpret_cast<const char *>(bits.data()), bits.size());
+        ofs.write(bits.data(), bits.size());
         if (!(ofs.good()))
             return false;
         return true;
@@ -149,7 +149,7 @@ public:
 
     void utf8_to_bits(string &bits) {
         if (convertedNum <= 0b01111111) {
-            bits += static_cast<uint8_t>(convertedNum);
+            bits += convertedNum;
         } else if (convertedNum <= 0b11111111111) {
             bits += 0b11000000 | (convertedNum >> 6);
             bits += 0b10000000 | (convertedNum & 0b00111111);
