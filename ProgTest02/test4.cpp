@@ -47,46 +47,54 @@ public:
              unsigned int salary) {
         CPerson person = CPerson(name, surname, email, salary);
 
-        if (mVectorByName.empty() && mVectorByName.empty()) {
+        if (mVectorByName.empty() && mVectorByEmail.empty()) {
             mVectorByName.push_back(person);
             mVectorByEmail.push_back(person);
             return true;
         }
 
-        if (!addToNameVector(person))
+        if (checkIfNameExists(person))
             return false;
 
-        if (!addToEmailVector(person))
+        if (checkIfEmailExists(person))
             return false;
+
+        addToNameVector(person);
+
+        addToEmailVector(person);
 
         return true;
     }
 
-//    void printNameVector() const {
-//        cout << "/////////////NAME////////////////" << endl;
-//        for (const auto &item: mVectorByName) {
-//            cout << item.mName << " " << item.mSurname << " " << item.mEmail << " " << item.mSalary << endl;
-//        }
-//        cout << "////////////////////////" << endl;
-//        cout << endl;
-//    }
-//
-//    void printEmailVector() const {
-//        cout << "/////////////EMAIL////////////////" << endl;
-//        for (const auto &item: mVectorByEmail) {
-//            cout << item.mName << " " << item.mSurname << " " << item.mEmail << " " << item.mSalary << endl;
-//        }
-//        cout << "////////////////////////" << endl;
-//        cout << endl;
-//    }
+    void printNameVector() const {
+        cout << "/////////////NAME////////////////" << endl;
+        for (const auto &item: mVectorByName) {
+            cout << item.mName << " " << item.mSurname << " " << item.mEmail << " " << item.mSalary << endl;
+        }
+        cout << "////////////////////////" << endl;
+        cout << endl;
+    }
 
+    void printEmailVector() const {
+        cout << "/////////////EMAIL////////////////" << endl;
+        for (const auto &item: mVectorByEmail) {
+            cout << item.mName << " " << item.mSurname << " " << item.mEmail << " " << item.mSalary << endl;
+        }
+        cout << "////////////////////////" << endl;
+        cout << endl;
+    }
 
     bool del(const string &name,
              const string &surname) {
         CPerson person(name, surname, "");
-        auto namePos = lower_bound(mVectorByName.begin(), mVectorByName.end(), person, cmpName);
-        if (namePos == mVectorByName.end() || (namePos->mName != name && namePos->mSurname != surname))
+
+        if (mVectorByName.empty() || mVectorByEmail.empty())
             return false;
+
+        std::vector<CPerson>::iterator namePos;
+        if (!checkIfNameExists(person, namePos))
+            return false;
+
         person.mEmail = namePos->mEmail;
 
         mVectorByName.erase(namePos);
@@ -97,8 +105,12 @@ public:
 
     bool del(const string &email) {
         CPerson person("", "", email);
-        auto emailPos = lower_bound(mVectorByEmail.begin(), mVectorByEmail.end(), person, cmpEmail);
-        if (emailPos == mVectorByEmail.end() || emailPos->mEmail != email)
+
+        if (mVectorByName.empty() || mVectorByEmail.empty())
+            return false;
+
+        std::vector<CPerson>::iterator emailPos;
+        if (!checkIfEmailExists(person, emailPos))
             return false;
 
         person.mName = emailPos->mName;
@@ -137,8 +149,7 @@ public:
         person.mName = newName;
         person.mSurname = newSurname;
 
-        if (!addToNameVector(person))
-            return false;
+        addToNameVector(person);
         return true;
     }
 
@@ -164,8 +175,7 @@ public:
 
         person.mEmail = newEmail;
 
-        if (!addToEmailVector(person))
-            return false;
+        addToEmailVector(person);
         return true;
     }
 
@@ -173,9 +183,12 @@ public:
                    const string &surname,
                    unsigned int salary) {
         CPerson person(name, surname, "");
+
         std::vector<CPerson>::iterator namePos;
+
         if (!checkIfNameExists(person, namePos))
             return false;
+
         namePos->mSalary = salary;
         person.mEmail = namePos->mEmail;
 
@@ -187,12 +200,15 @@ public:
     bool setSalary(const string &email,
                    unsigned int salary) {
         CPerson person("", "", email);
+
         std::vector<CPerson>::iterator emailPos;
         if (!checkIfEmailExists(person, emailPos))
             return false;
+
         emailPos->mSalary = salary;
         person.mName = emailPos->mName;
         person.mSurname = emailPos->mSurname;
+
         auto namePos = lower_bound(mVectorByName.begin(), mVectorByName.end(), person, cmpName);
         namePos->mSalary = salary;
         return true;
@@ -203,16 +219,19 @@ public:
                            const string &surname) const {
         CPerson person(name, surname);
         auto namePos = lower_bound(mVectorByName.begin(), mVectorByName.end(), person, cmpName);
-        if (namePos == mVectorByName.end() || (namePos->mName != name || namePos->mSurname != surname))
+        if (!((namePos != mVectorByName.end()) &&
+              ((namePos->mName == person.mName) && (namePos->mSurname == person.mSurname))))
             return 0;
+
         return namePos->mSalary;
     }
 
     unsigned int getSalary(const string &email) const {
         CPerson person("", "", email);
         auto emailPos = lower_bound(mVectorByEmail.begin(), mVectorByEmail.end(), person, cmpEmail);
-        if (emailPos == mVectorByEmail.end() || emailPos->mEmail != email)
+        if (!((emailPos != mVectorByEmail.end()) && (emailPos->mEmail == person.mEmail)))
             return 0;
+
         return emailPos->mSalary;
     }
 
@@ -224,8 +243,8 @@ public:
         CPerson person(name, surname);
 
         auto namePos = lower_bound(mVectorByName.begin(), mVectorByName.end(), person, cmpName);
-
-        if (namePos == mVectorByName.end() || !(namePos->mName == name && namePos->mSurname == surname))
+        if (!((namePos != mVectorByName.end()) &&
+              (namePos->mName == person.mName && namePos->mSurname == person.mSurname)))
             return false;
 
         unsigned int val = namePos->mSalary;
@@ -240,11 +259,10 @@ public:
         CPerson person("", "", email);
 
         auto emailPos = lower_bound(mVectorByEmail.begin(), mVectorByEmail.end(), person, cmpEmail);
-        if (emailPos == mVectorByEmail.end() || emailPos->mEmail != email)
+        if (!((emailPos != mVectorByEmail.end()) && (emailPos->mEmail == person.mEmail)))
             return false;
 
         unsigned int val = emailPos->mSalary;
-
         findBounds(rankMin, rankMax, val);
         return true;
     }
@@ -265,6 +283,8 @@ public:
                  string &outSurname) const {
         CPerson person(name, surname);
         auto namePos = lower_bound(mVectorByName.begin(), mVectorByName.end(), person, cmpName);
+        if (namePos == mVectorByName.end() || namePos->mName != person.mName || namePos->mSurname != person.mSurname)
+            return false;
         namePos += 1;
         if (namePos == mVectorByName.end())
             return false;
@@ -298,26 +318,20 @@ private:
         return left.mEmail < right.mEmail;
     }
 
-    bool addToNameVector(const CPerson &person) {
+    void addToNameVector(const CPerson &person) {
         auto namePos = lower_bound(mVectorByName.begin(), mVectorByName.end(), person, cmpName);
         if (namePos == mVectorByName.end())
             mVectorByName.push_back(person);
-        else if ((namePos->mSurname == person.mSurname) && (namePos->mName == person.mName))
-            return false;
         else
             mVectorByName.insert(namePos, person);
-        return true;
     }
 
-    bool addToEmailVector(const CPerson &person) {
+    void addToEmailVector(const CPerson &person) {
         auto emailPos = lower_bound(mVectorByEmail.begin(), mVectorByEmail.end(), person, cmpEmail);
         if (emailPos == mVectorByEmail.end())
             mVectorByEmail.push_back(person);
-        else if (emailPos->mEmail == person.mEmail)
-            return false;
         else
             mVectorByEmail.insert(emailPos, person);
-        return true;
     }
 
     bool checkIfEmailExists(const CPerson &person,
@@ -328,8 +342,23 @@ private:
         return false;
     }
 
+    bool checkIfEmailExists(const CPerson &person) {
+        auto emailPos = lower_bound(mVectorByEmail.begin(), mVectorByEmail.end(), person, cmpEmail);
+        if ((emailPos != mVectorByEmail.end()) && (emailPos->mEmail == person.mEmail))
+            return true;
+        return false;
+    }
+
     bool checkIfNameExists(const CPerson &person, std::vector<CPerson>::iterator &namePos) {
         namePos = lower_bound(mVectorByName.begin(), mVectorByName.end(), person, cmpName);
+        if ((namePos != mVectorByName.end()) &&
+            (namePos->mName == person.mName && namePos->mSurname == person.mSurname))
+            return true;
+        return false;
+    }
+
+    bool checkIfNameExists(const CPerson &person) {
+        auto namePos = lower_bound(mVectorByName.begin(), mVectorByName.end(), person, cmpName);
         if ((namePos != mVectorByName.end()) &&
             (namePos->mName == person.mName && namePos->mSurname == person.mSurname))
             return true;
@@ -349,6 +378,7 @@ int main(void) {
     CPersonalAgenda b1;
     assert (b1.add("John", "Smith", "john", 30000));
     assert (b1.add("John", "Miller", "johnm", 35000));
+    assert (!b1.add("John", "Miller", "johnm", 35000));
     assert (b1.add("Peter", "Smith", "peter", 23000));
     assert (!b1.add("Peter", "Smith", "peter", 23000));
     assert (b1.getFirst(outName, outSurname)
