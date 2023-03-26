@@ -53,6 +53,7 @@ string             toString                                ( const CRangeList& x
   return oss . str ();
 }
 
+
 int                main                                    ( void )
 {
   CRangeList a, b;
