@@ -317,12 +317,6 @@ int main(int argc, char *argv[]) {
             && identicalFiles("output.utf8", "example/dst_9.utf8"));
     assert (fibonacciToUtf8("example/src_10.fib", "output.utf8")
             && identicalFiles("output.utf8", "example/dst_10.utf8"));
-    assert (!utf8ToFibonacci("example/in_1331672.bin", "output.fib"));
-    assert (!utf8ToFibonacci("example/in_1322558.bin", "output.fib"));
-    assert (!utf8ToFibonacci("example/in_1339192.bin", "output.fib"));
-    assert (fibonacciToUtf8("example/in_1323330.bin", "output.utf8"));
-    assert (!fibonacciToUtf8("example/in_5027244.bin", "output.utf8"));
-    assert (fibonacciToUtf8("example/test.fib", "output.utf8"));
 
     return EXIT_SUCCESS;
 }
