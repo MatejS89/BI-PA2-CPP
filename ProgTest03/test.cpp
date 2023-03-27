@@ -174,9 +174,33 @@ public:
         return true;
     }
 
+    bool operator!=(const CRangeList &other) const {
+        return !(*this == other);
+    }
+
+    bool includes(const long long &num) const {
+        for (const auto &item: m_List) {
+            if (item.m_Beg <= num && item.m_End >= num)
+                return true;
+        }
+        return false;
+    }
+
+    bool includes(const CRange &needle) const {
+        for (const auto &item: m_List) {
+            if (item.m_Beg <= needle.m_Beg && item.m_End >= needle.m_End)
+                return true;
+        }
+        return false;
+    }
+
     friend ostream &operator<<(ostream &os, const CRangeList &list);
 
     void printList(ostream &os) const {
+        if (m_List.size() == 0) {
+            os << "{}";
+            return;
+        }
         size_t idx = m_List.size() - 1;
         os << "{";
         for (size_t i = 0; i < idx; i++) {
@@ -289,29 +313,29 @@ int main(void) {
     assert (toString(a) == "{<-500..-401>,<-399..-300>,<-30..9>,<21..29>,<41..899>,<2501..3000>}");
     b = a;
     assert (a == b);
-//    assert (!(a != b));
-//    b += CRange(2600, 2700);
-//    assert (toString(b) == "{<-500..-401>,<-399..-300>,<-30..9>,<21..29>,<41..899>,<2501..3000>}");
-//    assert (a == b);
-//    assert (!(a != b));
-//    b += CRange(15, 15);
-//    assert (toString(b) == "{<-500..-401>,<-399..-300>,<-30..9>,15,<21..29>,<41..899>,<2501..3000>}");
-//    assert (!(a == b));
-//    assert (a != b);
-//    assert (b.includes(15));
-//    assert (b.includes(2900));
-//    assert (b.includes(CRange(15, 15)));
-//    assert (b.includes(CRange(-350, -350)));
-//    assert (b.includes(CRange(100, 200)));
-//    assert (!b.includes(CRange(800, 900)));
-//    assert (!b.includes(CRange(-1000, -450)));
-//    assert (!b.includes(CRange(0, 500)));
-//    a += CRange(-10000, 10000) + CRange(10000000, 1000000000);
-//    assert (toString(a) == "{<-10000..10000>,<10000000..1000000000>}");
-//    b += a;
-//    assert (toString(b) == "{<-10000..10000>,<10000000..1000000000>}");
-//    b -= a;
-//    assert (toString(b) == "{}");
+    assert (!(a != b));
+    b += CRange(2600, 2700);
+    assert (toString(b) == "{<-500..-401>,<-399..-300>,<-30..9>,<21..29>,<41..899>,<2501..3000>}");
+    assert (a == b);
+    assert (!(a != b));
+    b += CRange(15, 15);
+    assert (toString(b) == "{<-500..-401>,<-399..-300>,<-30..9>,15,<21..29>,<41..899>,<2501..3000>}");
+    assert (!(a == b));
+    assert (a != b);
+    assert (b.includes(15));
+    assert (b.includes(2900));
+    assert (b.includes(CRange(15, 15)));
+    assert (b.includes(CRange(-350, -350)));
+    assert (b.includes(CRange(100, 200)));
+    assert (!b.includes(CRange(800, 900)));
+    assert (!b.includes(CRange(-1000, -450)));
+    assert (!b.includes(CRange(0, 500)));
+    a += CRange(-10000, 10000) + CRange(10000000, 1000000000);
+    assert (toString(a) == "{<-10000..10000>,<10000000..1000000000>}");
+    b += a;
+    assert (toString(b) == "{<-10000..10000>,<10000000..1000000000>}");
+    b -= a;
+    assert (toString(b) == "{}");
 //    b += CRange(0, 100) + CRange(200, 300) - CRange(150, 250) + CRange(160, 180) - CRange(170, 170);
 //    assert (toString(b) == "{<0..100>,<160..169>,<171..180>,<251..300>}");
 //    b -= CRange(10, 90) - CRange(20, 30) - CRange(40, 50) - CRange(60, 90) + CRange(70, 80);
