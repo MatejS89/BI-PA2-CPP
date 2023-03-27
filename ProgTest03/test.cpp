@@ -25,9 +25,13 @@ using namespace std;
 // uncomment if your code implements initializer lists
 // #define EXTENDED_SYNTAX
 
+class CRangeList;
+
 class CRange {
 public:
     CRange(long long beg, long long end) : m_Beg(beg), m_End(end) {}
+
+    friend CRangeList operator+(const CRange &left, const CRange &right);
 
 private:
     long long m_Beg;
@@ -59,7 +63,7 @@ public:
         for (size_t index = 0; index < len; index++) {
             CRange &item = m_List[index];
             CRange nextItem = item;
-            if (len != 1)
+            if (len != 1 && index + 1 < len)
                 nextItem = m_List[index + 1];
             if (range.m_Beg < item.m_Beg && range.m_End < item.m_End) {
                 auto it = m_List.begin() + index;
@@ -75,7 +79,7 @@ public:
                 auto it = m_List.begin() + index + 1;
                 m_List.insert(it, range);
                 break;
-            } else if (len == 1) {
+            } else if (len == index + 1) {
                 m_List.push_back(range);
                 break;
             }
@@ -95,6 +99,23 @@ public:
         return *this;
     }
 
+    CRangeList &operator+(const CRange &range) {
+        *this += range;
+        cout << endl << "+ OVERLOAD " << endl;
+        this->printList(cout);
+        return *this;
+    }
+
+    CRangeList &operator+=(const CRangeList &other) {
+        for (const auto &item: other.m_List) {
+            cout << item.m_Beg << item.m_End << endl;
+            *this += item;
+            cout << endl << "OVERLOAD +=" << endl;
+            this->printList(cout);
+        }
+        return *this;
+    }
+
     friend ostream &operator<<(ostream &os, const CRangeList &list);
 
     void printList(ostream &os) const {
@@ -109,14 +130,6 @@ public:
         os << "}";
 //        cout << "<" << m_List[idx].m_Beg << ".." << m_List[idx].m_End << ">}";
     }
-
-
-
-//    void printList() {
-//        for (const auto &item: m_List) {
-//            cout << item.m_Beg << item.m_End << endl;
-//        }
-//    }
 
 private:
     vector<CRange> m_List;
@@ -153,6 +166,15 @@ private:
     }
 };
 
+CRangeList operator+(const CRange &left, const CRange &right) {
+    CRangeList tmp;
+    tmp += left;
+    tmp += right;
+    cout << "TMP " << endl;
+    tmp.printList(cout);
+    return tmp;
+}
+
 ostream &operator<<(ostream &os, const CRangeList &list) {
     list.printList(os);
 }
@@ -166,7 +188,8 @@ string toString(const CRangeList &x) {
 }
 
 int main(void) {
-    CRangeList a, b;
+    CRangeList a, b, c;
+
 
     assert (sizeof(CRange) <= 2 * sizeof(long long));
     a = CRange(5, 10);
@@ -175,16 +198,20 @@ int main(void) {
     a += CRange(-5, 0);
     a += CRange(8, 50);
     assert (toString(a) == "{<-5..0>,<5..100>}");
-//    a += CRange(101, 105) + CRange(120, 150) + CRange(160, 180) + CRange(190, 210);
-//    assert (toString(a) == "{<-5..0>,<5..105>,<120..150>,<160..180>,<190..210>}");
-//    a += CRange(106, 119) + CRange(152, 158);
-//    assert (toString(a) == "{<-5..0>,<5..150>,<152..158>,<160..180>,<190..210>}");
-//    a += CRange(-3, 170);
-//    a += CRange(-30, 1000);
-//    assert (toString(a) == "{<-30..1000>}");
-//    b = CRange(-500, -300) + CRange(2000, 3000) + CRange(700, 1001);
-//    a += b;
-//    assert (toString(a) == "{<-500..-300>,<-30..1001>,<2000..3000>}");
+    a += CRange(101, 105) + CRange(120, 150) + CRange(160, 180) + CRange(190, 210);
+//    c = CRange(1, 5);
+//    c += CRange(101, 105) + CRange(103, 107) + CRange(102, 109) + CRange(125, 150);
+//    c.printList(cout);
+//    a.printList(cout);
+    assert (toString(a) == "{<-5..0>,<5..105>,<120..150>,<160..180>,<190..210>}");
+    a += CRange(106, 119) + CRange(152, 158);
+    assert (toString(a) == "{<-5..0>,<5..150>,<152..158>,<160..180>,<190..210>}");
+    a += CRange(-3, 170);
+    a += CRange(-30, 1000);
+    assert (toString(a) == "{<-30..1000>}");
+    b = CRange(-500, -300) + CRange(2000, 3000) + CRange(700, 1001);
+    a += b;
+    assert (toString(a) == "{<-500..-300>,<-30..1001>,<2000..3000>}");
 //    a -= CRange(-400, -400);
 //    assert (toString(a) == "{<-500..-401>,<-399..-300>,<-30..1001>,<2000..3000>}");
 //    a -= CRange(10, 20) + CRange(900, 2500) + CRange(30, 40) + CRange(10000, 20000);
