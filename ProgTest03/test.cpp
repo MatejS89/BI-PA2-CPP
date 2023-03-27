@@ -134,6 +134,7 @@ public:
                 item.m_End = range.m_Beg - 1;
             len = m_List.size();
         }
+//        compactList();
         return *this;
     }
 
@@ -207,11 +208,14 @@ private:
     vector<CRange> m_List;
 
     bool overlap(const CRange &left, const CRange &right) const {
-        if (right.m_End != LLONG_MAX) {
+        if (right.m_End != LLONG_MAX && right.m_Beg != LLONG_MIN) {
             if (left.m_Beg <= right.m_End + 1 && left.m_End >= right.m_Beg - 1)
                 return true;
-        } else {
-            if (left.m_Beg <= right.m_End && left.m_End >= right.m_Beg)
+        } else if (right.m_End == LLONG_MAX) {
+            if (left.m_Beg <= right.m_End && left.m_End >= right.m_Beg - 1)
+                return true;
+        } else if (right.m_Beg == LLONG_MIN) {
+            if (left.m_Beg <= right.m_End + 1 && left.m_End >= right.m_Beg)
                 return true;
         }
         return false;
