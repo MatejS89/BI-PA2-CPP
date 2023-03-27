@@ -29,7 +29,10 @@ class CRangeList;
 
 class CRange {
 public:
-    CRange(long long beg, long long end) : m_Beg(beg), m_End(end) {}
+    CRange(long long beg, long long end) : m_Beg(beg), m_End(end) {
+        if (beg > end)
+            throw std::logic_error("e");
+    }
 
     friend CRangeList operator+(const CRange &left, const CRange &right);
 
@@ -93,19 +96,6 @@ public:
         return *this;
     }
 
-    CRangeList &operator=(const CRange &range) {
-        m_List.clear();
-        *this += range;
-        return *this;
-    }
-
-    CRangeList &operator+(const CRange &range) {
-        *this += range;
-        cout << endl << "+ OVERLOAD " << endl;
-        this->printList(cout);
-        return *this;
-    }
-
     CRangeList &operator+=(const CRangeList &other) {
         for (const auto &item: other.m_List) {
             cout << item.m_Beg << item.m_End << endl;
@@ -116,29 +106,47 @@ public:
         return *this;
     }
 
+    CRangeList &operator=(const CRange &range) {
+        m_List.clear();
+        *this += range;
+        return *this;
+    }
+
+    CRangeList &operator=(const CRangeList &other) {
+        m_List.clear();
+        for (const auto &item: other.m_List) {
+            *this += item;
+        }
+        return *this;
+    }
+
+    CRangeList &operator+(const CRange &range) {
+        *this += range;
+        cout << endl << "+ OVERLOAD " << endl;
+        this->printList(cout);
+        return *this;
+    }
+
     CRangeList &operator-=(const CRange &range) {
         size_t len = m_List.size();
         for (size_t i = 0; i < len; i++) {
             CRange &item = m_List[i];
             auto it = m_List.begin() + i;
-            if (item.m_Beg >= range.m_Beg && item.m_End <= range.m_End) {
+            // TOTAL OVERLAP
+            if (range.m_Beg <= item.m_Beg && range.m_End >= item.m_End) {
                 m_List.erase(it);
-                break;
-            } else if (overlap(range, item)) {
-                if (range.m_Beg >= item.m_Beg) {
-                    CRange tmp(range.m_End + 1, item.m_End);
-                    item.m_End = range.m_Beg - 1;
-                    if (range.m_End <= tmp.m_End) {
-                        m_List.insert(it + 1, tmp);
-                    }
-                }
-                if (range.m_Beg <= item.m_Beg) {
-                    item.m_End = range.m_End - 1;
-                    break;
-                }
-            }
+                // INSIDE
+            } else if (range.m_Beg >= item.m_Beg && range.m_End <= item.m_End) {
+                CRange tmp(range.m_End + 1, item.m_End);
+                item.m_End = range.m_Beg - 1;
+                m_List.insert(it + 1, tmp);
+                // OVERLAP LEFT
+            } else if (range.m_Beg <= item.m_Beg && range.m_End <= item.m_End && range.m_End >= item.m_Beg) {
+                item.m_Beg = range.m_End + 1;
+            } else if (range.m_Beg >= item.m_Beg && range.m_Beg <= item.m_End && range.m_End >= item.m_End)
+                item.m_End = range.m_Beg - 1;
         }
-        compactList();
+//        compactList();
         return *this;
     }
 
@@ -147,6 +155,23 @@ public:
             *this -= item;
         }
         return *this;
+    }
+
+    bool operator==(const CRangeList &other) const {
+        size_t lenThis = this->m_List.size();
+        size_t lenOther = other.m_List.size();
+
+        if (lenThis != lenOther)
+            return false;
+
+        for (size_t i = 0; i < lenThis; i++) {
+            const CRange &left = this->m_List[i];
+            const CRange &right = other.m_List[i];
+            if (left.m_Beg != right.m_Beg || left.m_End != right.m_End)
+                return false;
+        }
+
+        return true;
     }
 
     friend ostream &operator<<(ostream &os, const CRangeList &list);
@@ -250,20 +275,20 @@ int main(void) {
 //    a.printList(cout);
     assert (toString(a) == "{<-500..-401>,<-399..-300>,<-30..1001>,<2000..3000>}");
     a -= CRange(10, 20) + CRange(900, 2500) + CRange(30, 40) + CRange(10000, 20000);
-    a.printList(cout);
-    //    assert (toString(a) == "{<-500..-401>,<-399..-300>,<-30..9>,<21..29>,<41..899>,<2501..3000>}");
-//    try {
-//        a += CRange(15, 18) + CRange(10, 0) + CRange(35, 38);
-//        assert ("Exception not thrown" == nullptr);
-//    }
-//    catch (const std::logic_error &e) {
-//    }
-//    catch (...) {
-//        assert ("Invalid exception thrown" == nullptr);
-//    }
-//    assert (toString(a) == "{<-500..-401>,<-399..-300>,<-30..9>,<21..29>,<41..899>,<2501..3000>}");
-//    b = a;
-//    assert (a == b);
+//    a.printList(cout);
+    assert (toString(a) == "{<-500..-401>,<-399..-300>,<-30..9>,<21..29>,<41..899>,<2501..3000>}");
+    try {
+        a += CRange(15, 18) + CRange(10, 0) + CRange(35, 38);
+        assert ("Exception not thrown" == nullptr);
+    }
+    catch (const std::logic_error &e) {
+    }
+    catch (...) {
+        assert ("Invalid exception thrown" == nullptr);
+    }
+    assert (toString(a) == "{<-500..-401>,<-399..-300>,<-30..9>,<21..29>,<41..899>,<2501..3000>}");
+    b = a;
+    assert (a == b);
 //    assert (!(a != b));
 //    b += CRange(2600, 2700);
 //    assert (toString(b) == "{<-500..-401>,<-399..-300>,<-30..9>,<21..29>,<41..899>,<2501..3000>}");
