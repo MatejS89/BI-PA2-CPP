@@ -81,14 +81,12 @@ public:
         }
 
         compactList();
-
         return *this;
     }
 
     CRangeList &operator+=(const CRangeList &other) {
         for (const auto &item: other.m_List) {
             *this += item;
-            this->printList(cout);
         }
         return *this;
     }
@@ -114,12 +112,15 @@ public:
 
     CRangeList &operator-=(const CRange &range) {
         size_t len = m_List.size();
+        if (len == 0)
+            return *this;
         for (size_t i = 0; i < len; i++) {
             CRange &item = m_List[i];
             auto it = m_List.begin() + i;
             // TOTAL OVERLAP
             if (range.m_Beg <= item.m_Beg && range.m_End >= item.m_End) {
                 m_List.erase(it);
+                --i;
                 // INSIDE
             } else if (range.m_Beg > item.m_Beg && range.m_End < item.m_End) {
                 CRange tmp(range.m_End + 1, item.m_End);
@@ -128,8 +129,10 @@ public:
                 // OVERLAP LEFT
             } else if (range.m_Beg <= item.m_Beg && range.m_End <= item.m_End && range.m_End >= item.m_Beg) {
                 item.m_Beg = range.m_End + 1;
+                // OVERLAP RIGHT
             } else if (range.m_Beg >= item.m_Beg && range.m_Beg <= item.m_End && range.m_End >= item.m_End)
                 item.m_End = range.m_Beg - 1;
+            len = m_List.size();
         }
         return *this;
     }
@@ -203,9 +206,14 @@ public:
 private:
     vector<CRange> m_List;
 
-    bool overlap(const CRange &left, const CRange &right) {
-        if (left.m_Beg <= right.m_End + 1 && left.m_End >= right.m_Beg - 1)
-            return true;
+    bool overlap(const CRange &left, const CRange &right) const {
+        if (right.m_End != LLONG_MAX) {
+            if (left.m_Beg <= right.m_End + 1 && left.m_End >= right.m_Beg - 1)
+                return true;
+        } else {
+            if (left.m_Beg <= right.m_End && left.m_End >= right.m_Beg)
+                return true;
+        }
         return false;
     }
 
@@ -251,6 +259,7 @@ CRangeList operator-(const CRange &left, const CRange &right) {
 
 ostream &operator<<(ostream &os, const CRangeList &list) {
     list.printList(os);
+    return os;
 }
 
 #ifndef __PROGTEST__
@@ -262,8 +271,7 @@ string toString(const CRangeList &x) {
 }
 
 int main(void) {
-    CRangeList a, b, c;
-
+    CRangeList a, b;
 
     assert (sizeof(CRange) <= 2 * sizeof(long long));
     a = CRange(5, 10);
