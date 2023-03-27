@@ -48,7 +48,44 @@ public:
     // operator <<
 
     CRangeList &operator+=(const CRange &range) {
-        m_List.push_back(range);
+        if (m_List.empty()) {
+            m_List.push_back(range);
+            return *this;
+        }
+
+        size_t len = m_List.size();
+        bool toCompact = false;
+
+        for (size_t index = 0; index < len; index++) {
+            CRange &item = m_List[index];
+            CRange nextItem = item;
+            if (len != 1)
+                nextItem = m_List[index + 1];
+            if (range.m_Beg < item.m_Beg && range.m_End < item.m_End) {
+                auto it = m_List.begin() + index;
+                m_List.insert(it, range);
+                break;
+            } else if (overlap(range, item)) {
+                if (range.m_Beg < item.m_Beg)
+                    item.m_Beg = range.m_Beg;
+                if (range.m_End > item.m_End)
+                    item.m_End = range.m_End;
+                break;
+            } else if (range.m_Beg > item.m_End && range.m_Beg < nextItem.m_Beg) {
+                auto it = m_List.begin() + index + 1;
+                m_List.insert(it, range);
+                break;
+            } else if (len == 1) {
+                m_List.push_back(range);
+                break;
+            }
+        }
+
+        compactList();
+
+//        printList(cout);
+//        cout << endl;
+
         return *this;
     }
 
@@ -57,7 +94,6 @@ public:
         *this += range;
         return *this;
     }
-
 
     friend ostream &operator<<(ostream &os, const CRangeList &list);
 
@@ -74,18 +110,47 @@ public:
 //        cout << "<" << m_List[idx].m_Beg << ".." << m_List[idx].m_End << ">}";
     }
 
-    void printElement(ostream &os, const size_t i) const {
-        os << "<" << m_List[i].m_Beg << ".." << m_List[i].m_End << ">";
-    }
 
-    void printList() {
-        for (const auto &item: m_List) {
-            cout << item.m_Beg << item.m_End << endl;
-        }
-    }
+
+//    void printList() {
+//        for (const auto &item: m_List) {
+//            cout << item.m_Beg << item.m_End << endl;
+//        }
+//    }
 
 private:
     vector<CRange> m_List;
+
+    bool overlap(const CRange &left, const CRange &right) {
+        if (left.m_Beg <= right.m_End + 1 && left.m_End >= right.m_Beg - 1)
+            return true;
+        return false;
+    }
+
+    void printElement(ostream &os, const size_t i) const {
+        if (m_List[i].m_Beg == m_List[i].m_End)
+            os << m_List[i].m_Beg;
+        else
+            os << "<" << m_List[i].m_Beg << ".." << m_List[i].m_End << ">";
+    }
+
+    void compactList() {
+        size_t len = m_List.size();
+        for (size_t i = 0; i < len - 1; i++) {
+            CRange &item = m_List[i];
+            CRange nextItem = item;
+            if (len != 1)
+                nextItem = m_List[i + 1];
+            if (overlap(item, nextItem)) {
+                auto it = m_List.begin() + i;
+                m_List.erase(it + 1);
+                if (nextItem.m_End > item.m_End)
+                    item.m_End = nextItem.m_End;
+                --i;
+            }
+            len = m_List.size();
+        }
+    }
 };
 
 ostream &operator<<(ostream &os, const CRangeList &list) {
@@ -102,15 +167,14 @@ string toString(const CRangeList &x) {
 
 int main(void) {
     CRangeList a, b;
+
     assert (sizeof(CRange) <= 2 * sizeof(long long));
     a = CRange(5, 10);
     a += CRange(25, 100);
-    a.printList();
     assert (toString(a) == "{<5..10>,<25..100>}");
     a += CRange(-5, 0);
     a += CRange(8, 50);
-//    toString(a);
-//    assert (toString(a) == "{<-5..0>,<5..100>}");
+    assert (toString(a) == "{<-5..0>,<5..100>}");
 //    a += CRange(101, 105) + CRange(120, 150) + CRange(160, 180) + CRange(190, 210);
 //    assert (toString(a) == "{<-5..0>,<5..105>,<120..150>,<160..180>,<190..210>}");
 //    a += CRange(106, 119) + CRange(152, 158);
