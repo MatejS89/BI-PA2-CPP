@@ -13,6 +13,46 @@
 using namespace std;
 #endif /* __PROGTEST__ */
 
+class CString
+{
+private:
+    char * data;
+    size_t len;
+    size_t cap;
+};
+
+template<typename T>
+class Vector
+{
+public:
+    Vector() : m_Data(new T[100]),
+               m_Size(0),
+               m_Cap(100){};
+
+    ~Vector() {
+        delete[] m_Data;
+    }
+
+    T &operator+=(const T &vector)
+    {
+        if(m_Size >= m_Cap)
+        {
+            m_Cap =+ 2;
+            m_Cap *= 2;
+            T * tmp = new T[m_Cap];
+            memcpy(tmp, m_Data, m_Size);
+            delete[] m_Data;
+            m_Data = tmp;
+        }
+        m_Data[++m_Size] = vector;
+    }
+
+public:
+    T * m_Data;
+    size_t m_Size;
+    size_t m_Cap;
+};
+
 class CMail {
 public:
     CMail(const char *from,
