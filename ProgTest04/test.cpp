@@ -16,18 +16,15 @@ using namespace std;
 class CString
 {
 public:
-    CString()
+    CString(const char * src) : m_Size(strlen(src) + 1), m_Data (new char[m_Size])
     {
+        memcpy(m_Data, src, m_Size);
     }
 
     ~CString()
     {
         delete[] m_Data;
     }
-
-    CString &operator= (const char *str){};
-
-    CString &operator[] (size_t idx);
 
     size_t size (void) const
     {
@@ -36,15 +33,18 @@ public:
 
     bool operator== (const CString &right) const
     {
-
+        return strcmp(this->m_Data, right.m_Data) == 0;
     }
 
-    friend ostream &operator<< (ostream &os, const CString &str);
-//
-//    bool operator==(){};
+    bool operator != ( const CString &right) const
+    {
+        return !(*this == right);
+    }
+
+    friend ostream &operator<< (ostream &os, const CString &src);
 private:
-    char * m_Data;
     size_t m_Size;
+    char * m_Data;
 };
 
 template<typename T>
@@ -91,20 +91,30 @@ private:
     size_t m_Cap;
 };
 
-//class CMail {
-//public:
-//    CMail(const char *from,
-//          const char *to,
-//          const char *body);
-//
-//    bool operator==(const CMail &x) const;
-//
-//    friend ostream &operator<<(ostream &os,
-//                               const CMail &m);
-//
-//private:
-//    // todo
-//};
+class CMail {
+public:
+    CMail(const char *from,
+          const char *to,
+          const char *body): m_From(CString(from)), m_To(CString(to)), m_Body(CString(body)){};
+
+    bool operator==(const CMail &x) const
+    {
+        return (this->m_From == x.m_From
+                && this->m_To == x.m_To
+                && this->m_Body == x.m_Body);
+    }
+
+    bool operator !=( const CMail &right) const
+    {
+        return !(*this == right);
+    }
+
+    friend ostream &operator<<(ostream &os,
+                               const CMail &m);
+
+private:
+    CString m_From, m_To, m_Body;
+};
 //
 //class CMailIterator {
 //public:
@@ -141,6 +151,11 @@ private:
 //    // todo
 //};
 
+ostream &operator<<(ostream &os,const CString &src)
+{
+    os << src.m_Data << endl;
+}
+
 #ifndef __PROGTEST__
 
 //bool matchOutput(const CMail &m,
@@ -174,14 +189,21 @@ int main(void) {
     int_Vector += 2;
     int_Vector.print();
 
+    CString a("Serus");
+    CString b("Serus");
 
+    if (a == b)
+    {
+        cout << "ahoj" << endl;
+    }
+    cout << a;
 
-//    assert (CMail("john", "peter", "progtest deadline") == CMail("john", "peter", "progtest deadline"));
-//    assert (!(CMail("john", "peter", "progtest deadline") == CMail("john", "progtest deadline", "peter")));
-//    assert (!(CMail("john", "peter", "progtest deadline") == CMail("peter", "john", "progtest deadline")));
-//    assert (!(CMail("john", "peter", "progtest deadline") == CMail("peter", "progtest deadline", "john")));
-//    assert (!(CMail("john", "peter", "progtest deadline") == CMail("progtest deadline", "john", "peter")));
-//    assert (!(CMail("john", "peter", "progtest deadline") == CMail("progtest deadline", "peter", "john")));
+    assert (CMail("john", "peter", "progtest deadline") == CMail("john", "peter", "progtest deadline"));
+    assert (!(CMail("john", "peter", "progtest deadline") == CMail("john", "progtest deadline", "peter")));
+    assert (!(CMail("john", "peter", "progtest deadline") == CMail("peter", "john", "progtest deadline")));
+    assert (!(CMail("john", "peter", "progtest deadline") == CMail("peter", "progtest deadline", "john")));
+    assert (!(CMail("john", "peter", "progtest deadline") == CMail("progtest deadline", "john", "peter")));
+    assert (!(CMail("john", "peter", "progtest deadline") == CMail("progtest deadline", "peter", "john")));
 //    CMailServer s0;
 //    s0.sendMail(CMail("john", "peter", "some important mail"));
 //    strncpy(from, "john", sizeof(from));
