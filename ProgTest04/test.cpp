@@ -16,19 +16,25 @@ using namespace std;
 class CString
 {
 public:
-    CString(const char * src) : m_Size(strlen(src) + 1), m_Data (new char[m_Size])
+    CString(const char * src = "") : m_Size(strlen(src) + 1), m_Data (new char[m_Size])
     {
         memcpy(m_Data, src, m_Size);
     }
 
-    ~CString()
+    ~CString(void)
     {
-        delete[] m_Data;
+//        delete[] m_Data;
     }
 
     size_t size (void) const
     {
         return m_Size;
+    }
+
+    CString &operator= (CString other)
+    {
+        swap(m_Data, other.m_Data);
+        return *this;
     }
 
     bool operator== (const CString &right) const
@@ -47,55 +53,22 @@ private:
     char * m_Data;
 };
 
-template<typename T>
-class Vector
-{
-public:
-    Vector() : m_Data(new T[10]),
-               m_Size(0),
-               m_Cap(10){};
-
-    ~Vector() {
-        delete[] m_Data;
-        m_Size = 0;
-        m_Cap = 0;
-    }
-
-    T &operator+= (const T &vector)
-    {
-        if(m_Size >= m_Cap)
-        {
-            m_Cap += 2;
-            m_Cap *= 2;
-            T * tmp = new T[m_Cap];
-            for(size_t i = 0; i < m_Size; i++)
-            {
-                tmp[i] = m_Data[i];
-            }
-            delete[] m_Data;
-            m_Data = tmp;
-        }
-        m_Data[m_Size++] = vector;
-    }
-
-    void print() {
-        for (size_t i = 0; i < m_Size; i++)
-        {
-            cout << m_Data[i] << endl;
-        }
-    }
-
-private:
-    T * m_Data;
-    size_t m_Size;
-    size_t m_Cap;
-};
-
 class CMail {
 public:
     CMail(const char *from,
           const char *to,
-          const char *body): m_From(CString(from)), m_To(CString(to)), m_Body(CString(body)){};
+          const char *body): m_From(from), m_To(to), m_Body(body) {}
+
+    CMail(): m_From(), m_To(), m_Body(){};
+
+    CMail &operator= (CMail other)
+    {
+        m_From = other.m_From;
+        m_To = other.m_To;
+        m_Body = other.m_Body;
+        return *this;
+    }
+
 
     bool operator==(const CMail &x) const
     {
@@ -115,6 +88,53 @@ public:
 private:
     CString m_From, m_To, m_Body;
 };
+
+template<typename T>
+class Vector
+{
+public:
+    Vector() : m_Data(new T[100]),
+                         m_Size(0),
+                         m_Cap(100){};
+
+    ~Vector(void) {
+//        delete[] m_Data;
+        m_Size = 0;
+        m_Cap = 0;
+    }
+
+    void operator+= (const T &vector)
+    {
+        if(m_Size >= m_Cap)
+        {
+            m_Cap += 2;
+            m_Cap *= 2;
+            T * tmp = new T[m_Cap];
+            for(size_t i = 0; i < m_Size; i++)
+            {
+                tmp[i] = m_Data[i];
+            }
+//            delete[] m_Data;
+            m_Data = tmp;
+        }
+        m_Data[m_Size] = vector;
+        ++m_Size;
+    }
+
+    void print() {
+        for (size_t i = 0; i < m_Size; i++)
+        {
+            cout << m_Data[i] << endl;
+        }
+    }
+
+private:
+    T * m_Data;
+    size_t m_Size;
+    size_t m_Cap;
+};
+
+
 //
 //class CMailIterator {
 //public:
@@ -131,25 +151,34 @@ private:
 //};
 //
 //
-//class CMailServer {
-//public:
-//    CMailServer(void);
-//
-//    CMailServer(const CMailServer &src);
-//
-//    CMailServer &operator=(const CMailServer &src);
-//
-//    ~CMailServer(void);
-//
-//    void sendMail(const CMail &m);
-//
+class CMailServer {
+public:
+    CMailServer(void){};
+
+    CMailServer(const CMailServer &src);
+
+    CMailServer &operator=(const CMailServer &src)
+    {
+    };
+
+    ~CMailServer(void)
+    {
+    };
+
+    void sendMail(const CMail &m)
+    {
+        m_VecByTo += m;
+        m_VecByFrom += m;
+    }
+
 //    CMailIterator outbox(const char *email) const;
-//
+
 //    CMailIterator inbox(const char *email) const;
-//
-//private:
-//    // todo
-//};
+
+private:
+    Vector<CMail> m_VecByFrom;
+    Vector<CMail> m_VecByTo;
+};
 
 ostream &operator<<(ostream &os,const CString &src)
 {
@@ -168,44 +197,14 @@ ostream &operator<<(ostream &os,const CString &src)
 int main(void) {
     char from[100], to[100], body[1024];
 
-    Vector<int> int_Vector;
-    int_Vector += 2;
-    int_Vector += 2;
-    int_Vector += 2;
-    int_Vector += 2;
-    int_Vector += 2;
-    int_Vector += 2;
-    int_Vector += 2;
-    int_Vector += 2;
-    int_Vector += 2;
-    int_Vector += 2;
-    int_Vector += 2;
-    int_Vector += 2;
-    int_Vector += 2;
-    int_Vector += 2;
-    int_Vector += 2;
-    int_Vector += 2;
-    int_Vector += 2;
-    int_Vector += 2;
-    int_Vector.print();
-
-    CString a("Serus");
-    CString b("Serus");
-
-    if (a == b)
-    {
-        cout << "ahoj" << endl;
-    }
-    cout << a;
-
     assert (CMail("john", "peter", "progtest deadline") == CMail("john", "peter", "progtest deadline"));
     assert (!(CMail("john", "peter", "progtest deadline") == CMail("john", "progtest deadline", "peter")));
     assert (!(CMail("john", "peter", "progtest deadline") == CMail("peter", "john", "progtest deadline")));
     assert (!(CMail("john", "peter", "progtest deadline") == CMail("peter", "progtest deadline", "john")));
     assert (!(CMail("john", "peter", "progtest deadline") == CMail("progtest deadline", "john", "peter")));
     assert (!(CMail("john", "peter", "progtest deadline") == CMail("progtest deadline", "peter", "john")));
-//    CMailServer s0;
-//    s0.sendMail(CMail("john", "peter", "some important mail"));
+    CMailServer s0;
+    s0.sendMail(CMail("john", "peter", "some important mail"));
 //    strncpy(from, "john", sizeof(from));
 //    strncpy(to, "thomas", sizeof(to));
 //    strncpy(body, "another important mail", sizeof(body));
