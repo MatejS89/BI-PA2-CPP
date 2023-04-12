@@ -29,7 +29,7 @@ public:
         return m_Size;
     }
 
-    CString &operator=(const CString& other) {
+    CString & operator=(const CString& other) {
         if( this->m_Data != other.m_Data)
         {
             delete[] m_Data;
@@ -50,7 +50,7 @@ public:
         return !(*this == right);
     }
 
-    friend ostream &operator<< (ostream &os, const CString &src);
+    friend ostream & operator<< (ostream &os, const CString &src);
 private:
     size_t m_Size;
     char * m_Data;
@@ -64,14 +64,14 @@ public:
 
     CMail(): m_From(CString()), m_To(CString()), m_Body(CString()){};
 
-    bool operator==(const CMail &x) const
+    bool operator== (const CMail &x) const
     {
         return (this->m_From == x.m_From
                 && this->m_To == x.m_To
                 && this->m_Body == x.m_Body);
     }
 
-    bool operator !=(const CMail &right) const
+    bool operator!= (const CMail &right) const
     {
         return !(*this == right);
     }
@@ -84,7 +84,7 @@ public:
 //        return *this;
 //    }
 
-    friend ostream &operator<<(ostream &os,
+    friend ostream & operator<<(ostream &os,
                                const CMail &src);
 
 private:
@@ -157,7 +157,7 @@ public:
 
     CMailServer(const CMailServer &src);
 
-    CMailServer &operator=(const CMailServer &src)
+    CMailServer & operator=(const CMailServer &src)
     {
     };
 
@@ -230,6 +230,7 @@ int main(void) {
     s0.sendMail(CMail(from, to, body));
     s0.sendMail(CMail("alice", "john", "deadline confirmation"));
     s0.sendMail(CMail("peter", "alice", "PR bullshit"));
+    s0.print();
 //    CMailIterator i0 = s0.inbox("alice");
 //    assert (i0 && *i0 == CMail("john", "alice", "deadline notice"));
 //    assert (matchOutput(*i0, "From: john, To: alice, Body: deadline notice"));
