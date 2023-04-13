@@ -1,3 +1,5 @@
+#include <ostream>
+
 #ifndef __PROGTEST__
 
 #include <cstring>
@@ -15,257 +17,263 @@ using namespace std;
 
 class CString {
 public:
-    CString(const char *src) : m_Size(strlen(src) + 1), m_Data(new char[m_Size]) {
-        memcpy(m_Data, src, m_Size);
-    }
+    CString(const char *src);
 
-    CString() : m_Size(0), m_Data(nullptr) {}
+    CString();
 
-    ~CString() {
-        delete[] m_Data;
-    }
+    ~CString();
 
-    size_t size(void) const {
-        return m_Size;
-    }
+    CString(const CString &src);
 
-    CString & operator =(const CString& other) {
-        if( this->m_Data != other.m_Data)
-        {
-            delete[] m_Data;
-            m_Size = other.m_Size;
-            m_Data = new char[m_Size];
-            memcpy(m_Data, other.m_Data, m_Size);
-        }
-        return *this;
-    }
+    CString &operator=(CString other);
 
-    bool operator ==(const CString &right) const
-    {
-        return strcmp(this->m_Data, right.m_Data) == 0;
-    }
+    friend ostream &operator<<(ostream &os, const CString &src);
 
-    bool operator ==( const char *right) const
-    {
-        return strcmp(this->m_Data, right) == 0;
-    }
+    bool operator==(const CString &right) const;
 
-    bool operator !=( const CString &right) const
-    {
-        return !(*this == right);
-    }
+    bool operator!=(const CString &right);
 
-    friend ostream & operator <<(ostream &os, const CString &src);
 private:
+    size_t m_Len;
+    size_t m_Max;
+    char *m_Data;
+};
+
+template<typename T>
+class CVector {
+public:
+    CVector();
+
+    ~CVector();
+
+    CVector(const CVector &src);
+
+    CVector &operator=(const CVector<T> &other);
+
+    void push_back(const T &src);
+
+    void print(ostream &os) const;
+
+private:
+    T *m_Data;
     size_t m_Size;
-    char * m_Data;
+    size_t m_Cap;
 };
 
 class CMail {
 public:
     CMail(const char *from,
           const char *to,
-          const char *body): m_From(from), m_To(to), m_Body(body) {}
+          const char *body);
 
-    CMail(): m_From(CString()), m_To(CString()), m_Body(CString()){};
+    bool operator==(const CMail &x) const;
 
-    bool operator ==(const CMail &x) const
-    {
-        return (this->m_From == x.m_From
-                && this->m_To == x.m_To
-                && this->m_Body == x.m_Body);
-    }
-
-    bool operator !=(const CMail &right) const
-    {
-        return !(*this == right);
-    }
-
-    friend ostream & operator <<(ostream &os,
-                                  const CMail &src);
+    friend ostream &operator<<(ostream &os,
+                               const CMail &m);
 
 private:
-    friend class CMailServer;
     CString m_From, m_To, m_Body;
 };
+//
+//class CMailIterator {
+//public:
+//    explicit                 operator bool(void) const;
+//
+//    bool operator!(void) const;
+//
+//    const CMail &operator*(void) const;
+//
+//    CMailIterator &operator++(void);
+//
+//private:
+//    // todo
+//};
+//
+//
+//class CMailServer {
+//public:
+//    CMailServer(void);
+//
+//    CMailServer(const CMailServer &src);
+//
+//    CMailServer &operator=(const CMailServer &src);
+//
+//    ~CMailServer(void);
+//
+//    void sendMail(const CMail &m);
+//
+//    CMailIterator outbox(const char *email) const;
+//
+//    CMailIterator inbox(const char *email) const;
+//
+//private:
+//    // todo
+//};
 
-template<typename T>
-class Vector
-{
-public:
-    Vector() : m_Data(new T[100]),
-               m_Size(0),
-               m_Cap(100){};
-
-    ~Vector() {
-        delete[] m_Data;
-        m_Size = 0;
-        m_Cap = 0;
-    }
-
-    T &operator[] (int idx) const
-    {
-        return m_Data[idx];
-    }
-
-    void push_back (const T &other)
-    {
-        if( m_Size >= m_Cap)
-        {
-            m_Cap += 2;
-            m_Cap *= 2;
-            T * tmp = new T[m_Cap];
-            for( size_t i = 0; i < m_Size; i++ )
-                tmp[i] = m_Data[i];
-            delete[] m_Data;
-            m_Data = tmp;
-        }
-        m_Data[m_Size] = other;
-        m_Size++;
-    }
-
-    void print() const {
-        for (size_t i = 0; i < m_Size; i++)
-        {
-            cout << m_Data[i] << endl;
-        }
-    }
-
-private:
-    T * m_Data;
-    size_t m_Size;
-    size_t m_Cap;
-    friend class CMailServer;
-    friend class CMailIterator;
-};
-
-class CMailIterator {
-public:
-    explicit operator bool(void) const
-    {
-        if(m_Vector.m_Size == 0) return false;
-        if(pos>=m_Vector.m_Size) return false;
-        return true;
-    }
-
-    bool operator!(void) const
-    {
-    }
-
-    const CMail &operator*(void) const
-    {
-        return *m_Vector[pos];
-    }
-
-    CMailIterator &operator++(void)
-    {
-        pos++;
-    }
-
-private:
-    size_t pos;
-    friend class CMailServer;
-    Vector<CMail*> m_Vector;
-};
-
-class CMailServer {
-public:
-    CMailServer(void) {};
-
-    CMailServer(const CMailServer &src);
-
-    CMailServer &operator=(const CMailServer &src) {
-    };
-
-    ~CMailServer(void) {
-    };
-
-    CMailServer &sendMail(const CMail &m) {
-        m_MailVector.push_back(m);
-        return *this;
-    }
-
-    void print() const {
-        cout << "VECBYFROM" << endl;
-    }
-
-    CMailIterator outbox(const char *email) const
-    {
-        CMailIterator tmp;
-        tmp.pos = 0;
-        for (size_t i = 0; i < m_MailVector.m_Size; i++)
-        {
-            if(m_MailVector[i].m_From == email)
-            {
-                tmp.m_Vector.push_back(&m_MailVector[i]);
-            }
-        }
-        return tmp;
-    }
-
-    CMailIterator inbox(const char *email) const
-    {
-        CMailIterator tmp;
-        tmp.pos = 0;
-        for(size_t i = 0; i < m_MailVector.m_Size; i++)
-        {
-            if(m_MailVector[i].m_To == email)
-            {
-                tmp.m_Vector.push_back(&m_MailVector[i]);
-            }
-        }
-        return tmp;
-    }
-
-private:
-    Vector<CMail> m_MailVector;
-};
-
-ostream & operator << (ostream &os,const CString &src)
-{
-    os << src.m_Data;
+CString::CString(const char *src) : m_Len(strlen(src)),
+                                    m_Max(m_Len + 1),
+                                    m_Data(new char[m_Max]) {
+    memcpy(m_Data, src, m_Max);
 }
 
-ostream & operator << (ostream &os,const CMail &src)
-{
-    os << "From: "<<src.m_From << ", To: " << src.m_To << ", Body: " << src.m_Body;
+CString::CString() : m_Len(0), m_Max(1), m_Data(new char[m_Max]) {
+    m_Data[0] = '\0';
+}
+
+CString::~CString() {
+    delete[] m_Data;
+}
+
+CString::CString(const CString &src) : m_Len(src.m_Len),
+                                       m_Max(src.m_Max),
+                                       m_Data(new char[m_Max]) {
+    memcpy(m_Data, src.m_Data, m_Max);
+}
+
+CString &CString::operator=(CString other) {
+    m_Max = other.m_Max;
+    m_Len = other.m_Len;
+    swap(m_Data, other.m_Data);
+    return *this;
+}
+
+ostream &operator<<(ostream &os, const CString &src) {
+    os << src.m_Data;
+    return os;
+}
+
+bool CString::operator==(const CString &right) const {
+    return strcmp(m_Data, right.m_Data) == 0;
+}
+
+bool CString::operator!=(const CString &right) {
+    return !(*this == right);
+}
+
+template<typename T>
+CVector<T>::CVector() : m_Size(0), m_Cap(1) {
+    m_Data = (new T[m_Cap]);
+}
+
+template<typename T>
+CVector<T>::~CVector() {
+    delete[] m_Data;
+}
+
+template<typename T>
+CVector<T>::CVector(const CVector<T> &src) : m_Size(src.m_Size),
+                                             m_Cap(src.m_Cap) {
+    m_Data = new T[m_Cap];
+    for (size_t i = 0; i < src.m_Size; i++)
+        m_Data[i] = src.m_Data[i];
+}
+
+template<typename T>
+CVector<T> &CVector<T>::operator=(const CVector<T> &other) {
+    if (this == &other)
+        return *this;
+    m_Size = other.m_Size;
+    m_Cap = other.m_Cap;
+    delete[] m_Data;
+    m_Data = new T[m_Cap];
+    for (size_t i = 0; i < m_Size; i++)
+        m_Data[i] = other.m_Data[i];
+    return *this;
+}
+
+template<typename T>
+void CVector<T>::push_back(const T &src) {
+    if (m_Size >= m_Cap) {
+        m_Cap += 2;
+        m_Cap *= 2;
+        T *tmp = new T[m_Cap];
+        for (size_t i = 0; i < m_Size; i++) {
+            tmp[i] = m_Data[i];
+        }
+        delete[] m_Data;
+        m_Data = tmp;
+    }
+    m_Data[m_Size++] = src;
+}
+
+template<typename T>
+void CVector<T>::print(ostream &os) const {
+    os << "BEGIN: " << endl;
+    for (size_t i = 0; i < m_Size; i++) {
+        cout << m_Data[i] << endl;
+    }
+    os << "END" << endl;
+}
+
+CMail::CMail(const char *from, const char *to, const char *body) : m_From(from),
+                                                                   m_To(to),
+                                                                   m_Body(body) {}
+
+bool CMail::operator==(const CMail &x) const {
+    return (m_From == x.m_From
+            && m_To == x.m_To
+            && m_Body == x.m_Body);
+}
+
+ostream &operator<<(ostream &os, const CMail &m) {
+    os << "From: " << m.m_From << ", To: " << m.m_To << ", " << m.m_Body << endl;
 }
 
 #ifndef __PROGTEST__
 
-bool matchOutput(const CMail &m,
-                 const char *str) {
-    ostringstream oss;
-    oss << m;
-    return oss.str() == str;
-}
+//bool matchOutput(const CMail &m,
+//                 const char *str) {
+//    ostringstream oss;
+//    oss << m;
+//    return oss.str() == str;
+//}
 
 int main(void) {
     char from[100], to[100], body[1024];
-    CMail mail1("john", "peter", "progtest deadline");
+
+//    CString a("Ahoj");
+//
+//    CString b(a);
+//
+//    if (a == b)
+//        cout << "SAME" << endl;
+//
+//    CString c = b;
+//
+//    CVector<CString> vec;
+//
+//    vec.push_back(a);
+//    vec.push_back(b);
+//    vec.push_back(c);
+//
+//    CVector<CString> vec2 = vec;
+//
+//    vec2.print(cout);
+//
+//    vec.print(cout);
     assert (CMail("john", "peter", "progtest deadline") == CMail("john", "peter", "progtest deadline"));
     assert (!(CMail("john", "peter", "progtest deadline") == CMail("john", "progtest deadline", "peter")));
     assert (!(CMail("john", "peter", "progtest deadline") == CMail("peter", "john", "progtest deadline")));
     assert (!(CMail("john", "peter", "progtest deadline") == CMail("peter", "progtest deadline", "john")));
     assert (!(CMail("john", "peter", "progtest deadline") == CMail("progtest deadline", "john", "peter")));
     assert (!(CMail("john", "peter", "progtest deadline") == CMail("progtest deadline", "peter", "john")));
-    CMailServer s0;
-    s0.sendMail(CMail("john", "peter", "some important mail"));
-    strncpy(from, "john", sizeof(from));
-    strncpy(to, "thomas", sizeof(to));
-    strncpy(body, "another important mail", sizeof(body));
-    s0.sendMail(CMail(from, to, body));
-    strncpy(from, "john", sizeof(from));
-    strncpy(to, "alice", sizeof(to));
-    strncpy(body, "deadline notice", sizeof(body));
-    s0.sendMail(CMail(from, to, body));
-    s0.sendMail(CMail("alice", "john", "deadline confirmation"));
-    s0.sendMail(CMail("peter", "alice", "PR bullshit"));
-    CMailIterator i0 = s0.inbox("alice");
-    assert (i0 && *i0 == CMail("john", "alice", "deadline notice"));
-    assert (matchOutput(*i0, "From: john, To: alice, Body: deadline notice"));
-    assert (++i0 && *i0 == CMail("peter", "alice", "PR bullshit"));
-    assert (matchOutput(*i0, "From: peter, To: alice, Body: PR bullshit"));
+//    CMailServer s0;
+//    s0.sendMail(CMail("john", "peter", "some important mail"));
+//    strncpy(from, "john", sizeof(from));
+//    strncpy(to, "thomas", sizeof(to));
+//    strncpy(body, "another important mail", sizeof(body));
+//    s0.sendMail(CMail(from, to, body));
+//    strncpy(from, "john", sizeof(from));
+//    strncpy(to, "alice", sizeof(to));
+//    strncpy(body, "deadline notice", sizeof(body));
+//    s0.sendMail(CMail(from, to, body));
+//    s0.sendMail(CMail("alice", "john", "deadline confirmation"));
+//    s0.sendMail(CMail("peter", "alice", "PR bullshit"));
+//    CMailIterator i0 = s0.inbox("alice");
+//    assert (i0 && *i0 == CMail("john", "alice", "deadline notice"));
+//    assert (matchOutput(*i0, "From: john, To: alice, Body: deadline notice"));
+//    assert (++i0 && *i0 == CMail("peter", "alice", "PR bullshit"));
+//    assert (matchOutput(*i0, "From: peter, To: alice, Body: PR bullshit"));
 //    assert (!++i0);
 //
 //    CMailIterator i1 = s0.inbox("john");
