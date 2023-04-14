@@ -52,11 +52,14 @@ public:
 
     CVector &operator=(const CVector<T> &other);
 
-    T &operator[](size_t idx) const;
+    const T &operator[](size_t idx) const;
+
+
+    T &operator[](size_t idx);
 
     void push_back(const T &src);
 
-    void print(ostream &os) const;
+//    void print(ostream &os) const;
 
     size_t size() const;
 
@@ -75,8 +78,6 @@ public:
     CMail();
 
     CMail(const CMail &other);
-
-    CMail &operator=(const CMail &other);
 
     bool operator==(const CMail &x) const;
 
@@ -119,15 +120,6 @@ private:
     friend class CMailServer;
 };
 
-//class CMailVector {
-//private:
-//    CVector<CMail> m_MailVector;
-//
-//    friend class CMailIterator;
-//
-//    friend class CMailServer;
-//};
-
 class CMailIterator {
 public:
     CMailIterator();
@@ -160,7 +152,7 @@ public:
 
     void sendMail(const CMail &m);
 
-    void print(ostream &os) const;
+//    void print(ostream &os) const;
 
     CMailIterator outbox(const char *email) const;
 
@@ -242,7 +234,12 @@ CVector<T> &CVector<T>::operator=(const CVector<T> &other) {
 }
 
 template<typename T>
-T &CVector<T>::operator[](size_t idx) const {
+const T &CVector<T>::operator[](size_t idx) const {
+    return m_Data[idx];
+}
+
+template<typename T>
+T &CVector<T>::operator[](size_t idx) {
     return m_Data[idx];
 }
 
@@ -261,14 +258,14 @@ void CVector<T>::push_back(const T &src) {
     m_Data[m_Size++] = src;
 }
 
-template<typename T>
-void CVector<T>::print(ostream &os) const {
-    os << "BEGIN: " << endl;
-    for (size_t i = 0; i < m_Size; i++) {
-        cout << m_Data[i];
-    }
-    os << "END" << endl;
-}
+//template<typename T>
+//void CVector<T>::print(ostream &os) const {
+//    os << "BEGIN: " << endl;
+//    for (size_t i = 0; i < m_Size; i++) {
+//        cout << m_Data[i];
+//    }
+//    os << "END" << endl;
+//}
 
 template<typename T>
 size_t CVector<T>::size() const {
@@ -283,15 +280,6 @@ bool CMail::operator==(const CMail &x) const {
     return (m_From == x.m_From
             && m_To == x.m_To
             && m_Body == x.m_Body);
-}
-
-CMail &CMail::operator=(const CMail &other) {
-    if (this != &other) {
-        m_From = other.m_From;
-        m_To = other.m_To;
-        m_Body = other.m_Body;
-    }
-    return *this;
 }
 
 CMail::CMail(const CMail &other) :
@@ -341,18 +329,18 @@ bool CMailBox::addToOutbox(const CMail &mail) {
     return false;
 }
 
-ostream &operator<<(ostream &os, const CMailBox &mailBox) {
-    os << "\nMAIL:\n\n" << mailBox.m_Email << "\n" << endl;
-
-    os << "OUTBOX:\n";
-    mailBox.m_Outbox.print(os);
-
-    os << "\nINBOX:\n";
-    mailBox.m_Inbox.print(os);
-
-    os << "\nEND OF MAILBOX\n" << endl;
-    return os;
-}
+//ostream &operator<<(ostream &os, const CMailBox &mailBox) {
+//    os << "\nMAIL:\n\n" << mailBox.m_Email << "\n" << endl;
+//
+//    os << "OUTBOX:\n";
+//    mailBox.m_Outbox.print(os);
+//
+//    os << "\nINBOX:\n";
+//    mailBox.m_Inbox.print(os);
+//
+//    os << "\nEND OF MAILBOX\n" << endl;
+//    return os;
+//}
 
 CMailServer::CMailServer() : m_MailBoxVector() {}
 
@@ -400,11 +388,11 @@ void CMailServer::sendMail(const CMail &m) {
 
 }
 
-void CMailServer::print(ostream &os) const {
-    os << "\nSERVER BEGIN" << endl;
-    m_MailBoxVector.print(os);
-    os << "\nSERVER END" << endl;
-}
+//void CMailServer::print(ostream &os) const {
+//    os << "\nSERVER BEGIN" << endl;
+//    m_MailBoxVector.print(os);
+//    os << "\nSERVER END" << endl;
+//}
 
 CMailIterator CMailServer::outbox(const char *email) const {
     CMailIterator tmp;
