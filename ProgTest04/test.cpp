@@ -85,11 +85,15 @@ private:
     CString m_From, m_To, m_Body;
 
     friend class CMailBox;
+
+    friend class CMailServer;
 };
 
 class CMailBox {
 public:
     CMailBox();
+
+    CMailBox(const CString &mail);
 
     ~CMailBox();
 
@@ -283,6 +287,8 @@ ostream &operator<<(ostream &os, const CMail &m) {
 
 CMailBox::CMailBox() : m_Email(), m_Inbox(), m_Outbox() {}
 
+CMailBox::CMailBox(const CString &mail) : m_Email(mail) {}
+
 CMailBox::~CMailBox() {}
 
 CMailBox::CMailBox(const CMailBox &other) : m_Email(other.m_Email),
@@ -299,10 +305,19 @@ CMailBox &CMailBox::operator=(const CMailBox &other) {
 }
 
 bool CMailBox::addToInbox(const CMail &mail) {
+    if (mail.m_To == m_Email) {
+        m_Inbox.push_back(mail);
+        return true;
+    }
+    return false;
 }
 
 bool CMailBox::addToOutbox(const CMail &mail) {
-
+    if (mail.m_From == m_Email) {
+        m_Outbox.push_back(mail);
+        return true;
+    }
+    return false;
 }
 
 ostream &operator<<(ostream &os, const CMailBox &mailBox) {
@@ -344,6 +359,18 @@ void CMailServer::sendMail(const CMail &m) {
         if (senderFound && recepientFound)
             break;
     }
+
+    if (!senderFound) {
+        CMailBox tmp(m.m_From);
+        tmp.addToOutbox(m);
+        m_MailBoxVector.push_back(tmp);
+    }
+
+    if (!recepientFound) {
+        CMailBox tmp(m.m_To);
+        tmp.addToInbox(m);
+        m_MailBoxVector.push_back(tmp);
+    }
 }
 
 void CMailServer::print(ostream &os) const {
@@ -364,78 +391,78 @@ bool matchOutput(const CMail &m,
 int main(void) {
     char from[100], to[100], body[1024];
 
-    CString a("Ahoj");
-
-    CString b(a);
-
-    if (a == b)
-        cout << "SAME" << endl;
-
-    CString c = b;
-
-    CVector<CString> vec;
-
-    vec.push_back(a);
-    vec.push_back(b);
-    vec.push_back(c);
-
-    CVector<CString> vec2 = vec;
-
-    vec2.print(cout);
-
-    CMail mail1("Ahoj", "Cau", "1");
-    CMail mail2("1", "2", "3");
-
-    CVector<CMail> vecMail;
-    vecMail.push_back(mail1);
-    vecMail.push_back(mail2);
-
-    CVector<CMail> vecMail2 = vecMail;
-
-    CMail mail3("SERUS", "KAMO", "#");
-
-    vecMail.push_back(mail3);
-
-    vecMail2.print(cout);
-
-    vecMail.print(cout);
-
-    CMailServer server;
-
-    server.sendMail(mail1);
-    server.sendMail(mail2);
-    server.sendMail(mail3);
-
-    CMailServer server2(server);
-    server.print(cout);
-    server2.sendMail(CMail("novy", "mail", "2"));
-
-    CMailServer server3 = server2;
-    server2.sendMail(CMail("2", "4", "6"));
-    server3.sendMail(CMail("3", "5", "7"));
-
-    server2.print(cout);
-
-    server3.print(cout);
-    vec.print(cout);
+//    CString a("Ahoj");
+//
+//    CString b(a);
+//
+//    if (a == b)
+//        cout << "SAME" << endl;
+//
+//    CString c = b;
+//
+//    CVector<CString> vec;
+//
+//    vec.push_back(a);
+//    vec.push_back(b);
+//    vec.push_back(c);
+//
+//    CVector<CString> vec2 = vec;
+//
+//    vec2.print(cout);
+//
+//    CMail mail1("Ahoj", "Cau", "1");
+//    CMail mail2("1", "2", "3");
+//
+//    CVector<CMail> vecMail;
+//    vecMail.push_back(mail1);
+//    vecMail.push_back(mail2);
+//
+//    CVector<CMail> vecMail2 = vecMail;
+//
+//    CMail mail3("SERUS", "KAMO", "#");
+//
+//    vecMail.push_back(mail3);
+//
+//    vecMail2.print(cout);
+//
+//    vecMail.print(cout);
+//
+//    CMailServer server;
+//
+//    server.sendMail(mail1);
+//    server.sendMail(mail2);
+//    server.sendMail(mail3);
+//
+//    CMailServer server2(server);
+//    server.print(cout);
+//    server2.sendMail(CMail("novy", "mail", "2"));
+//
+//    CMailServer server3 = server2;
+//    server2.sendMail(CMail("2", "4", "6"));
+//    server3.sendMail(CMail("3", "5", "7"));
+//
+//    server2.print(cout);
+//
+//    server3.print(cout);
+//    vec.print(cout);
     assert (CMail("john", "peter", "progtest deadline") == CMail("john", "peter", "progtest deadline"));
     assert (!(CMail("john", "peter", "progtest deadline") == CMail("john", "progtest deadline", "peter")));
     assert (!(CMail("john", "peter", "progtest deadline") == CMail("peter", "john", "progtest deadline")));
     assert (!(CMail("john", "peter", "progtest deadline") == CMail("peter", "progtest deadline", "john")));
     assert (!(CMail("john", "peter", "progtest deadline") == CMail("progtest deadline", "john", "peter")));
     assert (!(CMail("john", "peter", "progtest deadline") == CMail("progtest deadline", "peter", "john")));
-//    CMailServer s0;
-//    s0.sendMail(CMail("john", "peter", "some important mail"));
-//    strncpy(from, "john", sizeof(from));
-//    strncpy(to, "thomas", sizeof(to));
-//    strncpy(body, "another important mail", sizeof(body));
-//    s0.sendMail(CMail(from, to, body));
-//    strncpy(from, "john", sizeof(from));
-//    strncpy(to, "alice", sizeof(to));
-//    strncpy(body, "deadline notice", sizeof(body));
-//    s0.sendMail(CMail(from, to, body));
-//    s0.sendMail(CMail("alice", "john", "deadline confirmation"));
-//    s0.sendMail(CMail("peter", "alice", "PR bullshit"));
+    CMailServer s0;
+    s0.sendMail(CMail("john", "peter", "some important mail"));
+    strncpy(from, "john", sizeof(from));
+    strncpy(to, "thomas", sizeof(to));
+    strncpy(body, "another important mail", sizeof(body));
+    s0.sendMail(CMail(from, to, body));
+    strncpy(from, "john", sizeof(from));
+    strncpy(to, "alice", sizeof(to));
+    strncpy(body, "deadline notice", sizeof(body));
+    s0.sendMail(CMail(from, to, body));
+    s0.sendMail(CMail("alice", "john", "deadline confirmation"));
+    s0.sendMail(CMail("peter", "alice", "PR bullshit"));
 //    CMailIterator i0 = s0.inbox("alice");
 //    assert (i0 && *i0 == CMail("john", "alice", "deadline notice"));
 //    assert (matchOutput(*i0, "From: john, To: alice, Body: deadline notice"));
