@@ -1,7 +1,3 @@
-#include <ctime>
-#include <mutex>
-#include <ostream>
-
 #ifndef __PROGTEST__
 
 #include <cstring>
@@ -33,8 +29,6 @@ public:
 
     bool operator==(const CString &right) const;
 
-    bool operator!=(const CString &right);
-
 private:
     size_t m_Len;
     size_t m_Max;
@@ -48,7 +42,7 @@ public:
 
     ~CVector();
 
-    CVector(const CVector &src);
+//    CVector(const CVector &src);
 
     CVector &operator=(const CVector<T> &other);
 
@@ -100,8 +94,6 @@ public:
 
     CMailBox(const CString &mail);
 
-    ~CMailBox();
-
     CMailBox(const CMailBox &other);
 
     CMailBox &operator=(const CMailBox &other);
@@ -110,7 +102,7 @@ public:
 
     bool addToOutbox(const CMail &mail);
 
-    friend ostream &operator<<(ostream &os, const CMailBox &mailBox);
+//    friend ostream &operator<<(ostream &os, const CMailBox &mailBox);
 
 private:
     CString m_Email;
@@ -198,12 +190,8 @@ bool CString::operator==(const CString &right) const {
     return strcmp(m_Data, right.m_Data) == 0;
 }
 
-bool CString::operator!=(const CString &right) {
-    return !(*this == right);
-}
-
 template<typename T>
-CVector<T>::CVector() : m_Size(0), m_Cap(100) {
+CVector<T>::CVector() : m_Size(0), m_Cap(1) {
     m_Data = (new T[m_Cap]);
 }
 
@@ -212,24 +200,24 @@ CVector<T>::~CVector() {
     delete[] m_Data;
 }
 
-template<typename T>
-CVector<T>::CVector(const CVector<T> &src) : m_Size(src.m_Size),
-                                             m_Cap(src.m_Cap) {
-    m_Data = new T[m_Cap];
-    for (size_t i = 0; i < src.m_Size; i++)
-        m_Data[i] = src.m_Data[i];
-}
+//template<typename T>
+//CVector<T>::CVector(const CVector<T> &src) : m_Size(src.m_Size),
+//                                             m_Cap(src.m_Cap) {
+//    m_Data = new T[m_Cap];
+//    for (size_t i = 0; i < src.m_Size; i++)
+//        m_Data[i] = src.m_Data[i];
+//}
 
 template<typename T>
 CVector<T> &CVector<T>::operator=(const CVector<T> &other) {
-    if (this == &other)
-        return *this;
-    m_Size = other.m_Size;
-    m_Cap = other.m_Cap;
-    delete[] m_Data;
-    m_Data = new T[m_Cap];
-    for (size_t i = 0; i < m_Size; i++)
-        m_Data[i] = other.m_Data[i];
+    if (this != &other) {
+        m_Size = other.m_Size;
+        m_Cap = other.m_Cap;
+        delete[] m_Data;
+        m_Data = new T[m_Cap];
+        for (size_t i = 0; i < m_Size; i++)
+            m_Data[i] = other.m_Data[i];
+    }
     return *this;
 }
 
@@ -298,8 +286,6 @@ CMailBox::CMailBox() : m_Email(), m_Inbox(), m_Outbox() {}
 
 CMailBox::CMailBox(const CString &mail) : m_Email(mail) {}
 
-CMailBox::~CMailBox() {}
-
 CMailBox::CMailBox(const CMailBox &other) : m_Email(other.m_Email),
                                             m_Inbox(other.m_Inbox),
                                             m_Outbox(other.m_Outbox) {}
@@ -344,11 +330,11 @@ bool CMailBox::addToOutbox(const CMail &mail) {
 
 CMailServer::CMailServer() : m_MailBoxVector() {}
 
-CMailServer::~CMailServer() {}
-
 CMailServer::CMailServer(const CMailServer &src) {
     m_MailBoxVector = src.m_MailBoxVector;
 }
+
+CMailServer::~CMailServer(void) = default;
 
 CMailServer &CMailServer::operator=(const CMailServer &src) {
     if (this != &src) {
@@ -385,7 +371,6 @@ void CMailServer::sendMail(const CMail &m) {
         tmp.addToOutbox(m);
         m_MailBoxVector.push_back(tmp);
     }
-
 }
 
 //void CMailServer::print(ostream &os) const {
@@ -466,60 +451,6 @@ bool matchOutput(const CMail &m,
 int main(void) {
     char from[100], to[100], body[1024];
 
-//    CString a("Ahoj");
-//
-//    CString b(a);
-//
-//    if (a == b)
-//        cout << "SAME" << endl;
-//
-//    CString c = b;
-//
-//    CVector<CString> vec;
-//
-//    vec.push_back(a);
-//    vec.push_back(b);
-//    vec.push_back(c);
-//
-//    CVector<CString> vec2 = vec;
-//
-//    vec2.print(cout);
-//
-//    CMail mail1("Ahoj", "Cau", "1");
-//    CMail mail2("1", "2", "3");
-//
-//    CVector<CMail> vecMail;
-//    vecMail.push_back(mail1);
-//    vecMail.push_back(mail2);
-//
-//    CVector<CMail> vecMail2 = vecMail;
-//
-//    CMail mail3("SERUS", "KAMO", "#");
-//
-//    vecMail.push_back(mail3);
-//
-//    vecMail2.print(cout);
-//
-//    vecMail.print(cout);
-//
-//    CMailServer server;
-//
-//    server.sendMail(mail1);
-//    server.sendMail(mail2);
-//    server.sendMail(mail3);
-//
-//    CMailServer server2(server);
-//    server.print(cout);
-//    server2.sendMail(CMail("novy", "mail", "2"));
-//
-//    CMailServer server3 = server2;
-//    server2.sendMail(CMail("2", "4", "6"));
-//    server3.sendMail(CMail("3", "5", "7"));
-//
-//    server2.print(cout);
-//
-//    server3.print(cout);
-//    vec.print(cout);
     assert (CMail("john", "peter", "progtest deadline") == CMail("john", "peter", "progtest deadline"));
     assert (!(CMail("john", "peter", "progtest deadline") == CMail("john", "progtest deadline", "peter")));
     assert (!(CMail("john", "peter", "progtest deadline") == CMail("peter", "john", "progtest deadline")));
