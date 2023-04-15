@@ -13,6 +13,10 @@
 using namespace std;
 #endif /* __PROGTEST__ */
 
+//--- Classes and their declarations ---------------------------------------------------------------------------------//
+//**----------------------------------------------------------------------------------------------------------------**//
+//--- CString class --------------------------------------------------------------------------------------------------//
+
 class CString {
 public:
     CString(const char *src);
@@ -35,6 +39,8 @@ private:
     char *m_Data;
 };
 
+//--- CVector class --------------------------------------------------------------------------------------------------//
+
 template<typename T>
 class CVector {
 public:
@@ -42,18 +48,13 @@ public:
 
     ~CVector();
 
-//    CVector(const CVector &src);
-
     CVector &operator=(const CVector<T> &other);
 
     const T &operator[](size_t idx) const;
 
-
     T &operator[](size_t idx);
 
     void push_back(const T &src);
-
-//    void print(ostream &os) const;
 
     size_t size() const;
 
@@ -62,6 +63,8 @@ private:
     size_t m_Size;
     size_t m_Cap;
 };
+
+//--- CMail class ----------------------------------------------------------------------------------------------------//
 
 class CMail {
 public:
@@ -88,6 +91,8 @@ private:
     friend class CMailIterator;
 };
 
+//--- CMailBox class -------------------------------------------------------------------------------------------------//
+
 class CMailBox {
 public:
     CMailBox();
@@ -102,8 +107,6 @@ public:
 
     bool addToOutbox(const CMail &mail);
 
-//    friend ostream &operator<<(ostream &os, const CMailBox &mailBox);
-
 private:
     CString m_Email;
     CVector<CMail> m_Inbox;
@@ -111,6 +114,8 @@ private:
 
     friend class CMailServer;
 };
+
+//--- CMailIterator class --------------------------------------------------------------------------------------------//
 
 class CMailIterator {
 public:
@@ -132,6 +137,8 @@ private:
     friend class CMailServer;
 };
 
+//--- CMailServer class ----------------------------------------------------------------------------------------------//
+
 class CMailServer {
 public:
     CMailServer(void);
@@ -144,8 +151,6 @@ public:
 
     void sendMail(const CMail &m);
 
-//    void print(ostream &os) const;
-
     CMailIterator outbox(const char *email) const;
 
     CMailIterator inbox(const char *email) const;
@@ -153,6 +158,12 @@ public:
 private:
     CVector<CMailBox> m_MailBoxVector;
 };
+
+//**----------------------------------------------------------------------------------------------------------------**//
+//--- Definitions of methods -----------------------------------------------------------------------------------------//
+//**----------------------------------------------------------------------------------------------------------------**//
+
+//--- CString class methods definitions ------------------------------------------------------------------------------//
 
 CString::CString(const char *src) : m_Len(strlen(src)),
                                     m_Max(m_Len + 1),
@@ -190,6 +201,8 @@ bool CString::operator==(const CString &right) const {
     return strcmp(m_Data, right.m_Data) == 0;
 }
 
+//--- CVector class methods definitions ------------------------------------------------------------------------------//
+
 template<typename T>
 CVector<T>::CVector() : m_Size(0), m_Cap(1) {
     m_Data = (new T[m_Cap]);
@@ -199,14 +212,6 @@ template<typename T>
 CVector<T>::~CVector() {
     delete[] m_Data;
 }
-
-//template<typename T>
-//CVector<T>::CVector(const CVector<T> &src) : m_Size(src.m_Size),
-//                                             m_Cap(src.m_Cap) {
-//    m_Data = new T[m_Cap];
-//    for (size_t i = 0; i < src.m_Size; i++)
-//        m_Data[i] = src.m_Data[i];
-//}
 
 template<typename T>
 CVector<T> &CVector<T>::operator=(const CVector<T> &other) {
@@ -246,19 +251,12 @@ void CVector<T>::push_back(const T &src) {
     m_Data[m_Size++] = src;
 }
 
-//template<typename T>
-//void CVector<T>::print(ostream &os) const {
-//    os << "BEGIN: " << endl;
-//    for (size_t i = 0; i < m_Size; i++) {
-//        cout << m_Data[i];
-//    }
-//    os << "END" << endl;
-//}
-
 template<typename T>
 size_t CVector<T>::size() const {
     return m_Size;
 }
+
+//--- CMail class methods definitions --------------------------------------------------------------------------------//
 
 CMail::CMail(const char *from, const char *to, const char *body) : m_From(from),
                                                                    m_To(to),
@@ -281,6 +279,8 @@ ostream &operator<<(ostream &os, const CMail &m) {
     os << "From: " << m.m_From << ", To: " << m.m_To << ", Body: " << m.m_Body;
     return os;
 }
+
+//--- CMailBox class methods definitions -----------------------------------------------------------------------------//
 
 CMailBox::CMailBox() : m_Email(), m_Inbox(), m_Outbox() {}
 
@@ -315,18 +315,7 @@ bool CMailBox::addToOutbox(const CMail &mail) {
     return false;
 }
 
-//ostream &operator<<(ostream &os, const CMailBox &mailBox) {
-//    os << "\nMAIL:\n\n" << mailBox.m_Email << "\n" << endl;
-//
-//    os << "OUTBOX:\n";
-//    mailBox.m_Outbox.print(os);
-//
-//    os << "\nINBOX:\n";
-//    mailBox.m_Inbox.print(os);
-//
-//    os << "\nEND OF MAILBOX\n" << endl;
-//    return os;
-//}
+//--- CMailServer class methods definitions --------------------------------------------------------------------------//
 
 CMailServer::CMailServer() : m_MailBoxVector() {}
 
@@ -373,12 +362,6 @@ void CMailServer::sendMail(const CMail &m) {
     }
 }
 
-//void CMailServer::print(ostream &os) const {
-//    os << "\nSERVER BEGIN" << endl;
-//    m_MailBoxVector.print(os);
-//    os << "\nSERVER END" << endl;
-//}
-
 CMailIterator CMailServer::outbox(const char *email) const {
     CMailIterator tmp;
     bool found = false;
@@ -391,10 +374,10 @@ CMailIterator CMailServer::outbox(const char *email) const {
             break;
         }
     }
-    if (!found)
-        tmp.m_Ptr = nullptr;
-    else
+
+    if (found)
         tmp.m_Ptr = &tmp.m_MailVector[0];
+    
     return tmp;
 }
 
@@ -410,12 +393,14 @@ CMailIterator CMailServer::inbox(const char *email) const {
             break;
         }
     }
-    if (!found)
-        tmp.m_Ptr = nullptr;
-    else
+
+    if (found)
         tmp.m_Ptr = &tmp.m_MailVector[0];
+
     return tmp;
 }
+
+//--- CMailIterator class methods definitions ------------------------------------------------------------------------//
 
 CMailIterator::CMailIterator() : m_Ptr(nullptr), m_Pos(0), m_MailVector() {}
 
@@ -438,6 +423,8 @@ CMailIterator::operator bool() const {
 bool CMailIterator::operator!() const {
     return m_Ptr == nullptr;
 }
+
+//**----------------------------------------------------------------------------------------------------------------**//
 
 #ifndef __PROGTEST__
 
