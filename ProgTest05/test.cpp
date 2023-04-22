@@ -74,6 +74,28 @@ private:
 
 #endif /* __PROGTEST__ */
 
+class CCompanyCmp {
+public:
+    bool operator()(const string &left, const string &right) {
+        return trunc(left) < trunc(right);
+    }
+
+private:
+    string trunc(const string &str) {
+        string tmp;
+        size_t firstChar = str.find_first_not_of(" \t\n");
+        size_t lastChar = str.find_last_not_of(" \t\n");
+        for (size_t i = firstChar; i <= lastChar; i++) {
+            if (!std::isspace(str[i])) {
+                tmp += tolower(str[i]);
+            } else if (std::isspace(str[i]) && !std::isspace(str[i + 1])) {
+                tmp += str[i];
+            }
+        }
+        return tmp;
+    }
+};
+
 class CInvoice {
 public:
     CInvoice(const CDate &date,
@@ -123,9 +145,11 @@ private:
 
 class CVATRegister {
 public:
-    CVATRegister(void);
+    CVATRegister(void) {}
 
-    bool registerCompany(const string &name);
+    bool registerCompany(const string &name) {
+        return m_CompSet.insert(name).second;
+    }
 
     bool addIssued(const CInvoice &x);
 
@@ -138,8 +162,13 @@ public:
     list<CInvoice> unmatched(const string &company,
                              const CSortOpt &sortBy) const;
 
+    void printSet(void) const {
+        for (const auto &item: m_CompSet)
+            cout << item << endl;
+    }
+
 private:
-    // todo
+    set<string, CCompanyCmp> m_CompSet;
 };
 
 #ifndef __PROGTEST__
