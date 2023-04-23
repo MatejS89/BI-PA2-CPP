@@ -175,13 +175,44 @@ public:
     static const int BY_AMOUNT = 3;
     static const int BY_VAT = 4;
 
-    CSortOpt(void);
+    CSortOpt(void) {};
 
     CSortOpt &addKey(int key,
-                     bool ascending = true);
+                     bool ascending = true) {
+        m_OptionVec.emplace_back(key, ascending);
+        return *this;
+    }
 
 private:
-    // todo
+    struct sortCriteria {
+        sortCriteria(const int key, const bool ascending) : key(key), ascending(ascending) {};
+        int key;
+        bool ascending;
+    };
+
+    void sortVector(vector<CInvoice> &invoiceVector) const {
+        for (sortCriteria criterium: m_OptionVec) {
+            sort(invoiceVector.begin(), invoiceVector.end(),
+                 [&criterium, this](const CInvoice &left, const CInvoice &right) {
+                     return sortByCriterium(left, right, criterium);
+                 });
+        }
+    }
+
+    bool sortByCriterium(const CInvoice &left, const CInvoice &right, sortCriteria &criterium) const {
+        switch (criterium.key) {
+            case 0:
+                if (criterium.ascending == 1) {
+                    return left.date().compare(right.date()) < 0;
+                } else {
+                    return left.date().compare(right.date()) > 0;
+                }
+        }
+    }
+
+    vector<sortCriteria> m_OptionVec;
+
+    friend class CVATRegister;
 };
 
 class CVATRegister {
@@ -224,7 +255,21 @@ public:
     bool delAccepted(const CInvoice &x);
 
     list<CInvoice> unmatched(const string &company,
-                             const CSortOpt &sortBy) const;
+                             const CSortOpt &sortBy) const {
+        for (const auto &optionVec: sortBy.m_OptionVec) {
+            cout << optionVec.key << "  " << optionVec.ascending << endl;
+        }
+
+        vector<CInvoice> vecInvoice;
+
+        vecInvoice.reserve(m_UnmatchedInvoiceSet.size());
+        for (const auto &item: m_UnmatchedInvoiceSet) {
+            vecInvoice.push_back(item);
+        }
+
+        sortBy.sortVector(vecInvoice);
+        cout << "HEY" << endl;
+    }
 
 private:
     bool checkInvoice(const CInvoice &src) {
@@ -265,12 +310,13 @@ int main(void) {
     assert (r.addIssued(CInvoice(CDate(2000, 1, 2), "FirSt Company", "Second Company ", 200, 30)));
     assert (r.addIssued(CInvoice(CDate(2000, 1, 1), "First Company", "Second Company ", 100, 30)));
     assert (r.addIssued(CInvoice(CDate(2000, 1, 1), "First Company", "Second Company ", 300, 30)));
-    assert (r.addIssued(CInvoice(CDate(2000, 1, 1), "First Company", " Third  Company,  Ltd.   ", 200, 30)));
+    assert (r.addIssued(CInvoice(CDate(2000, 1, 25), "First Company", " Third  Company,  Ltd.   ", 200, 30)));
     assert (r.addIssued(CInvoice(CDate(2000, 1, 1), "Second Company ", "First Company", 300, 30)));
     assert (r.addIssued(CInvoice(CDate(2000, 1, 1), "Third  Company,  Ltd.", "  Second    COMPANY ", 400, 34)));
     assert (!r.addIssued(CInvoice(CDate(2000, 1, 1), "First Company", "Second Company ", 300, 30)));
     assert (!r.addIssued(CInvoice(CDate(2000, 1, 4), "First Company", "First   Company", 200, 30)));
     assert (!r.addIssued(CInvoice(CDate(2000, 1, 4), "Another Company", "First   Company", 200, 30)));
+//    r.unmatched("First Company", CSortOpt().addKey(CSortOpt::BY_DATE, false));
 //    assert (equalLists(r.unmatched("First Company",
 //                                   CSortOpt().addKey(CSortOpt::BY_SELLER, true).addKey(CSortOpt::BY_BUYER,
 //                                                                                       false).addKey(CSortOpt::BY_DATE,
