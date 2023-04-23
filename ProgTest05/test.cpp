@@ -324,10 +324,7 @@ public:
 
         if (!m_AcceptedInvoiceSet.insert(tmp).second)
             return false;
-        for (const auto &item: m_IssuedInvoiceSet) {
-            if (item == tmp)
-                cout << " MATCH ";
-        }
+
         auto found = m_IssuedInvoiceSet.find(tmp);
         if (found == m_IssuedInvoiceSet.end()) {
             m_UnmatchedInvoiceMap[tmp.m_Seller].push_back(tmp);
@@ -343,9 +340,57 @@ public:
         return true;
     }
 
-    bool delIssued(const CInvoice &x);
+    bool delIssued(const CInvoice &x) {
+        auto it1 = m_CompanySet.find(x.seller());
+        if (it1 == m_CompanySet.end())
+            return false;
 
-    bool delAccepted(const CInvoice &x);
+        auto it2 = m_CompanySet.find(x.buyer());
+        if (it2 == m_CompanySet.end())
+            return false;
+
+        CInvoice tmp(it1->data(), it2->data(), x);
+
+        auto it = m_IssuedInvoiceSet.find(tmp);
+        if (it == m_IssuedInvoiceSet.end())
+            return false;
+        else
+            m_IssuedInvoiceSet.erase(it);
+
+        auto found = m_AcceptedInvoiceSet.find(tmp);
+        if (found != m_AcceptedInvoiceSet.end()) {
+            m_UnmatchedInvoiceMap[tmp.m_Seller].push_back(tmp);
+            m_UnmatchedInvoiceMap[tmp.m_Buyer].push_back(tmp);
+        } else deleteFromUnmatched(tmp);
+
+        return true;
+    }
+
+    bool delAccepted(const CInvoice &x) {
+        auto it1 = m_CompanySet.find(x.seller());
+        if (it1 == m_CompanySet.end())
+            return false;
+
+        auto it2 = m_CompanySet.find(x.buyer());
+        if (it2 == m_CompanySet.end())
+            return false;
+
+        CInvoice tmp(it1->data(), it2->data(), x);
+
+        auto it = m_AcceptedInvoiceSet.find(tmp);
+        if (it == m_AcceptedInvoiceSet.end())
+            return false;
+        else
+            m_AcceptedInvoiceSet.erase(it);
+
+        auto found = m_IssuedInvoiceSet.find(tmp);
+        if (found != m_IssuedInvoiceSet.end()) {
+            m_UnmatchedInvoiceMap[tmp.m_Seller].push_back(tmp);
+            m_UnmatchedInvoiceMap[tmp.m_Buyer].push_back(tmp);
+        } else deleteFromUnmatched(tmp);
+
+        return true;
+    }
 
     list<CInvoice> unmatched(const string &company,
                              const CSortOpt &sortBy) const {
@@ -369,6 +414,15 @@ public:
     }
 
 private:
+    void deleteFromUnmatched(const CInvoice &x) {
+        auto it2 = m_UnmatchedInvoiceMap.find(x.buyer());
+        if (it2 != m_UnmatchedInvoiceMap.end() && !it2->second.empty())
+            it2->second.remove(x);
+
+        auto it3 = m_UnmatchedInvoiceMap.find(x.seller());
+        if (it3 != m_UnmatchedInvoiceMap.end() && !it3->second.empty())
+            it3->second.remove(x);
+    }
 
     set<string, CCompanyCmp> m_CompanySet;
     set<CInvoice, CInvoiceCmp> m_AcceptedInvoiceSet;
@@ -520,70 +574,75 @@ int main(void) {
                                        CInvoice(CDate(2000, 1, 1), "Second     Company", "first Company", 300,
                                                 32.000000)
                                }));
-//    assert (!r.delIssued(CInvoice(CDate(2001, 1, 1), "First Company", "Second Company ", 200, 30)));
-//    assert (!r.delIssued(CInvoice(CDate(2000, 1, 1), "A First Company", "Second Company ", 200, 30)));
-//    assert (!r.delIssued(CInvoice(CDate(2000, 1, 1), "First Company", "Second Hand", 200, 30)));
-//    assert (!r.delIssued(CInvoice(CDate(2000, 1, 1), "First Company", "Second Company", 1200, 30)));
-//    assert (!r.delIssued(CInvoice(CDate(2000, 1, 1), "First Company", "Second Company", 200, 130)));
-//    assert (r.delIssued(CInvoice(CDate(2000, 1, 2), "First Company", "Second Company", 200, 30)));
-//    assert (equalLists(r.unmatched("First Company",
-//                                   CSortOpt().addKey(CSortOpt::BY_SELLER, true).addKey(CSortOpt::BY_BUYER, true).addKey(
-//                                           CSortOpt::BY_DATE, true)),
-//                       list<CInvoice>
-//                               {
-//                                       CInvoice(CDate(2000, 1, 1), "first Company", "Second     Company", 100,
-//                                                20.000000),
-//                                       CInvoice(CDate(2000, 1, 1), "first Company", "Second     Company", 100,
-//                                                30.000000),
-//                                       CInvoice(CDate(2000, 1, 1), "first Company", "Second     Company", 300,
-//                                                30.000000),
-//                                       CInvoice(CDate(2000, 1, 2), "first Company", "Second     Company", 200,
-//                                                30.000000),
-//                                       CInvoice(CDate(2000, 1, 1), "Second     Company", "first Company", 300,
-//                                                30.000000),
-//                                       CInvoice(CDate(2000, 1, 1), "Second     Company", "first Company", 300,
-//                                                32.000000)
-//                               }));
-//    assert (r.delAccepted(CInvoice(CDate(2000, 1, 1), "First Company", " Third  Company,  Ltd.   ", 200, 30)));
-//    assert (equalLists(r.unmatched("First Company",
-//                                   CSortOpt().addKey(CSortOpt::BY_SELLER, true).addKey(CSortOpt::BY_BUYER, true).addKey(
-//                                           CSortOpt::BY_DATE, true)),
-//                       list<CInvoice>
-//                               {
-//                                       CInvoice(CDate(2000, 1, 1), "first Company", "Second     Company", 100,
-//                                                20.000000),
-//                                       CInvoice(CDate(2000, 1, 1), "first Company", "Second     Company", 100,
-//                                                30.000000),
-//                                       CInvoice(CDate(2000, 1, 1), "first Company", "Second     Company", 300,
-//                                                30.000000),
-//                                       CInvoice(CDate(2000, 1, 2), "first Company", "Second     Company", 200,
-//                                                30.000000),
-//                                       CInvoice(CDate(2000, 1, 1), "first Company", "Third Company, Ltd.", 200,
-//                                                30.000000),
-//                                       CInvoice(CDate(2000, 1, 1), "Second     Company", "first Company", 300,
-//                                                30.000000),
-//                                       CInvoice(CDate(2000, 1, 1), "Second     Company", "first Company", 300,
-//                                                32.000000)
-//                               }));
-//    assert (r.delIssued(CInvoice(CDate(2000, 1, 1), "First Company", " Third  Company,  Ltd.   ", 200, 30)));
-//    assert (equalLists(r.unmatched("First Company",
-//                                   CSortOpt().addKey(CSortOpt::BY_SELLER, true).addKey(CSortOpt::BY_BUYER, true).addKey(
-//                                           CSortOpt::BY_DATE, true)),
-//                       list<CInvoice>
-//                               {
-//                                       CInvoice(CDate(2000, 1, 1), "first Company", "Second     Company", 100,
-//                                                20.000000),
-//                                       CInvoice(CDate(2000, 1, 1), "first Company", "Second     Company", 100,
-//                                                30.000000),
-//                                       CInvoice(CDate(2000, 1, 1), "first Company", "Second     Company", 300,
-//                                                30.000000),
-//                                       CInvoice(CDate(2000, 1, 2), "first Company", "Second     Company", 200,
-//                                                30.000000),
-//                                       CInvoice(CDate(2000, 1, 1), "Second     Company", "first Company", 300,
-//                                                30.000000),
-//                                       CInvoice(CDate(2000, 1, 1), "Second     Company", "first Company", 300,
-//                                                32.000000)
-//                               }));
+    assert (!r.delIssued(CInvoice(CDate(2001, 1, 1), "First Company", "Second Company ", 200, 30)));
+    assert (!r.delIssued(CInvoice(CDate(2000, 1, 1), "A First Company", "Second Company ", 200, 30)));
+    assert (!r.delIssued(CInvoice(CDate(2000, 1, 1), "First Company", "Second Hand", 200, 30)));
+    assert (!r.delIssued(CInvoice(CDate(2000, 1, 1), "First Company", "Second Company", 1200, 30)));
+    assert (!r.delIssued(CInvoice(CDate(2000, 1, 1), "First Company", "Second Company", 200, 130)));
+    cout << "______________________________________________________" << endl;
+    r.unmatched("First Company",
+                CSortOpt().addKey(CSortOpt::BY_SELLER, true).addKey(CSortOpt::BY_BUYER, true).addKey(
+                        CSortOpt::BY_DATE, true));
+    cout << "_____________________________________________________" << endl;
+    assert (r.delIssued(CInvoice(CDate(2000, 1, 2), "First Company", "Second Company", 200, 30)));
+    assert (equalLists(r.unmatched("First Company",
+                                   CSortOpt().addKey(CSortOpt::BY_SELLER, true).addKey(CSortOpt::BY_BUYER, true).addKey(
+                                           CSortOpt::BY_DATE, true)),
+                       list<CInvoice>
+                               {
+                                       CInvoice(CDate(2000, 1, 1), "first Company", "Second     Company", 100,
+                                                20.000000),
+                                       CInvoice(CDate(2000, 1, 1), "first Company", "Second     Company", 100,
+                                                30.000000),
+                                       CInvoice(CDate(2000, 1, 1), "first Company", "Second     Company", 300,
+                                                30.000000),
+                                       CInvoice(CDate(2000, 1, 2), "first Company", "Second     Company", 200,
+                                                30.000000),
+                                       CInvoice(CDate(2000, 1, 1), "Second     Company", "first Company", 300,
+                                                30.000000),
+                                       CInvoice(CDate(2000, 1, 1), "Second     Company", "first Company", 300,
+                                                32.000000)
+                               }));
+    assert (r.delAccepted(CInvoice(CDate(2000, 1, 1), "First Company", " Third  Company,  Ltd.   ", 200, 30)));
+    assert (equalLists(r.unmatched("First Company",
+                                   CSortOpt().addKey(CSortOpt::BY_SELLER, true).addKey(CSortOpt::BY_BUYER, true).addKey(
+                                           CSortOpt::BY_DATE, true)),
+                       list<CInvoice>
+                               {
+                                       CInvoice(CDate(2000, 1, 1), "first Company", "Second     Company", 100,
+                                                20.000000),
+                                       CInvoice(CDate(2000, 1, 1), "first Company", "Second     Company", 100,
+                                                30.000000),
+                                       CInvoice(CDate(2000, 1, 1), "first Company", "Second     Company", 300,
+                                                30.000000),
+                                       CInvoice(CDate(2000, 1, 2), "first Company", "Second     Company", 200,
+                                                30.000000),
+                                       CInvoice(CDate(2000, 1, 1), "first Company", "Third Company, Ltd.", 200,
+                                                30.000000),
+                                       CInvoice(CDate(2000, 1, 1), "Second     Company", "first Company", 300,
+                                                30.000000),
+                                       CInvoice(CDate(2000, 1, 1), "Second     Company", "first Company", 300,
+                                                32.000000)
+                               }));
+    assert (r.delIssued(CInvoice(CDate(2000, 1, 1), "First Company", " Third  Company,  Ltd.   ", 200, 30)));
+    assert (equalLists(r.unmatched("First Company",
+                                   CSortOpt().addKey(CSortOpt::BY_SELLER, true).addKey(CSortOpt::BY_BUYER, true).addKey(
+                                           CSortOpt::BY_DATE, true)),
+                       list<CInvoice>
+                               {
+                                       CInvoice(CDate(2000, 1, 1), "first Company", "Second     Company", 100,
+                                                20.000000),
+                                       CInvoice(CDate(2000, 1, 1), "first Company", "Second     Company", 100,
+                                                30.000000),
+                                       CInvoice(CDate(2000, 1, 1), "first Company", "Second     Company", 300,
+                                                30.000000),
+                                       CInvoice(CDate(2000, 1, 2), "first Company", "Second     Company", 200,
+                                                30.000000),
+                                       CInvoice(CDate(2000, 1, 1), "Second     Company", "first Company", 300,
+                                                30.000000),
+                                       CInvoice(CDate(2000, 1, 1), "Second     Company", "first Company", 300,
+                                                32.000000)
+                               }));
     return EXIT_SUCCESS;
 }
 
