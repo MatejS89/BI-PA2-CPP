@@ -74,27 +74,41 @@ private:
 
 #endif /* __PROGTEST__ */
 
-class CCompanyCmp {
+string trunc(const string &str) {
+    string tmp;
+    size_t firstChar = str.find_first_not_of(" \t\n");
+    size_t lastChar = str.find_last_not_of(" \t\n");
+    for (size_t i = firstChar; i <= lastChar; i++) {
+        if (!std::isspace(str[i])) {
+            tmp += tolower(str[i]);
+        } else if (std::isspace(str[i]) && !std::isspace(str[i + 1])) {
+            tmp += str[i];
+        }
+    }
+    return tmp;
+}
+
+class CCompany {
 public:
-    bool operator()(const string &left, const string &right) {
-        return trunc(left) < trunc(right);
+    CCompany(const string &name) : m_Name(name), m_NameNormalized(trunc(name)) {};
+
+    bool operator<(const CCompany &other) const {
+        return (m_NameNormalized < other.m_NameNormalized);
     }
 
 private:
-    string trunc(const string &str) {
-        string tmp;
-        size_t firstChar = str.find_first_not_of(" \t\n");
-        size_t lastChar = str.find_last_not_of(" \t\n");
-        for (size_t i = firstChar; i <= lastChar; i++) {
-            if (!std::isspace(str[i])) {
-                tmp += tolower(str[i]);
-            } else if (std::isspace(str[i]) && !std::isspace(str[i + 1])) {
-                tmp += str[i];
-            }
-        }
-        return tmp;
+    string m_NameNormalized;
+    string m_Name;
+};
+
+
+class CCompanyCmp {
+public:
+    bool operator()(const CCompany &left, const CCompany &right) const {
+        return left < right;
     }
 };
+
 
 class CInvoice {
 public:
@@ -108,11 +122,27 @@ public:
                            m_Amount(amount),
                            m_Vat(vat) {};
 
+    bool operator==(const CInvoice &other) const {
+        return (m_Date.compare(other.m_Date) == 0 &&
+                m_Seller == other.m_Seller &&
+                m_Buyer == other.m_Buyer &&
+                m_Vat == other.m_Vat &&
+                m_Amount == other.m_Amount);
+    }
+
+    bool operator<(const CInvoice &other) const {
+        return (m_Date.compare(other.m_Date) < 0 ||
+                m_Seller < other.m_Seller ||
+                m_Buyer < other.m_Buyer ||
+                m_Vat < other.m_Vat ||
+                m_Amount < other.m_Amount);
+    }
+
     CDate date(void) const { return m_Date; }
 
     string buyer(void) const { return m_Buyer; }
 
-    string seller(void) const { return m_Buyer; }
+    string seller(void) const { return m_Seller; }
 
     unsigned int amount(void) const { return m_Amount; }
 
@@ -124,6 +154,17 @@ private:
     string m_Buyer;
     unsigned int m_Amount;
     double m_Vat;
+
+    friend class CVATRegister;
+
+    friend string trunc(const string &str);
+};
+
+class CInvoiceCmp {
+public:
+    bool operator()(const CInvoice &left, const CInvoice &right) {
+        return left < right;
+    }
 };
 
 class CSortOpt {
@@ -145,15 +186,38 @@ private:
 
 class CVATRegister {
 public:
-    CVATRegister(void) {}
+    CVATRegister(void) {};
 
     bool registerCompany(const string &name) {
-        return m_CompSet.insert(name).second;
+        CCompany tmp(name);
+        if (!m_CompanySet.insert(tmp).second)
+            return false;
+        return true;
     }
 
-    bool addIssued(const CInvoice &x);
+    bool addIssued(const CInvoice &x) {
+        if (!checkInvoice(x))
+            return false;
+        if (!m_IssuedInvoiceSet.insert(x).second)
+            return false;
+        if (m_AcceptedInvoiceSet.find(x) == m_AcceptedInvoiceSet.end())
+            m_UnmatchedInvoiceSet.insert(x);
+        else
+            m_UnmatchedInvoiceSet.erase(x);
+        return true;
+    }
 
-    bool addAccepted(const CInvoice &x);
+    bool addAccepted(const CInvoice &x) {
+        if (!checkInvoice(x))
+            return false;
+        if (!m_AcceptedInvoiceSet.insert(x).second)
+            return false;
+        if (m_IssuedInvoiceSet.find(x) == m_IssuedInvoiceSet.end())
+            m_UnmatchedInvoiceSet.insert(x);
+        else
+            m_UnmatchedInvoiceSet.erase(x);
+        return true;
+    }
 
     bool delIssued(const CInvoice &x);
 
@@ -162,13 +226,25 @@ public:
     list<CInvoice> unmatched(const string &company,
                              const CSortOpt &sortBy) const;
 
-    void printSet(void) const {
-        for (const auto &item: m_CompSet)
-            cout << item << endl;
+private:
+    bool checkInvoice(const CInvoice &src) {
+        string buyerNorm = trunc(src.m_Buyer);
+        string sellerNorm = trunc(src.m_Seller);
+        if (buyerNorm == sellerNorm)
+            return false;
+        CCompany comp(src.buyer());
+        if (m_CompanySet.find(comp) == m_CompanySet.end())
+            return false;
+        CCompany comp2(src.seller());
+        if (m_CompanySet.find(comp2) == m_CompanySet.end())
+            return false;
+        return true;
     }
 
-private:
-    set<string, CCompanyCmp> m_CompSet;
+    set<CCompany, CCompanyCmp> m_CompanySet;
+    set<CInvoice, CInvoiceCmp> m_AcceptedInvoiceSet;
+    set<CInvoice, CInvoiceCmp> m_UnmatchedInvoiceSet;
+    set<CInvoice, CInvoiceCmp> m_IssuedInvoiceSet;
 };
 
 #ifndef __PROGTEST__
@@ -185,16 +261,16 @@ int main(void) {
     assert (r.registerCompany("Third Company, Ltd."));
     assert (!r.registerCompany("Third Company, Ltd."));
     assert (!r.registerCompany(" Third  Company,  Ltd.  "));
-//    assert (r.addIssued(CInvoice(CDate(2000, 1, 1), "First Company", "Second Company ", 100, 20)));
-//    assert (r.addIssued(CInvoice(CDate(2000, 1, 2), "FirSt Company", "Second Company ", 200, 30)));
-//    assert (r.addIssued(CInvoice(CDate(2000, 1, 1), "First Company", "Second Company ", 100, 30)));
-//    assert (r.addIssued(CInvoice(CDate(2000, 1, 1), "First Company", "Second Company ", 300, 30)));
-//    assert (r.addIssued(CInvoice(CDate(2000, 1, 1), "First Company", " Third  Company,  Ltd.   ", 200, 30)));
-//    assert (r.addIssued(CInvoice(CDate(2000, 1, 1), "Second Company ", "First Company", 300, 30)));
-//    assert (r.addIssued(CInvoice(CDate(2000, 1, 1), "Third  Company,  Ltd.", "  Second    COMPANY ", 400, 34)));
-//    assert (!r.addIssued(CInvoice(CDate(2000, 1, 1), "First Company", "Second Company ", 300, 30)));
-//    assert (!r.addIssued(CInvoice(CDate(2000, 1, 4), "First Company", "First   Company", 200, 30)));
-//    assert (!r.addIssued(CInvoice(CDate(2000, 1, 4), "Another Company", "First   Company", 200, 30)));
+    assert (r.addIssued(CInvoice(CDate(2000, 1, 1), "First Company", "Second Company ", 100, 20)));
+    assert (r.addIssued(CInvoice(CDate(2000, 1, 2), "FirSt Company", "Second Company ", 200, 30)));
+    assert (r.addIssued(CInvoice(CDate(2000, 1, 1), "First Company", "Second Company ", 100, 30)));
+    assert (r.addIssued(CInvoice(CDate(2000, 1, 1), "First Company", "Second Company ", 300, 30)));
+    assert (r.addIssued(CInvoice(CDate(2000, 1, 1), "First Company", " Third  Company,  Ltd.   ", 200, 30)));
+    assert (r.addIssued(CInvoice(CDate(2000, 1, 1), "Second Company ", "First Company", 300, 30)));
+    assert (r.addIssued(CInvoice(CDate(2000, 1, 1), "Third  Company,  Ltd.", "  Second    COMPANY ", 400, 34)));
+    assert (!r.addIssued(CInvoice(CDate(2000, 1, 1), "First Company", "Second Company ", 300, 30)));
+    assert (!r.addIssued(CInvoice(CDate(2000, 1, 4), "First Company", "First   Company", 200, 30)));
+    assert (!r.addIssued(CInvoice(CDate(2000, 1, 4), "Another Company", "First   Company", 200, 30)));
 //    assert (equalLists(r.unmatched("First Company",
 //                                   CSortOpt().addKey(CSortOpt::BY_SELLER, true).addKey(CSortOpt::BY_BUYER,
 //                                                                                       false).addKey(CSortOpt::BY_DATE,
