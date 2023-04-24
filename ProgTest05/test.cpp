@@ -212,6 +212,19 @@ private:
 
     bool sortByCriterium(const CInvoice &left, const CInvoice &right) const {
         for (const auto &criterium: m_OptionVec) {
+            string leftBuyer, rightBuyer, leftSeller, rightSeller;
+            if (criterium.key == 1) {
+                leftBuyer = left.buyer();
+                transform(leftBuyer.begin(), leftBuyer.end(), leftBuyer.begin(), ::tolower);
+                rightBuyer = right.buyer();
+                transform(rightBuyer.begin(), rightBuyer.end(), rightBuyer.begin(), ::tolower);
+            }
+            if (criterium.key == 2) {
+                leftSeller = left.seller();
+                transform(leftSeller.begin(), leftSeller.end(), leftSeller.begin(), ::tolower);
+                rightSeller = right.seller();
+                transform(rightSeller.begin(), rightSeller.end(), rightSeller.begin(), ::tolower);
+            }
             bool ascending = criterium.ascending;
             switch (criterium.key) {
                 case 0:
@@ -223,19 +236,19 @@ private:
                     }
                     break;
                 case 1:
-                    if (trunc(left.buyer()) != trunc(right.buyer())) {
+                    if (leftBuyer != rightBuyer) {
                         if (ascending)
-                            return trunc(left.buyer()) < trunc(right.buyer());
+                            return leftBuyer < rightBuyer;
                         else
-                            return trunc(left.buyer()) > trunc(right.buyer());
+                            return leftBuyer > rightBuyer;
                     }
                     break;
                 case 2:
-                    if (trunc(left.seller()) != trunc(right.seller())) {
+                    if (leftSeller != rightSeller) {
                         if (ascending)
-                            return trunc(left.seller()) < trunc(right.seller());
+                            return leftSeller < rightSeller;
                         else
-                            return trunc(left.seller()) > trunc(right.seller());
+                            return leftSeller > rightSeller;
                     }
                     break;
                 case 3:
@@ -341,6 +354,11 @@ public:
     }
 
     bool delIssued(const CInvoice &x) {
+        string str1 = trunc(x.m_Buyer);
+        string str2 = trunc(x.m_Seller);
+        if (str1 == str2)
+            return false;
+
         auto it1 = m_CompanySet.find(x.seller());
         if (it1 == m_CompanySet.end())
             return false;
@@ -367,6 +385,11 @@ public:
     }
 
     bool delAccepted(const CInvoice &x) {
+        string str1 = trunc(x.m_Buyer);
+        string str2 = trunc(x.m_Seller);
+        if (str1 == str2)
+            return false;
+
         auto it1 = m_CompanySet.find(x.seller());
         if (it1 == m_CompanySet.end())
             return false;
@@ -394,9 +417,6 @@ public:
 
     list<CInvoice> unmatched(const string &company,
                              const CSortOpt &sortBy) const {
-        for (const auto &optionVec: sortBy.m_OptionVec) {
-            cout << optionVec.key << "  " << optionVec.ascending << endl;
-        }
         auto it = m_UnmatchedInvoiceMap.find(company);
         if (it == m_UnmatchedInvoiceMap.end())
             return list<CInvoice>();
@@ -405,10 +425,10 @@ public:
             return listCInvoice;
         sortBy.sortList(listCInvoice);
 
-        for (const auto &item: listCInvoice) {
-            cout << item.m_Date << "  " << item.m_Seller << "  " << item.m_Buyer << "  " << item.m_Amount << "  "
-                 << item.m_Vat << endl;
-        }
+//        for (const auto &item: listCInvoice) {
+//            cout << item.m_Date << "  " << item.m_Seller << "  " << item.m_Buyer << "  " << item.m_Amount << "  "
+//                 << item.m_Vat << endl;
+//        }
 
         return listCInvoice;
     }
@@ -433,9 +453,16 @@ private:
 #ifndef __PROGTEST__
 
 bool equalLists(const list<CInvoice> &a, const list<CInvoice> &b) {
-    for (const auto &item: a) {
-        if (a != b)
+    if (a.size() != b.size()) return false;
+
+    auto it1 = a.begin();
+    auto it2 = b.begin();
+
+    while (it1 != a.end()) {
+        if (*it1 != *it2)
             return false;
+        it1++;
+        it2++;
     }
     return true;
 }
@@ -579,11 +606,6 @@ int main(void) {
     assert (!r.delIssued(CInvoice(CDate(2000, 1, 1), "First Company", "Second Hand", 200, 30)));
     assert (!r.delIssued(CInvoice(CDate(2000, 1, 1), "First Company", "Second Company", 1200, 30)));
     assert (!r.delIssued(CInvoice(CDate(2000, 1, 1), "First Company", "Second Company", 200, 130)));
-    cout << "______________________________________________________" << endl;
-    r.unmatched("First Company",
-                CSortOpt().addKey(CSortOpt::BY_SELLER, true).addKey(CSortOpt::BY_BUYER, true).addKey(
-                        CSortOpt::BY_DATE, true));
-    cout << "_____________________________________________________" << endl;
     assert (r.delIssued(CInvoice(CDate(2000, 1, 2), "First Company", "Second Company", 200, 30)));
     assert (equalLists(r.unmatched("First Company",
                                    CSortOpt().addKey(CSortOpt::BY_SELLER, true).addKey(CSortOpt::BY_BUYER, true).addKey(
