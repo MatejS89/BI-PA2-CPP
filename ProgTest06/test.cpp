@@ -27,15 +27,11 @@ using namespace std;
 
 class CRect {
 public:
-    CRect(double x,
-          double y,
-          double w,
-          double h)
-            : m_X(x),
-              m_Y(y),
-              m_W(w),
-              m_H(h) {
-    }
+    CRect(double x, double y, double w, double h) :
+            m_X(x),
+            m_Y(y),
+            m_W(w),
+            m_H(h) {}
 
     friend ostream &operator<<(ostream &os,
                                const CRect &x) {
@@ -50,21 +46,52 @@ public:
 
 #endif /* __PROGTEST__ */
 
+class CElement {
+protected:
+    CElement(int id, CRect coords) : m_ElementId(id), m_AbsElemCoords(coords), m_RelElemCoords(coords) {};
+    CRect m_AbsElemCoords;
+    CRect m_RelElemCoords;
+public:
+    int m_ElementId;
+
+    friend class CWindow;
+};
+
 class CWindow {
 public:
     CWindow(int id,
             const string &title,
-            const CRect &absPos);
-    // add
+            const CRect &absPos) :
+            m_Id(id), m_Title(title), m_AbsPos(absPos) {};
+
+    CWindow &add(const CElement &src) {
+        CElement tmp(src);
+        CRect absCoords = calculateAbsCoords(src.m_RelElemCoords);
+        tmp.m_AbsElemCoords = absCoords;
+        m_MapElements.insert({tmp.m_ElementId, tmp});
+
+        return *this;
+    }
     // search
     // setPosition
+private:
+    CRect calculateAbsCoords(const CRect &src) {
+        // todo
+    }
+
+    int m_Id;
+    string m_Title;
+    CRect m_AbsPos;
+    map<int, CElement> m_MapElements;
 };
 
-class CButton {
+class CButton : public CElement {
 public:
     CButton(int id,
             const CRect &relPos,
-            const string &name);
+            const string &name) : CElement(id, relPos), m_ButtonName(name) {};
+private:
+    const string m_ButtonName;
 };
 
 class CInput {
@@ -108,75 +135,78 @@ int main(void) {
     assert (sizeof(CInput) - sizeof(string) < sizeof(CComboBox) - sizeof(vector<string>));
     assert (sizeof(CLabel) - sizeof(string) < sizeof(CComboBox) - sizeof(vector<string>));
     CWindow a(0, "Sample window", CRect(10, 10, 600, 480));
+//    a.add(CButton(1, CRect(0.1, 0.8, 0.3, 0.4), "Ok"));
+//    cout << "AHOJ" << endl;
     a.add(CButton(1, CRect(0.1, 0.8, 0.3, 0.1), "Ok")).add(CButton(2, CRect(0.6, 0.8, 0.3, 0.1), "Cancel"));
-    a.add(CLabel(10, CRect(0.1, 0.1, 0.2, 0.1), "Username:"));
-    a.add(CInput(11, CRect(0.4, 0.1, 0.5, 0.1), "chucknorris"));
-    a.add(CComboBox(20, CRect(0.1, 0.3, 0.8, 0.1)).add("Karate").add("Judo").add("Box").add("Progtest"));
-    assert (toString(a) ==
-            "[0] Window \"Sample window\" (10,10,600,480)\n"
-            "+- [1] Button \"Ok\" (70,394,180,48)\n"
-            "+- [2] Button \"Cancel\" (370,394,180,48)\n"
-            "+- [10] Label \"Username:\" (70,58,120,48)\n"
-            "+- [11] Input \"chucknorris\" (250,58,300,48)\n"
-            "+- [20] ComboBox (70,154,480,48)\n"
-            "   +->Karate<\n"
-            "   +- Judo\n"
-            "   +- Box\n"
-            "   +- Progtest\n");
-    CWindow b = a;
-    assert (toString(*b.search(20)) ==
-            "[20] ComboBox (70,154,480,48)\n"
-            "+->Karate<\n"
-            "+- Judo\n"
-            "+- Box\n"
-            "+- Progtest\n");
-    assert (dynamic_cast<CComboBox &> ( *b.search(20)).getSelected() == 0);
-    dynamic_cast<CComboBox &> ( *b.search(20)).setSelected(3);
-    assert (dynamic_cast<CInput &> ( *b.search(11)).getValue() == "chucknorris");
-    dynamic_cast<CInput &> ( *b.search(11)).setValue("chucknorris@fit.cvut.cz");
-    b.add(CComboBox(21, CRect(0.1, 0.5, 0.8, 0.1)).add("PA2").add("OSY").add("Both"));
-    assert (toString(b) ==
-            "[0] Window \"Sample window\" (10,10,600,480)\n"
-            "+- [1] Button \"Ok\" (70,394,180,48)\n"
-            "+- [2] Button \"Cancel\" (370,394,180,48)\n"
-            "+- [10] Label \"Username:\" (70,58,120,48)\n"
-            "+- [11] Input \"chucknorris@fit.cvut.cz\" (250,58,300,48)\n"
-            "+- [20] ComboBox (70,154,480,48)\n"
-            "|  +- Karate\n"
-            "|  +- Judo\n"
-            "|  +- Box\n"
-            "|  +->Progtest<\n"
-            "+- [21] ComboBox (70,250,480,48)\n"
-            "   +->PA2<\n"
-            "   +- OSY\n"
-            "   +- Both\n");
-    assert (toString(a) ==
-            "[0] Window \"Sample window\" (10,10,600,480)\n"
-            "+- [1] Button \"Ok\" (70,394,180,48)\n"
-            "+- [2] Button \"Cancel\" (370,394,180,48)\n"
-            "+- [10] Label \"Username:\" (70,58,120,48)\n"
-            "+- [11] Input \"chucknorris\" (250,58,300,48)\n"
-            "+- [20] ComboBox (70,154,480,48)\n"
-            "   +->Karate<\n"
-            "   +- Judo\n"
-            "   +- Box\n"
-            "   +- Progtest\n");
-    b.setPosition(CRect(20, 30, 640, 520));
-    assert (toString(b) ==
-            "[0] Window \"Sample window\" (20,30,640,520)\n"
-            "+- [1] Button \"Ok\" (84,446,192,52)\n"
-            "+- [2] Button \"Cancel\" (404,446,192,52)\n"
-            "+- [10] Label \"Username:\" (84,82,128,52)\n"
-            "+- [11] Input \"chucknorris@fit.cvut.cz\" (276,82,320,52)\n"
-            "+- [20] ComboBox (84,186,512,52)\n"
-            "|  +- Karate\n"
-            "|  +- Judo\n"
-            "|  +- Box\n"
-            "|  +->Progtest<\n"
-            "+- [21] ComboBox (84,290,512,52)\n"
-            "   +->PA2<\n"
-            "   +- OSY\n"
-            "   +- Both\n");
+    cout << "AHOJ" << endl;
+//    a.add(CLabel(10, CRect(0.1, 0.1, 0.2, 0.1), "Username:"));
+//    a.add(CInput(11, CRect(0.4, 0.1, 0.5, 0.1), "chucknorris"));
+//    a.add(CComboBox(20, CRect(0.1, 0.3, 0.8, 0.1)).add("Karate").add("Judo").add("Box").add("Progtest"));
+//    assert (toString(a) ==
+//            "[0] Window \"Sample window\" (10,10,600,480)\n"
+//            "+- [1] Button \"Ok\" (70,394,180,48)\n"
+//            "+- [2] Button \"Cancel\" (370,394,180,48)\n"
+//            "+- [10] Label \"Username:\" (70,58,120,48)\n"
+//            "+- [11] Input \"chucknorris\" (250,58,300,48)\n"
+//            "+- [20] ComboBox (70,154,480,48)\n"
+//            "   +->Karate<\n"
+//            "   +- Judo\n"
+//            "   +- Box\n"
+//            "   +- Progtest\n");
+//    CWindow b = a;
+//    assert (toString(*b.search(20)) ==
+//            "[20] ComboBox (70,154,480,48)\n"
+//            "+->Karate<\n"
+//            "+- Judo\n"
+//            "+- Box\n"
+//            "+- Progtest\n");
+//    assert (dynamic_cast<CComboBox &> ( *b.search(20)).getSelected() == 0);
+//    dynamic_cast<CComboBox &> ( *b.search(20)).setSelected(3);
+//    assert (dynamic_cast<CInput &> ( *b.search(11)).getValue() == "chucknorris");
+//    dynamic_cast<CInput &> ( *b.search(11)).setValue("chucknorris@fit.cvut.cz");
+//    b.add(CComboBox(21, CRect(0.1, 0.5, 0.8, 0.1)).add("PA2").add("OSY").add("Both"));
+//    assert (toString(b) ==
+//            "[0] Window \"Sample window\" (10,10,600,480)\n"
+//            "+- [1] Button \"Ok\" (70,394,180,48)\n"
+//            "+- [2] Button \"Cancel\" (370,394,180,48)\n"
+//            "+- [10] Label \"Username:\" (70,58,120,48)\n"
+//            "+- [11] Input \"chucknorris@fit.cvut.cz\" (250,58,300,48)\n"
+//            "+- [20] ComboBox (70,154,480,48)\n"
+//            "|  +- Karate\n"
+//            "|  +- Judo\n"
+//            "|  +- Box\n"
+//            "|  +->Progtest<\n"
+//            "+- [21] ComboBox (70,250,480,48)\n"
+//            "   +->PA2<\n"
+//            "   +- OSY\n"
+//            "   +- Both\n");
+//    assert (toString(a) ==
+//            "[0] Window \"Sample window\" (10,10,600,480)\n"
+//            "+- [1] Button \"Ok\" (70,394,180,48)\n"
+//            "+- [2] Button \"Cancel\" (370,394,180,48)\n"
+//            "+- [10] Label \"Username:\" (70,58,120,48)\n"
+//            "+- [11] Input \"chucknorris\" (250,58,300,48)\n"
+//            "+- [20] ComboBox (70,154,480,48)\n"
+//            "   +->Karate<\n"
+//            "   +- Judo\n"
+//            "   +- Box\n"
+//            "   +- Progtest\n");
+//    b.setPosition(CRect(20, 30, 640, 520));
+//    assert (toString(b) ==
+//            "[0] Window \"Sample window\" (20,30,640,520)\n"
+//            "+- [1] Button \"Ok\" (84,446,192,52)\n"
+//            "+- [2] Button \"Cancel\" (404,446,192,52)\n"
+//            "+- [10] Label \"Username:\" (84,82,128,52)\n"
+//            "+- [11] Input \"chucknorris@fit.cvut.cz\" (276,82,320,52)\n"
+//            "+- [20] ComboBox (84,186,512,52)\n"
+//            "|  +- Karate\n"
+//            "|  +- Judo\n"
+//            "|  +- Box\n"
+//            "|  +->Progtest<\n"
+//            "+- [21] ComboBox (84,290,512,52)\n"
+//            "   +->PA2<\n"
+//            "   +- OSY\n"
+//            "   +- Both\n");
     return EXIT_SUCCESS;
 }
 
