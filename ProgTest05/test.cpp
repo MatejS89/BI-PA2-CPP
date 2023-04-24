@@ -425,11 +425,6 @@ public:
             return listCInvoice;
         sortBy.sortList(listCInvoice);
 
-//        for (const auto &item: listCInvoice) {
-//            cout << item.m_Date << "  " << item.m_Seller << "  " << item.m_Buyer << "  " << item.m_Amount << "  "
-//                 << item.m_Vat << endl;
-//        }
-
         return listCInvoice;
     }
 
