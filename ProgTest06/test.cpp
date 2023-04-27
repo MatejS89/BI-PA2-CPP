@@ -119,29 +119,72 @@ private:
     string m_ButtonName;
 };
 
-class CInput {
+class CInput : public CElement {
 public:
     CInput(int id,
            const CRect &relPos,
-           const string &value);
+           const string &value) : CElement(id, relPos), m_InputName(value) {};
+
+    CInput(const CInput &src) : CElement(src.m_ElementId, src.m_RelCoords),
+                                m_InputName(src.m_InputName) {};
+
+    void setValue(const string &src) {
+        m_InputName = src;
+    }
+
+    string getValue() const {
+        return m_InputName;
+    }
+
+    unique_ptr<CElement> clone() const override {
+        return make_unique<CInput>(*this);
+    }
     // setValue
     // getValue
+private:
+    string m_InputName;
 };
 
-class CLabel {
+class CLabel : public CElement {
 public:
     CLabel(int id,
            const CRect &relPos,
-           const string &label);
+           const string &label) : CElement(id, relPos),
+                                  m_LabelName(label) {};
+
+    CLabel(const CLabel &src) : CElement(src.m_ElementId, src.m_RelCoords),
+                                m_LabelName(src.m_LabelName) {};
+
+    unique_ptr<CElement> clone() const override {
+        return make_unique<CLabel>(*this);
+    }
+
+private:
+    string m_LabelName;
 };
 
-class CComboBox {
+class CComboBox : public CElement {
 public:
     CComboBox(int id,
-              const CRect &relPos);
+              const CRect &relPos) : CElement(id, relPos), m_Selected(0) {};
+
+    CComboBox(const CComboBox &src) : CElement(src.m_ElementId, src.m_RelCoords),
+                                      m_ComboBoxContents(src.m_ComboBoxContents), m_Selected(src.m_Selected) {};
+
+    unique_ptr<CElement> clone() const override {
+        return make_unique<CComboBox>(*this);
+    }
+
+    CComboBox &add(const string &src) {
+        m_ComboBoxContents.push_back(src);
+        return *this;
+    }
     // add
     // setSelected
     // getSelected
+private:
+    vector<string> m_ComboBoxContents;
+    int m_Selected;
 };
 
 // output operators
@@ -162,10 +205,10 @@ int main(void) {
     CWindow a(0, "Sample window", CRect(10, 10, 600, 480));
 
     a.add(CButton(1, CRect(0.1, 0.8, 0.3, 0.1), "Ok")).add(CButton(2, CRect(0.6, 0.8, 0.3, 0.1), "Cancel"));
+    a.add(CLabel(10, CRect(0.1, 0.1, 0.2, 0.1), "Username:"));
+    a.add(CInput(11, CRect(0.4, 0.1, 0.5, 0.1), "chucknorris"));
+    a.add(CComboBox(20, CRect(0.1, 0.3, 0.8, 0.1)).add("Karate").add("Judo").add("Box").add("Progtest"));
     cout << "AHOJ" << endl;
-//    a.add(CLabel(10, CRect(0.1, 0.1, 0.2, 0.1), "Username:"));
-//    a.add(CInput(11, CRect(0.4, 0.1, 0.5, 0.1), "chucknorris"));
-//    a.add(CComboBox(20, CRect(0.1, 0.3, 0.8, 0.1)).add("Karate").add("Judo").add("Box").add("Progtest"));
 //    assert (toString(a) ==
 //            "[0] Window \"Sample window\" (10,10,600,480)\n"
 //            "+- [1] Button \"Ok\" (70,394,180,48)\n"
