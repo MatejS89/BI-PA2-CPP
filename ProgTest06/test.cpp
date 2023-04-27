@@ -52,146 +52,96 @@ public:
 
 class CElement {
 public:
-    CElement(int id, const CRect &coords) : m_ElementId(id), m_RelElemCoords(coords), m_AbsElemCoords(
-            0, 0, 0, 0) {};
+    CElement(int id, const CRect &coords) :
+            m_ElementId(id),
+            m_RelCoords(coords),
+            m_AbsCoords(coords) {};
 
-    virtual ostream &printElement(ostream &os) const = 0;
+    virtual unique_ptr<CElement> clone() const {};
 
 protected:
+    CRect m_RelCoords;
+    CRect m_AbsCoords;
     int m_ElementId;
-    CRect m_RelElemCoords;
-    CRect m_AbsElemCoords;
+
+private:
+    void calculateCoords(const CRect &windowCoords) {
+        m_AbsCoords.m_X = round(windowCoords.m_W * m_RelCoords.m_X + windowCoords.m_X);
+        m_AbsCoords.m_Y = round(windowCoords.m_H * m_RelCoords.m_Y + windowCoords.m_Y);
+        m_AbsCoords.m_H = round(windowCoords.m_H * m_RelCoords.m_H);
+        m_AbsCoords.m_W = round(windowCoords.m_W * m_RelCoords.m_W);
+    }
 
     friend class CWindow;
-};
-
-typedef unique_ptr<CElement> APtr;
-
-class CButton : public CElement {
-public:
-    CButton(int id,
-            const CRect &relPos,
-            const string &name) : CElement(id, relPos), m_ButtonName(name) {};
-//            "+- [1] Button \"Ok\" (70,394,180,48)\n"
-
-    ostream &printElement(ostream &os) const override {
-        cout << "+- [" << CElement::m_ElementId << "] Button \"" << m_ButtonName << "\" " << CElement::m_AbsElemCoords
-             << "\n";
-        return os;
-    }
-
-private:
-    const string m_ButtonName;
-};
-
-class CInput : public CElement {
-public:
-    CInput(int id,
-           const CRect &relPos,
-           const string &value) : CElement(id, relPos), m_InputName(value) {};
-
-    CInput &setValue(const string &src) {
-        m_InputName = src;
-        return *this;
-    }
-
-    ostream &printElement(ostream &os) const override {
-        cout << "+- [" << CElement::m_ElementId << "] Button \"" << m_InputName << "\" " << CElement::m_AbsElemCoords
-             << "\n";
-        return os;
-    }
-
-    string getValue() const {
-        return m_InputName;
-    }
-
-private:
-    string m_InputName;
-};
-
-class CLabel : public CElement {
-public:
-    CLabel(int id,
-           const CRect &relPos,
-           const string &label) : CElement(id, relPos), m_LabelName(label) {};
-
-    ostream &printElement(ostream &os) const override {
-        cout << "+- [" << CElement::m_ElementId << "] Label \"" << m_LabelName << "\" " << CElement::m_AbsElemCoords
-             << "\n";
-        return os;
-    }
-
-private:
-    const string m_LabelName;
-};
-
-class CComboBox : public CElement {
-public:
-    CComboBox(int id,
-              const CRect &relPos) : CElement(id, relPos), m_Selected(0) {};
-    // add
-    // setSelected
-    // getSelected
-private:
-    vector<string> m_Contents;
-    size_t m_Selected;
 };
 
 class CWindow {
 public:
     CWindow(int id,
             const string &title,
-            const CRect &absPos) : m_Id(id), m_Title(title), m_AbsPos(absPos) {};
+            const CRect &absPos) :
+            m_WindowId(id),
+            m_WindowCoords(absPos),
+            m_Title(title) {};
 
-    CWindow &add(CButton src) {
-//        src.printElement(cout);
-        calculateAbsCoords(src);
-        m_MapElements.insert(
-                make_pair(src.m_ElementId,
-                          make_unique<CButton>(src)));
+    CWindow &add(const CElement &src) {
+        unique_ptr<CElement> tmp(src.clone());
+        tmp->calculateCoords(m_WindowCoords);
+        m_Elements.push_back(move(tmp));
         return *this;
     }
-
-    CWindow &add(CLabel src) {
-        calculateAbsCoords(src);
-        m_MapElements.insert(
-                make_pair(src.m_ElementId,
-                          make_unique<CLabel>(src)));
-        return *this;
-    }
-
-    CWindow &add(CInput src) {
-        calculateAbsCoords(src);
-        m_MapElements.insert(
-                make_pair(src.m_ElementId,
-                          make_unique<CInput>(src)));
-        return *this;
-    }
-
-
-    ostream &printWindow(ostream &os) const {
-        for (const auto &mapElement: m_MapElements) {
-            mapElement.second->printElement(os);
-        }
-        return os;
-    }
-
     // add
     // search
     // setPosition
 private:
-    void calculateAbsCoords(CElement &src) {
-        src.m_AbsElemCoords.m_X = round(m_AbsPos.m_W * src.m_RelElemCoords.m_X + m_AbsPos.m_X);
-        src.m_AbsElemCoords.m_Y = round(m_AbsPos.m_H * src.m_RelElemCoords.m_Y + m_AbsPos.m_Y);
-        src.m_AbsElemCoords.m_H = round(m_AbsPos.m_H * src.m_RelElemCoords.m_H);
-        src.m_AbsElemCoords.m_W = round(m_AbsPos.m_W * src.m_RelElemCoords.m_W);
+
+
+    CRect m_WindowCoords;
+    int m_WindowId;
+    string m_Title;
+    vector<std::unique_ptr<CElement>> m_Elements;
+};
+
+class CButton : public CElement {
+public:
+    CButton(int id,
+            const CRect &relPos,
+            const string &name) : CElement(id, relPos), m_ButtonName(name) {};
+
+    CButton(const CButton &src) : CElement(src.m_ElementId, src.m_RelCoords),
+                                  m_ButtonName(src.m_ButtonName) {};
+
+    unique_ptr<CElement> clone() const override {
+        return make_unique<CButton>(*this);
     }
 
-    map<int, APtr> m_MapElements;
+private:
+    string m_ButtonName;
+};
 
-    int m_Id;
-    string m_Title;
-    CRect m_AbsPos;
+class CInput {
+public:
+    CInput(int id,
+           const CRect &relPos,
+           const string &value);
+    // setValue
+    // getValue
+};
+
+class CLabel {
+public:
+    CLabel(int id,
+           const CRect &relPos,
+           const string &label);
+};
+
+class CComboBox {
+public:
+    CComboBox(int id,
+              const CRect &relPos);
+    // add
+    // setSelected
+    // getSelected
 };
 
 // output operators
@@ -206,14 +156,15 @@ string toString(const _T &x) {
 }
 
 int main(void) {
-//    assert (sizeof(CButton) - sizeof(string) < sizeof(CComboBox) - sizeof(vector<string>));
-//    assert (sizeof(CInput) - sizeof(string) < sizeof(CComboBox) - sizeof(vector<string>));
-//    assert (sizeof(CLabel) - sizeof(string) < sizeof(CComboBox) - sizeof(vector<string>));
+    assert (sizeof(CButton) - sizeof(string) < sizeof(CComboBox) - sizeof(vector<string>));
+    assert (sizeof(CInput) - sizeof(string) < sizeof(CComboBox) - sizeof(vector<string>));
+    assert (sizeof(CLabel) - sizeof(string) < sizeof(CComboBox) - sizeof(vector<string>));
     CWindow a(0, "Sample window", CRect(10, 10, 600, 480));
+
     a.add(CButton(1, CRect(0.1, 0.8, 0.3, 0.1), "Ok")).add(CButton(2, CRect(0.6, 0.8, 0.3, 0.1), "Cancel"));
-    a.add(CLabel(10, CRect(0.1, 0.1, 0.2, 0.1), "Username:"));
-    a.add(CInput(11, CRect(0.4, 0.1, 0.5, 0.1), "chucknorris"));
-    a.printWindow(cout);
+    cout << "AHOJ" << endl;
+//    a.add(CLabel(10, CRect(0.1, 0.1, 0.2, 0.1), "Username:"));
+//    a.add(CInput(11, CRect(0.4, 0.1, 0.5, 0.1), "chucknorris"));
 //    a.add(CComboBox(20, CRect(0.1, 0.3, 0.8, 0.1)).add("Karate").add("Judo").add("Box").add("Progtest"));
 //    assert (toString(a) ==
 //            "[0] Window \"Sample window\" (10,10,600,480)\n"
