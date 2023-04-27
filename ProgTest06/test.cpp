@@ -87,12 +87,6 @@ private:
     friend class CWindow;
 };
 
-ostream &operator<<(ostream &os, const CElement &src) {
-    src.print(os);
-    return os;
-}
-
-
 class CWindow {
 public:
     CWindow(int id,
@@ -160,10 +154,6 @@ private:
     vector<std::shared_ptr<CElement>> m_Elements;
 };
 
-ostream &operator<<(ostream &os, const CWindow &src) {
-    src.printWindow(os);
-    return os;
-}
 
 class CButton : public CElement {
 public:
@@ -212,8 +202,7 @@ public:
         os << "[" << CElement::m_ElementId << "] Input \"" << m_InputName << "\" "
            << CElement::m_AbsCoords << "\n";
     }
-    // setValue
-    // getValue
+
 private:
     string m_InputName;
 };
@@ -296,15 +285,21 @@ public:
     size_t getSelected() const {
         return m_Selected;
     }
-    // add
-    // setSelected
-    // getSelected
+
 private:
     vector<string> m_ComboBoxContents;
     size_t m_Selected;
 };
 
-// output operators
+ostream &operator<<(ostream &os, const CWindow &src) {
+    src.printWindow(os);
+    return os;
+}
+
+ostream &operator<<(ostream &os, const CElement &src) {
+    src.print(os);
+    return os;
+}
 
 #ifndef __PROGTEST__
 
