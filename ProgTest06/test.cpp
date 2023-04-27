@@ -57,11 +57,19 @@ public:
             m_RelCoords(coords),
             m_AbsCoords(coords) {};
 
-    virtual unique_ptr<CElement> clone() const {};
+    CElement(const CElement &src) : m_ElementId(src.m_ElementId),
+                                    m_RelCoords(src.m_RelCoords),
+                                    m_AbsCoords(src.m_AbsCoords) {};
+
+    CElement(int id, const CRect &relCoords, const CRect &absCoords) : m_ElementId(id),
+                                                                       m_AbsCoords(absCoords),
+                                                                       m_RelCoords(relCoords) {};
+
+    virtual shared_ptr<CElement> clone() const {};
 
     friend ostream &operator<<(ostream &os, const CElement &src);
 
-    virtual ostream &print(ostream &os, int flag = 0) const {};
+    virtual void print(ostream &os, int flag = 0) const {};
 
 protected:
     CRect m_RelCoords;
@@ -94,8 +102,18 @@ public:
             m_WindowCoords(absPos),
             m_Title(title) {};
 
+    CWindow(const CWindow &src) : m_WindowId(src.m_WindowId),
+                                  m_WindowCoords(src.m_WindowCoords),
+                                  m_Title(src.m_Title) {
+        m_Elements.reserve(src.m_Elements.size());
+        for (const auto &element: src.m_Elements) {
+            m_Elements.push_back(element->clone());
+        }
+    }
+
     CWindow &add(const CElement &src) {
-        unique_ptr<CElement> tmp(src.clone());
+        shared_ptr
+                <CElement> tmp(src.clone());
         tmp->calculateCoords(m_WindowCoords);
         m_Elements.push_back(move(tmp));
         return *this;
@@ -114,6 +132,13 @@ public:
         }
         return os;
     }
+
+    shared_ptr<CElement> &search(int id) {
+        for (size_t i = 0; i < m_Elements.size(); i++)
+            if (m_Elements[i]->m_ElementId == id) {
+                return m_Elements[i];
+            }
+    }
     // add
     // search
     // setPosition
@@ -121,7 +146,7 @@ private:
     CRect m_WindowCoords;
     int m_WindowId;
     string m_Title;
-    vector<std::unique_ptr<CElement>> m_Elements;
+    vector<std::shared_ptr<CElement>> m_Elements;
 };
 
 ostream &operator<<(ostream &os, const CWindow &src) {
@@ -135,17 +160,16 @@ public:
             const CRect &relPos,
             const string &name) : CElement(id, relPos), m_ButtonName(name) {};
 
-    CButton(const CButton &src) : CElement(src.m_ElementId, src.m_RelCoords),
+    CButton(const CButton &src) : CElement(src.m_ElementId, src.m_RelCoords, src.m_AbsCoords),
                                   m_ButtonName(src.m_ButtonName) {};
 
-    unique_ptr<CElement> clone() const override {
-        return make_unique<CButton>(*this);
+    shared_ptr<CElement> clone() const override {
+        return make_shared<CButton>(*this);
     }
 
-    ostream &print(std::ostream &os, int flag) const override {
+    void print(ostream &os, int flag) const override {
         os << "[" << CElement::m_ElementId << "] Button \"" << m_ButtonName << "\" "
            << CElement::m_AbsCoords << "\n";
-        return os;
     }
 
 private:
@@ -158,8 +182,8 @@ public:
            const CRect &relPos,
            const string &value) : CElement(id, relPos), m_InputName(value) {};
 
-    CInput(const CInput &src) : CElement(src.m_ElementId, src.m_RelCoords),
-                                m_InputName(src.m_InputName) {};
+    CInput(const CInput &src) : CElement(src.m_ElementId, src.m_RelCoords,
+                                         src.m_AbsCoords), m_InputName(src.m_InputName) {};
 
     void setValue(const string &src) {
         m_InputName = src;
@@ -169,14 +193,13 @@ public:
         return m_InputName;
     }
 
-    unique_ptr<CElement> clone() const override {
-        return make_unique<CInput>(*this);
+    shared_ptr<CElement> clone() const override {
+        return make_shared<CInput>(*this);
     }
 
-    ostream &print(std::ostream &os, int flag) const override {
+    void print(ostream &os, int flag) const override {
         os << "[" << CElement::m_ElementId << "] Input \"" << m_InputName << "\" "
            << CElement::m_AbsCoords << "\n";
-        return os;
     }
     // setValue
     // getValue
@@ -191,17 +214,16 @@ public:
            const string &label) : CElement(id, relPos),
                                   m_LabelName(label) {};
 
-    CLabel(const CLabel &src) : CElement(src.m_ElementId, src.m_RelCoords),
+    CLabel(const CLabel &src) : CElement(src.m_ElementId, src.m_RelCoords, src.m_AbsCoords),
                                 m_LabelName(src.m_LabelName) {};
 
-    unique_ptr<CElement> clone() const override {
-        return make_unique<CLabel>(*this);
+    shared_ptr<CElement> clone() const override {
+        return make_shared<CLabel>(*this);
     }
 
-    ostream &print(std::ostream &os, int flag) const override {
+    void print(ostream &os, int flag) const override {
         os << "[" << CElement::m_ElementId << "] Label \"" << m_LabelName << "\" "
            << CElement::m_AbsCoords << "\n";
-        return os;
     }
 
 private:
@@ -213,14 +235,15 @@ public:
     CComboBox(int id,
               const CRect &relPos) : CElement(id, relPos), m_Selected(0) {};
 
-    CComboBox(const CComboBox &src) : CElement(src.m_ElementId, src.m_RelCoords),
-                                      m_ComboBoxContents(src.m_ComboBoxContents), m_Selected(src.m_Selected) {};
+    CComboBox(const CComboBox &src) : CElement(src.m_ElementId, src.m_RelCoords, src.m_AbsCoords),
+                                      m_ComboBoxContents(src.m_ComboBoxContents), m_Selected(src.m_Selected) {
+    };
 
-    unique_ptr<CElement> clone() const override {
-        return make_unique<CComboBox>(*this);
+    shared_ptr<CElement> clone() const override {
+        return make_shared<CComboBox>(*this);
     }
 
-    ostream &print(ostream &os, int flag) const override {
+    void print(ostream &os, int flag) const override {
         os << "[" << CElement::m_ElementId << "] ComboBox " << CElement::m_AbsCoords << "\n";
         switch (flag) {
             case 0:
@@ -259,8 +282,8 @@ public:
         m_Selected = num;
     }
 
-    string getSelected() const {
-        return m_ComboBoxContents[m_Selected];
+    int getSelected() const {
+        return m_Selected;
     }
     // add
     // setSelected
@@ -291,7 +314,7 @@ int main(void) {
     a.add(CLabel(10, CRect(0.1, 0.1, 0.2, 0.1), "Username:"));
     a.add(CInput(11, CRect(0.4, 0.1, 0.5, 0.1), "chucknorris"));
     a.add(CComboBox(20, CRect(0.1, 0.3, 0.8, 0.1)).add("Karate").add("Judo").add("Box").add("Progtest"));
-    a.printWindow(cout);
+//    a.printWindow(cout);
     assert (toString(a) ==
             "[0] Window \"Sample window\" (10,10,600,480)\n"
             "+- [1] Button \"Ok\" (70,394,180,48)\n"
@@ -303,44 +326,47 @@ int main(void) {
             "   +- Judo\n"
             "   +- Box\n"
             "   +- Progtest\n");
-//    CWindow b = a;
-//    assert (toString(*b.search(20)) ==
-//            "[20] ComboBox (70,154,480,48)\n"
-//            "+->Karate<\n"
-//            "+- Judo\n"
-//            "+- Box\n"
-//            "+- Progtest\n");
-//    assert (dynamic_cast<CComboBox &> ( *b.search(20)).getSelected() == 0);
-//    dynamic_cast<CComboBox &> ( *b.search(20)).setSelected(3);
-//    assert (dynamic_cast<CInput &> ( *b.search(11)).getValue() == "chucknorris");
-//    dynamic_cast<CInput &> ( *b.search(11)).setValue("chucknorris@fit.cvut.cz");
-//    b.add(CComboBox(21, CRect(0.1, 0.5, 0.8, 0.1)).add("PA2").add("OSY").add("Both"));
-//    assert (toString(b) ==
-//            "[0] Window \"Sample window\" (10,10,600,480)\n"
-//            "+- [1] Button \"Ok\" (70,394,180,48)\n"
-//            "+- [2] Button \"Cancel\" (370,394,180,48)\n"
-//            "+- [10] Label \"Username:\" (70,58,120,48)\n"
-//            "+- [11] Input \"chucknorris@fit.cvut.cz\" (250,58,300,48)\n"
-//            "+- [20] ComboBox (70,154,480,48)\n"
-//            "|  +- Karate\n"
-//            "|  +- Judo\n"
-//            "|  +- Box\n"
-//            "|  +->Progtest<\n"
-//            "+- [21] ComboBox (70,250,480,48)\n"
-//            "   +->PA2<\n"
-//            "   +- OSY\n"
-//            "   +- Both\n");
-//    assert (toString(a) ==
-//            "[0] Window \"Sample window\" (10,10,600,480)\n"
-//            "+- [1] Button \"Ok\" (70,394,180,48)\n"
-//            "+- [2] Button \"Cancel\" (370,394,180,48)\n"
-//            "+- [10] Label \"Username:\" (70,58,120,48)\n"
-//            "+- [11] Input \"chucknorris\" (250,58,300,48)\n"
-//            "+- [20] ComboBox (70,154,480,48)\n"
-//            "   +->Karate<\n"
-//            "   +- Judo\n"
-//            "   +- Box\n"
-//            "   +- Progtest\n");
+    CWindow b = a;
+
+    cout << *b.search(20);
+
+    assert (toString(*b.search(20)) ==
+            "[20] ComboBox (70,154,480,48)\n"
+            "+->Karate<\n"
+            "+- Judo\n"
+            "+- Box\n"
+            "+- Progtest\n");
+    assert (dynamic_cast<CComboBox &> ( *b.search(20)).getSelected() == 0);
+    dynamic_cast<CComboBox &> ( *b.search(20)).setSelected(3);
+    assert (dynamic_cast<CInput &> ( *b.search(11)).getValue() == "chucknorris");
+    dynamic_cast<CInput &> ( *b.search(11)).setValue("chucknorris@fit.cvut.cz");
+    b.add(CComboBox(21, CRect(0.1, 0.5, 0.8, 0.1)).add("PA2").add("OSY").add("Both"));
+    assert (toString(b) ==
+            "[0] Window \"Sample window\" (10,10,600,480)\n"
+            "+- [1] Button \"Ok\" (70,394,180,48)\n"
+            "+- [2] Button \"Cancel\" (370,394,180,48)\n"
+            "+- [10] Label \"Username:\" (70,58,120,48)\n"
+            "+- [11] Input \"chucknorris@fit.cvut.cz\" (250,58,300,48)\n"
+            "+- [20] ComboBox (70,154,480,48)\n"
+            "|  +- Karate\n"
+            "|  +- Judo\n"
+            "|  +- Box\n"
+            "|  +->Progtest<\n"
+            "+- [21] ComboBox (70,250,480,48)\n"
+            "   +->PA2<\n"
+            "   +- OSY\n"
+            "   +- Both\n");
+    assert (toString(a) ==
+            "[0] Window \"Sample window\" (10,10,600,480)\n"
+            "+- [1] Button \"Ok\" (70,394,180,48)\n"
+            "+- [2] Button \"Cancel\" (370,394,180,48)\n"
+            "+- [10] Label \"Username:\" (70,58,120,48)\n"
+            "+- [11] Input \"chucknorris\" (250,58,300,48)\n"
+            "+- [20] ComboBox (70,154,480,48)\n"
+            "   +->Karate<\n"
+            "   +- Judo\n"
+            "   +- Box\n"
+            "   +- Progtest\n");
 //    b.setPosition(CRect(20, 30, 640, 520));
 //    assert (toString(b) ==
 //            "[0] Window \"Sample window\" (20,30,640,520)\n"
