@@ -106,8 +106,7 @@ public:
     }
 
     CWindow &add(const CElement &src) {
-        shared_ptr
-                <CElement> tmp(src.clone());
+        shared_ptr<CElement> tmp(src.clone());
         tmp->calculateCoords(m_WindowCoords);
         m_Elements.push_back(move(tmp));
         return *this;
