@@ -62,26 +62,26 @@ public:
                                     m_AbsCoords(src.m_AbsCoords) {};
 
     CElement(int id, const CRect &relCoords, const CRect &absCoords) : m_ElementId(id),
-                                                                       m_AbsCoords(absCoords),
-                                                                       m_RelCoords(relCoords) {};
+                                                                       m_RelCoords(relCoords),
+                                                                       m_AbsCoords(absCoords) {};
 
-    virtual shared_ptr<CElement> clone() const {};
+    virtual shared_ptr<CElement> clone() const { return nullptr; };
 
     friend ostream &operator<<(ostream &os, const CElement &src);
 
     virtual void print(ostream &os, int flag = 0) const {};
 
 protected:
+    int m_ElementId;
     CRect m_RelCoords;
     CRect m_AbsCoords;
-    int m_ElementId;
 
 private:
     void calculateCoords(const CRect &windowCoords) {
-        m_AbsCoords.m_X = round(windowCoords.m_W * m_RelCoords.m_X + windowCoords.m_X);
-        m_AbsCoords.m_Y = round(windowCoords.m_H * m_RelCoords.m_Y + windowCoords.m_Y);
-        m_AbsCoords.m_H = round(windowCoords.m_H * m_RelCoords.m_H);
-        m_AbsCoords.m_W = round(windowCoords.m_W * m_RelCoords.m_W);
+        m_AbsCoords.m_X = windowCoords.m_W * m_RelCoords.m_X + windowCoords.m_X;
+        m_AbsCoords.m_Y = windowCoords.m_H * m_RelCoords.m_Y + windowCoords.m_Y;
+        m_AbsCoords.m_H = windowCoords.m_H * m_RelCoords.m_H;
+        m_AbsCoords.m_W = windowCoords.m_W * m_RelCoords.m_W;
     }
 
     friend class CWindow;
@@ -138,13 +138,24 @@ public:
             if (m_Elements[i]->m_ElementId == id) {
                 return m_Elements[i];
             }
+        return m_Elements[0];
     }
-    // add
-    // search
-    // setPosition
+
+    CWindow &setPosition(const CRect &src) {
+        m_WindowCoords.m_X = src.m_X;
+        m_WindowCoords.m_Y = src.m_Y;
+        m_WindowCoords.m_H = src.m_H;
+        m_WindowCoords.m_W = src.m_W;
+
+        for (const auto &element: m_Elements) {
+            element->calculateCoords(m_WindowCoords);
+        }
+        return *this;
+    }
+
 private:
-    CRect m_WindowCoords;
     int m_WindowId;
+    CRect m_WindowCoords;
     string m_Title;
     vector<std::shared_ptr<CElement>> m_Elements;
 };
@@ -278,11 +289,11 @@ public:
         return *this;
     }
 
-    void setSelected(int num) {
+    void setSelected(size_t num) {
         m_Selected = num;
     }
 
-    int getSelected() const {
+    size_t getSelected() const {
         return m_Selected;
     }
     // add
@@ -290,7 +301,7 @@ public:
     // getSelected
 private:
     vector<string> m_ComboBoxContents;
-    int m_Selected;
+    size_t m_Selected;
 };
 
 // output operators
@@ -314,7 +325,6 @@ int main(void) {
     a.add(CLabel(10, CRect(0.1, 0.1, 0.2, 0.1), "Username:"));
     a.add(CInput(11, CRect(0.4, 0.1, 0.5, 0.1), "chucknorris"));
     a.add(CComboBox(20, CRect(0.1, 0.3, 0.8, 0.1)).add("Karate").add("Judo").add("Box").add("Progtest"));
-//    a.printWindow(cout);
     assert (toString(a) ==
             "[0] Window \"Sample window\" (10,10,600,480)\n"
             "+- [1] Button \"Ok\" (70,394,180,48)\n"
@@ -327,8 +337,6 @@ int main(void) {
             "   +- Box\n"
             "   +- Progtest\n");
     CWindow b = a;
-
-    cout << *b.search(20);
 
     assert (toString(*b.search(20)) ==
             "[20] ComboBox (70,154,480,48)\n"
@@ -367,22 +375,22 @@ int main(void) {
             "   +- Judo\n"
             "   +- Box\n"
             "   +- Progtest\n");
-//    b.setPosition(CRect(20, 30, 640, 520));
-//    assert (toString(b) ==
-//            "[0] Window \"Sample window\" (20,30,640,520)\n"
-//            "+- [1] Button \"Ok\" (84,446,192,52)\n"
-//            "+- [2] Button \"Cancel\" (404,446,192,52)\n"
-//            "+- [10] Label \"Username:\" (84,82,128,52)\n"
-//            "+- [11] Input \"chucknorris@fit.cvut.cz\" (276,82,320,52)\n"
-//            "+- [20] ComboBox (84,186,512,52)\n"
-//            "|  +- Karate\n"
-//            "|  +- Judo\n"
-//            "|  +- Box\n"
-//            "|  +->Progtest<\n"
-//            "+- [21] ComboBox (84,290,512,52)\n"
-//            "   +->PA2<\n"
-//            "   +- OSY\n"
-//            "   +- Both\n");
+    b.setPosition(CRect(20, 30, 640, 520));
+    assert (toString(b) ==
+            "[0] Window \"Sample window\" (20,30,640,520)\n"
+            "+- [1] Button \"Ok\" (84,446,192,52)\n"
+            "+- [2] Button \"Cancel\" (404,446,192,52)\n"
+            "+- [10] Label \"Username:\" (84,82,128,52)\n"
+            "+- [11] Input \"chucknorris@fit.cvut.cz\" (276,82,320,52)\n"
+            "+- [20] ComboBox (84,186,512,52)\n"
+            "|  +- Karate\n"
+            "|  +- Judo\n"
+            "|  +- Box\n"
+            "|  +->Progtest<\n"
+            "+- [21] ComboBox (84,290,512,52)\n"
+            "   +->PA2<\n"
+            "   +- OSY\n"
+            "   +- Both\n");
     return EXIT_SUCCESS;
 }
 
