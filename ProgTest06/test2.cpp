@@ -69,7 +69,7 @@ public:
 
     friend ostream &operator<<(ostream &os, const CElement &src);
 
-    virtual void print(ostream &os, int flag = 0) const {};
+    virtual void print(ostream &os, size_t indent, int flag = 0) const {};
 
 protected:
     int m_ElementId;
@@ -116,12 +116,11 @@ public:
 
     ostream &printWindow(ostream &os) const {
         os << "[" << m_WindowId << "] Window \"" << m_Title << "\" " << m_WindowCoords << "\n";
-        for (size_t i = 0; i < m_Elements.size(); i++) {
-            os << "+- ";
-            if (i == m_Elements.size() - 1) {
-                m_Elements[i]->print(os, 1);
-            } else
-                m_Elements[i]->print(os, 2);
+        for (const auto &element: m_Elements) {
+            if (element == m_Elements.back())
+                element->print(os, 0, 1);
+            else
+                element->print(os, 0, 2);
         }
         return os;
     }
@@ -167,8 +166,8 @@ public:
         return make_shared<CButton>(*this);
     }
 
-    void print(ostream &os, int flag) const override {
-        os << "[" << CElement::m_ElementId << "] Button \"" << m_ButtonName << "\" "
+    void print(ostream &os, size_t indent, int flag) const override {
+        os << string(indent * 3, ' ') << "+- [" << CElement::m_ElementId << "] Button \"" << m_ButtonName << "\" "
            << CElement::m_AbsCoords << "\n";
     }
 
@@ -197,8 +196,8 @@ public:
         return make_shared<CInput>(*this);
     }
 
-    void print(ostream &os, int flag) const override {
-        os << "[" << CElement::m_ElementId << "] Input \"" << m_InputName << "\" "
+    void print(ostream &os, size_t indent, int flag) const override {
+        os << string(indent * 3, ' ') << "+- [" << CElement::m_ElementId << "] Input \"" << m_InputName << "\" "
            << CElement::m_AbsCoords << "\n";
     }
 
@@ -220,8 +219,8 @@ public:
         return make_shared<CLabel>(*this);
     }
 
-    void print(ostream &os, int flag) const override {
-        os << "[" << CElement::m_ElementId << "] Label \"" << m_LabelName << "\" "
+    void print(ostream &os, size_t indent, int flag) const override {
+        os << string(indent * 3, ' ') << "+- [" << CElement::m_ElementId << "] Label \"" << m_LabelName << "\" "
            << CElement::m_AbsCoords << "\n";
     }
 
@@ -242,10 +241,12 @@ public:
         return make_shared<CComboBox>(*this);
     }
 
-    void print(ostream &os, int flag) const override {
-        os << "[" << CElement::m_ElementId << "] ComboBox " << CElement::m_AbsCoords << "\n";
+    void print(ostream &os, size_t indent, int flag) const override {
         switch (flag) {
             case 0:
+                os << "[" << CElement::m_ElementId << "] ComboBox "
+                   << CElement::m_AbsCoords
+                   << "\n";
                 for (size_t i = 0; i < m_ComboBoxContents.size(); i++) {
                     if (i == m_Selected)
                         os << "+->" << m_ComboBoxContents[i] << "<\n";
@@ -254,19 +255,25 @@ public:
                 }
                 break;
             case 1:
+                os << string(indent * 3, ' ') << "+- [" << CElement::m_ElementId << "] ComboBox "
+                   << CElement::m_AbsCoords
+                   << "\n";
                 for (size_t i = 0; i < m_ComboBoxContents.size(); i++) {
                     if (i == m_Selected)
-                        os << "   +->" << m_ComboBoxContents[i] << "<\n";
+                        os << string(indent * 3 + 3, ' ') << "+->" << m_ComboBoxContents[i] << "<\n";
                     else
-                        os << "   +- " << m_ComboBoxContents[i] << "\n";
+                        os << string(indent * 3 + 3, ' ') << "+- " << m_ComboBoxContents[i] << "\n";
                 }
                 break;
             case 2:
+                os << string(indent * 3, ' ') << "+- [" << CElement::m_ElementId << "] ComboBox "
+                   << CElement::m_AbsCoords
+                   << "\n";
                 for (size_t i = 0; i < m_ComboBoxContents.size(); i++) {
                     if (i == m_Selected)
-                        os << "|  +->" << m_ComboBoxContents[i] << "<\n";
+                        os << string(indent * 3, ' ') << "|  +->" << m_ComboBoxContents[i] << "<\n";
                     else
-                        os << "|  +- " << m_ComboBoxContents[i] << "\n";
+                        os << string(indent * 3, ' ') << "|  +- " << m_ComboBoxContents[i] << "\n";
                 }
                 break;
         }
@@ -290,13 +297,49 @@ private:
     size_t m_Selected;
 };
 
+class CPanel : public CElement {
+public:
+    CPanel(int id, const CRect &coords) : CElement(id, coords) {};
+
+    CPanel(const CPanel &src) : CElement(src.m_ElementId, src.m_RelCoords, src.m_AbsCoords) {
+        m_PanelElements.reserve(src.m_PanelElements.size());
+        for (const auto &panelElement: src.m_PanelElements) {
+            m_PanelElements.push_back(panelElement->clone());
+        }
+    };
+
+    shared_ptr<CElement> clone() const override {
+        return make_shared<CPanel>(*this);
+    }
+
+    void print(ostream &os, size_t indent, int flag) const override {
+        os << string(indent * 3, ' ') << "+- [" <<
+           CElement::m_ElementId << "] " << "Panel " << CElement::m_AbsCoords << "\n";
+        for (const auto &panelElement: m_PanelElements) {
+            if (panelElement == m_PanelElements.back())
+                panelElement->print(os, indent + 1, 1);
+            else
+                panelElement->print(os, indent + 1, 2);
+        }
+    }
+
+    CPanel &add(const CElement &src) {
+        shared_ptr<CElement> tmp(src.clone());
+        m_PanelElements.push_back(move(tmp));
+        return *this;
+    }
+
+private:
+    vector<shared_ptr<CElement>> m_PanelElements;
+};
+
 ostream &operator<<(ostream &os, const CWindow &src) {
     src.printWindow(os);
     return os;
 }
 
 ostream &operator<<(ostream &os, const CElement &src) {
-    src.print(os);
+    src.print(os, 0);
     return os;
 }
 
@@ -322,331 +365,333 @@ int main(void) {
     a.add(CInput(11, CRect(0.4, 0.1, 0.5, 0.1), "chucknorris"));
     a.add(CPanel(12, CRect(0.1, 0.3, 0.8, 0.7)).add(
             CComboBox(20, CRect(0.1, 0.3, 0.8, 0.1)).add("Karate").add("Judo").add("Box").add("Progtest")));
-    assert (toString(a) ==
-            "[0] Window \"Sample window\" (10,10,600,480)\n"
-            "+- [1] Button \"Ok\" (70,394,180,48)\n"
-            "+- [2] Button \"Cancel\" (370,394,180,48)\n"
-            "+- [10] Label \"Username:\" (70,58,120,48)\n"
-            "+- [11] Input \"chucknorris\" (250,58,300,48)\n"
-            "+- [12] Panel (70,154,480,336)\n"
-            "   +- [20] ComboBox (118,254.8,384,33.6)\n"
-            "      +->Karate<\n"
-            "      +- Judo\n"
-            "      +- Box\n"
-            "      +- Progtest\n");
-    CWindow b = a;
-    assert (toString(*b.search(20)) ==
-            "[20] ComboBox (118,254.8,384,33.6)\n"
-            "+->Karate<\n"
-            "+- Judo\n"
-            "+- Box\n"
-            "+- Progtest\n");
-    assert (dynamic_cast<CComboBox &> ( *b.search(20)).getSelected() == 0);
-    dynamic_cast<CComboBox &> ( *b.search(20)).setSelected(3);
-    assert (dynamic_cast<CInput &> ( *b.search(11)).getValue() == "chucknorris");
-    dynamic_cast<CInput &> ( *b.search(11)).setValue("chucknorris@fit.cvut.cz");
-    CPanel &p = dynamic_cast<CPanel &> ( *b.search(12));
-    p.add(CComboBox(21, CRect(0.1, 0.5, 0.8, 0.1)).add("PA2").add("OSY").add("Both"));
-    assert (toString(b) ==
-            "[0] Window \"Sample window\" (10,10,600,480)\n"
-            "+- [1] Button \"Ok\" (70,394,180,48)\n"
-            "+- [2] Button \"Cancel\" (370,394,180,48)\n"
-            "+- [10] Label \"Username:\" (70,58,120,48)\n"
-            "+- [11] Input \"chucknorris@fit.cvut.cz\" (250,58,300,48)\n"
-            "+- [12] Panel (70,154,480,336)\n"
-            "   +- [20] ComboBox (118,254.8,384,33.6)\n"
-            "   |  +- Karate\n"
-            "   |  +- Judo\n"
-            "   |  +- Box\n"
-            "   |  +->Progtest<\n"
-            "   +- [21] ComboBox (118,322,384,33.6)\n"
-            "      +->PA2<\n"
-            "      +- OSY\n"
-            "      +- Both\n");
-    assert (toString(a) ==
-            "[0] Window \"Sample window\" (10,10,600,480)\n"
-            "+- [1] Button \"Ok\" (70,394,180,48)\n"
-            "+- [2] Button \"Cancel\" (370,394,180,48)\n"
-            "+- [10] Label \"Username:\" (70,58,120,48)\n"
-            "+- [11] Input \"chucknorris\" (250,58,300,48)\n"
-            "+- [12] Panel (70,154,480,336)\n"
-            "   +- [20] ComboBox (118,254.8,384,33.6)\n"
-            "      +->Karate<\n"
-            "      +- Judo\n"
-            "      +- Box\n"
-            "      +- Progtest\n");
-    assert (toString(p) ==
-            "[12] Panel (70,154,480,336)\n"
-            "+- [20] ComboBox (118,254.8,384,33.6)\n"
-            "|  +- Karate\n"
-            "|  +- Judo\n"
-            "|  +- Box\n"
-            "|  +->Progtest<\n"
-            "+- [21] ComboBox (118,322,384,33.6)\n"
-            "   +->PA2<\n"
-            "   +- OSY\n"
-            "   +- Both\n");
-    b.setPosition(CRect(20, 30, 640, 520));
-    assert (toString(b) ==
-            "[0] Window \"Sample window\" (20,30,640,520)\n"
-            "+- [1] Button \"Ok\" (84,446,192,52)\n"
-            "+- [2] Button \"Cancel\" (404,446,192,52)\n"
-            "+- [10] Label \"Username:\" (84,82,128,52)\n"
-            "+- [11] Input \"chucknorris@fit.cvut.cz\" (276,82,320,52)\n"
-            "+- [12] Panel (84,186,512,364)\n"
-            "   +- [20] ComboBox (135.2,295.2,409.6,36.4)\n"
-            "   |  +- Karate\n"
-            "   |  +- Judo\n"
-            "   |  +- Box\n"
-            "   |  +->Progtest<\n"
-            "   +- [21] ComboBox (135.2,368,409.6,36.4)\n"
-            "      +->PA2<\n"
-            "      +- OSY\n"
-            "      +- Both\n");
-    p.add(p);
-    assert (toString(p) ==
-            "[12] Panel (84,186,512,364)\n"
-            "+- [20] ComboBox (135.2,295.2,409.6,36.4)\n"
-            "|  +- Karate\n"
-            "|  +- Judo\n"
-            "|  +- Box\n"
-            "|  +->Progtest<\n"
-            "+- [21] ComboBox (135.2,368,409.6,36.4)\n"
-            "|  +->PA2<\n"
-            "|  +- OSY\n"
-            "|  +- Both\n"
-            "+- [12] Panel (135.2,295.2,409.6,254.8)\n"
-            "   +- [20] ComboBox (176.16,371.64,327.68,25.48)\n"
-            "   |  +- Karate\n"
-            "   |  +- Judo\n"
-            "   |  +- Box\n"
-            "   |  +->Progtest<\n"
-            "   +- [21] ComboBox (176.16,422.6,327.68,25.48)\n"
-            "      +->PA2<\n"
-            "      +- OSY\n"
-            "      +- Both\n");
-    p.add(p);
-    assert (toString(p) ==
-            "[12] Panel (84,186,512,364)\n"
-            "+- [20] ComboBox (135.2,295.2,409.6,36.4)\n"
-            "|  +- Karate\n"
-            "|  +- Judo\n"
-            "|  +- Box\n"
-            "|  +->Progtest<\n"
-            "+- [21] ComboBox (135.2,368,409.6,36.4)\n"
-            "|  +->PA2<\n"
-            "|  +- OSY\n"
-            "|  +- Both\n"
-            "+- [12] Panel (135.2,295.2,409.6,254.8)\n"
-            "|  +- [20] ComboBox (176.16,371.64,327.68,25.48)\n"
-            "|  |  +- Karate\n"
-            "|  |  +- Judo\n"
-            "|  |  +- Box\n"
-            "|  |  +->Progtest<\n"
-            "|  +- [21] ComboBox (176.16,422.6,327.68,25.48)\n"
-            "|     +->PA2<\n"
-            "|     +- OSY\n"
-            "|     +- Both\n"
-            "+- [12] Panel (135.2,295.2,409.6,254.8)\n"
-            "   +- [20] ComboBox (176.16,371.64,327.68,25.48)\n"
-            "   |  +- Karate\n"
-            "   |  +- Judo\n"
-            "   |  +- Box\n"
-            "   |  +->Progtest<\n"
-            "   +- [21] ComboBox (176.16,422.6,327.68,25.48)\n"
-            "   |  +->PA2<\n"
-            "   |  +- OSY\n"
-            "   |  +- Both\n"
-            "   +- [12] Panel (176.16,371.64,327.68,178.36)\n"
-            "      +- [20] ComboBox (208.928,425.148,262.144,17.836)\n"
-            "      |  +- Karate\n"
-            "      |  +- Judo\n"
-            "      |  +- Box\n"
-            "      |  +->Progtest<\n"
-            "      +- [21] ComboBox (208.928,460.82,262.144,17.836)\n"
-            "         +->PA2<\n"
-            "         +- OSY\n"
-            "         +- Both\n");
-    p.add(p);
-    assert (toString(p) ==
-            "[12] Panel (84,186,512,364)\n"
-            "+- [20] ComboBox (135.2,295.2,409.6,36.4)\n"
-            "|  +- Karate\n"
-            "|  +- Judo\n"
-            "|  +- Box\n"
-            "|  +->Progtest<\n"
-            "+- [21] ComboBox (135.2,368,409.6,36.4)\n"
-            "|  +->PA2<\n"
-            "|  +- OSY\n"
-            "|  +- Both\n"
-            "+- [12] Panel (135.2,295.2,409.6,254.8)\n"
-            "|  +- [20] ComboBox (176.16,371.64,327.68,25.48)\n"
-            "|  |  +- Karate\n"
-            "|  |  +- Judo\n"
-            "|  |  +- Box\n"
-            "|  |  +->Progtest<\n"
-            "|  +- [21] ComboBox (176.16,422.6,327.68,25.48)\n"
-            "|     +->PA2<\n"
-            "|     +- OSY\n"
-            "|     +- Both\n"
-            "+- [12] Panel (135.2,295.2,409.6,254.8)\n"
-            "|  +- [20] ComboBox (176.16,371.64,327.68,25.48)\n"
-            "|  |  +- Karate\n"
-            "|  |  +- Judo\n"
-            "|  |  +- Box\n"
-            "|  |  +->Progtest<\n"
-            "|  +- [21] ComboBox (176.16,422.6,327.68,25.48)\n"
-            "|  |  +->PA2<\n"
-            "|  |  +- OSY\n"
-            "|  |  +- Both\n"
-            "|  +- [12] Panel (176.16,371.64,327.68,178.36)\n"
-            "|     +- [20] ComboBox (208.928,425.148,262.144,17.836)\n"
-            "|     |  +- Karate\n"
-            "|     |  +- Judo\n"
-            "|     |  +- Box\n"
-            "|     |  +->Progtest<\n"
-            "|     +- [21] ComboBox (208.928,460.82,262.144,17.836)\n"
-            "|        +->PA2<\n"
-            "|        +- OSY\n"
-            "|        +- Both\n"
-            "+- [12] Panel (135.2,295.2,409.6,254.8)\n"
-            "   +- [20] ComboBox (176.16,371.64,327.68,25.48)\n"
-            "   |  +- Karate\n"
-            "   |  +- Judo\n"
-            "   |  +- Box\n"
-            "   |  +->Progtest<\n"
-            "   +- [21] ComboBox (176.16,422.6,327.68,25.48)\n"
-            "   |  +->PA2<\n"
-            "   |  +- OSY\n"
-            "   |  +- Both\n"
-            "   +- [12] Panel (176.16,371.64,327.68,178.36)\n"
-            "   |  +- [20] ComboBox (208.928,425.148,262.144,17.836)\n"
-            "   |  |  +- Karate\n"
-            "   |  |  +- Judo\n"
-            "   |  |  +- Box\n"
-            "   |  |  +->Progtest<\n"
-            "   |  +- [21] ComboBox (208.928,460.82,262.144,17.836)\n"
-            "   |     +->PA2<\n"
-            "   |     +- OSY\n"
-            "   |     +- Both\n"
-            "   +- [12] Panel (176.16,371.64,327.68,178.36)\n"
-            "      +- [20] ComboBox (208.928,425.148,262.144,17.836)\n"
-            "      |  +- Karate\n"
-            "      |  +- Judo\n"
-            "      |  +- Box\n"
-            "      |  +->Progtest<\n"
-            "      +- [21] ComboBox (208.928,460.82,262.144,17.836)\n"
-            "      |  +->PA2<\n"
-            "      |  +- OSY\n"
-            "      |  +- Both\n"
-            "      +- [12] Panel (208.928,425.148,262.144,124.852)\n"
-            "         +- [20] ComboBox (235.142,462.604,209.715,12.4852)\n"
-            "         |  +- Karate\n"
-            "         |  +- Judo\n"
-            "         |  +- Box\n"
-            "         |  +->Progtest<\n"
-            "         +- [21] ComboBox (235.142,487.574,209.715,12.4852)\n"
-            "            +->PA2<\n"
-            "            +- OSY\n"
-            "            +- Both\n");
-    assert (toString(b) ==
-            "[0] Window \"Sample window\" (20,30,640,520)\n"
-            "+- [1] Button \"Ok\" (84,446,192,52)\n"
-            "+- [2] Button \"Cancel\" (404,446,192,52)\n"
-            "+- [10] Label \"Username:\" (84,82,128,52)\n"
-            "+- [11] Input \"chucknorris@fit.cvut.cz\" (276,82,320,52)\n"
-            "+- [12] Panel (84,186,512,364)\n"
-            "   +- [20] ComboBox (135.2,295.2,409.6,36.4)\n"
-            "   |  +- Karate\n"
-            "   |  +- Judo\n"
-            "   |  +- Box\n"
-            "   |  +->Progtest<\n"
-            "   +- [21] ComboBox (135.2,368,409.6,36.4)\n"
-            "   |  +->PA2<\n"
-            "   |  +- OSY\n"
-            "   |  +- Both\n"
-            "   +- [12] Panel (135.2,295.2,409.6,254.8)\n"
-            "   |  +- [20] ComboBox (176.16,371.64,327.68,25.48)\n"
-            "   |  |  +- Karate\n"
-            "   |  |  +- Judo\n"
-            "   |  |  +- Box\n"
-            "   |  |  +->Progtest<\n"
-            "   |  +- [21] ComboBox (176.16,422.6,327.68,25.48)\n"
-            "   |     +->PA2<\n"
-            "   |     +- OSY\n"
-            "   |     +- Both\n"
-            "   +- [12] Panel (135.2,295.2,409.6,254.8)\n"
-            "   |  +- [20] ComboBox (176.16,371.64,327.68,25.48)\n"
-            "   |  |  +- Karate\n"
-            "   |  |  +- Judo\n"
-            "   |  |  +- Box\n"
-            "   |  |  +->Progtest<\n"
-            "   |  +- [21] ComboBox (176.16,422.6,327.68,25.48)\n"
-            "   |  |  +->PA2<\n"
-            "   |  |  +- OSY\n"
-            "   |  |  +- Both\n"
-            "   |  +- [12] Panel (176.16,371.64,327.68,178.36)\n"
-            "   |     +- [20] ComboBox (208.928,425.148,262.144,17.836)\n"
-            "   |     |  +- Karate\n"
-            "   |     |  +- Judo\n"
-            "   |     |  +- Box\n"
-            "   |     |  +->Progtest<\n"
-            "   |     +- [21] ComboBox (208.928,460.82,262.144,17.836)\n"
-            "   |        +->PA2<\n"
-            "   |        +- OSY\n"
-            "   |        +- Both\n"
-            "   +- [12] Panel (135.2,295.2,409.6,254.8)\n"
-            "      +- [20] ComboBox (176.16,371.64,327.68,25.48)\n"
-            "      |  +- Karate\n"
-            "      |  +- Judo\n"
-            "      |  +- Box\n"
-            "      |  +->Progtest<\n"
-            "      +- [21] ComboBox (176.16,422.6,327.68,25.48)\n"
-            "      |  +->PA2<\n"
-            "      |  +- OSY\n"
-            "      |  +- Both\n"
-            "      +- [12] Panel (176.16,371.64,327.68,178.36)\n"
-            "      |  +- [20] ComboBox (208.928,425.148,262.144,17.836)\n"
-            "      |  |  +- Karate\n"
-            "      |  |  +- Judo\n"
-            "      |  |  +- Box\n"
-            "      |  |  +->Progtest<\n"
-            "      |  +- [21] ComboBox (208.928,460.82,262.144,17.836)\n"
-            "      |     +->PA2<\n"
-            "      |     +- OSY\n"
-            "      |     +- Both\n"
-            "      +- [12] Panel (176.16,371.64,327.68,178.36)\n"
-            "         +- [20] ComboBox (208.928,425.148,262.144,17.836)\n"
-            "         |  +- Karate\n"
-            "         |  +- Judo\n"
-            "         |  +- Box\n"
-            "         |  +->Progtest<\n"
-            "         +- [21] ComboBox (208.928,460.82,262.144,17.836)\n"
-            "         |  +->PA2<\n"
-            "         |  +- OSY\n"
-            "         |  +- Both\n"
-            "         +- [12] Panel (208.928,425.148,262.144,124.852)\n"
-            "            +- [20] ComboBox (235.142,462.604,209.715,12.4852)\n"
-            "            |  +- Karate\n"
-            "            |  +- Judo\n"
-            "            |  +- Box\n"
-            "            |  +->Progtest<\n"
-            "            +- [21] ComboBox (235.142,487.574,209.715,12.4852)\n"
-            "               +->PA2<\n"
-            "               +- OSY\n"
-            "               +- Both\n");
-    assert (toString(a) ==
-            "[0] Window \"Sample window\" (10,10,600,480)\n"
-            "+- [1] Button \"Ok\" (70,394,180,48)\n"
-            "+- [2] Button \"Cancel\" (370,394,180,48)\n"
-            "+- [10] Label \"Username:\" (70,58,120,48)\n"
-            "+- [11] Input \"chucknorris\" (250,58,300,48)\n"
-            "+- [12] Panel (70,154,480,336)\n"
-            "   +- [20] ComboBox (118,254.8,384,33.6)\n"
-            "      +->Karate<\n"
-            "      +- Judo\n"
-            "      +- Box\n"
-            "      +- Progtest\n");
+    cout << "AHOJ" << endl;
+    a.printWindow(cout);
+    //    assert (toString(a) ==
+//            "[0] Window \"Sample window\" (10,10,600,480)\n"
+//            "+- [1] Button \"Ok\" (70,394,180,48)\n"
+//            "+- [2] Button \"Cancel\" (370,394,180,48)\n"
+//            "+- [10] Label \"Username:\" (70,58,120,48)\n"
+//            "+- [11] Input \"chucknorris\" (250,58,300,48)\n"
+//            "+- [12] Panel (70,154,480,336)\n"
+//            "   +- [20] ComboBox (118,254.8,384,33.6)\n"
+//            "      +->Karate<\n"
+//            "      +- Judo\n"
+//            "      +- Box\n"
+//            "      +- Progtest\n");
+//    CWindow b = a;
+//    assert (toString(*b.search(20)) ==
+//            "[20] ComboBox (118,254.8,384,33.6)\n"
+//            "+->Karate<\n"
+//            "+- Judo\n"
+//            "+- Box\n"
+//            "+- Progtest\n");
+//    assert (dynamic_cast<CComboBox &> ( *b.search(20)).getSelected() == 0);
+//    dynamic_cast<CComboBox &> ( *b.search(20)).setSelected(3);
+//    assert (dynamic_cast<CInput &> ( *b.search(11)).getValue() == "chucknorris");
+//    dynamic_cast<CInput &> ( *b.search(11)).setValue("chucknorris@fit.cvut.cz");
+//    CPanel &p = dynamic_cast<CPanel &> ( *b.search(12));
+//    p.add(CComboBox(21, CRect(0.1, 0.5, 0.8, 0.1)).add("PA2").add("OSY").add("Both"));
+//    assert (toString(b) ==
+//            "[0] Window \"Sample window\" (10,10,600,480)\n"
+//            "+- [1] Button \"Ok\" (70,394,180,48)\n"
+//            "+- [2] Button \"Cancel\" (370,394,180,48)\n"
+//            "+- [10] Label \"Username:\" (70,58,120,48)\n"
+//            "+- [11] Input \"chucknorris@fit.cvut.cz\" (250,58,300,48)\n"
+//            "+- [12] Panel (70,154,480,336)\n"
+//            "   +- [20] ComboBox (118,254.8,384,33.6)\n"
+//            "   |  +- Karate\n"
+//            "   |  +- Judo\n"
+//            "   |  +- Box\n"
+//            "   |  +->Progtest<\n"
+//            "   +- [21] ComboBox (118,322,384,33.6)\n"
+//            "      +->PA2<\n"
+//            "      +- OSY\n"
+//            "      +- Both\n");
+//    assert (toString(a) ==
+//            "[0] Window \"Sample window\" (10,10,600,480)\n"
+//            "+- [1] Button \"Ok\" (70,394,180,48)\n"
+//            "+- [2] Button \"Cancel\" (370,394,180,48)\n"
+//            "+- [10] Label \"Username:\" (70,58,120,48)\n"
+//            "+- [11] Input \"chucknorris\" (250,58,300,48)\n"
+//            "+- [12] Panel (70,154,480,336)\n"
+//            "   +- [20] ComboBox (118,254.8,384,33.6)\n"
+//            "      +->Karate<\n"
+//            "      +- Judo\n"
+//            "      +- Box\n"
+//            "      +- Progtest\n");
+//    assert (toString(p) ==
+//            "[12] Panel (70,154,480,336)\n"
+//            "+- [20] ComboBox (118,254.8,384,33.6)\n"
+//            "|  +- Karate\n"
+//            "|  +- Judo\n"
+//            "|  +- Box\n"
+//            "|  +->Progtest<\n"
+//            "+- [21] ComboBox (118,322,384,33.6)\n"
+//            "   +->PA2<\n"
+//            "   +- OSY\n"
+//            "   +- Both\n");
+//    b.setPosition(CRect(20, 30, 640, 520));
+//    assert (toString(b) ==
+//            "[0] Window \"Sample window\" (20,30,640,520)\n"
+//            "+- [1] Button \"Ok\" (84,446,192,52)\n"
+//            "+- [2] Button \"Cancel\" (404,446,192,52)\n"
+//            "+- [10] Label \"Username:\" (84,82,128,52)\n"
+//            "+- [11] Input \"chucknorris@fit.cvut.cz\" (276,82,320,52)\n"
+//            "+- [12] Panel (84,186,512,364)\n"
+//            "   +- [20] ComboBox (135.2,295.2,409.6,36.4)\n"
+//            "   |  +- Karate\n"
+//            "   |  +- Judo\n"
+//            "   |  +- Box\n"
+//            "   |  +->Progtest<\n"
+//            "   +- [21] ComboBox (135.2,368,409.6,36.4)\n"
+//            "      +->PA2<\n"
+//            "      +- OSY\n"
+//            "      +- Both\n");
+//    p.add(p);
+//    assert (toString(p) ==
+//            "[12] Panel (84,186,512,364)\n"
+//            "+- [20] ComboBox (135.2,295.2,409.6,36.4)\n"
+//            "|  +- Karate\n"
+//            "|  +- Judo\n"
+//            "|  +- Box\n"
+//            "|  +->Progtest<\n"
+//            "+- [21] ComboBox (135.2,368,409.6,36.4)\n"
+//            "|  +->PA2<\n"
+//            "|  +- OSY\n"
+//            "|  +- Both\n"
+//            "+- [12] Panel (135.2,295.2,409.6,254.8)\n"
+//            "   +- [20] ComboBox (176.16,371.64,327.68,25.48)\n"
+//            "   |  +- Karate\n"
+//            "   |  +- Judo\n"
+//            "   |  +- Box\n"
+//            "   |  +->Progtest<\n"
+//            "   +- [21] ComboBox (176.16,422.6,327.68,25.48)\n"
+//            "      +->PA2<\n"
+//            "      +- OSY\n"
+//            "      +- Both\n");
+//    p.add(p);
+//    assert (toString(p) ==
+//            "[12] Panel (84,186,512,364)\n"
+//            "+- [20] ComboBox (135.2,295.2,409.6,36.4)\n"
+//            "|  +- Karate\n"
+//            "|  +- Judo\n"
+//            "|  +- Box\n"
+//            "|  +->Progtest<\n"
+//            "+- [21] ComboBox (135.2,368,409.6,36.4)\n"
+//            "|  +->PA2<\n"
+//            "|  +- OSY\n"
+//            "|  +- Both\n"
+//            "+- [12] Panel (135.2,295.2,409.6,254.8)\n"
+//            "|  +- [20] ComboBox (176.16,371.64,327.68,25.48)\n"
+//            "|  |  +- Karate\n"
+//            "|  |  +- Judo\n"
+//            "|  |  +- Box\n"
+//            "|  |  +->Progtest<\n"
+//            "|  +- [21] ComboBox (176.16,422.6,327.68,25.48)\n"
+//            "|     +->PA2<\n"
+//            "|     +- OSY\n"
+//            "|     +- Both\n"
+//            "+- [12] Panel (135.2,295.2,409.6,254.8)\n"
+//            "   +- [20] ComboBox (176.16,371.64,327.68,25.48)\n"
+//            "   |  +- Karate\n"
+//            "   |  +- Judo\n"
+//            "   |  +- Box\n"
+//            "   |  +->Progtest<\n"
+//            "   +- [21] ComboBox (176.16,422.6,327.68,25.48)\n"
+//            "   |  +->PA2<\n"
+//            "   |  +- OSY\n"
+//            "   |  +- Both\n"
+//            "   +- [12] Panel (176.16,371.64,327.68,178.36)\n"
+//            "      +- [20] ComboBox (208.928,425.148,262.144,17.836)\n"
+//            "      |  +- Karate\n"
+//            "      |  +- Judo\n"
+//            "      |  +- Box\n"
+//            "      |  +->Progtest<\n"
+//            "      +- [21] ComboBox (208.928,460.82,262.144,17.836)\n"
+//            "         +->PA2<\n"
+//            "         +- OSY\n"
+//            "         +- Both\n");
+//    p.add(p);
+//    assert (toString(p) ==
+//            "[12] Panel (84,186,512,364)\n"
+//            "+- [20] ComboBox (135.2,295.2,409.6,36.4)\n"
+//            "|  +- Karate\n"
+//            "|  +- Judo\n"
+//            "|  +- Box\n"
+//            "|  +->Progtest<\n"
+//            "+- [21] ComboBox (135.2,368,409.6,36.4)\n"
+//            "|  +->PA2<\n"
+//            "|  +- OSY\n"
+//            "|  +- Both\n"
+//            "+- [12] Panel (135.2,295.2,409.6,254.8)\n"
+//            "|  +- [20] ComboBox (176.16,371.64,327.68,25.48)\n"
+//            "|  |  +- Karate\n"
+//            "|  |  +- Judo\n"
+//            "|  |  +- Box\n"
+//            "|  |  +->Progtest<\n"
+//            "|  +- [21] ComboBox (176.16,422.6,327.68,25.48)\n"
+//            "|     +->PA2<\n"
+//            "|     +- OSY\n"
+//            "|     +- Both\n"
+//            "+- [12] Panel (135.2,295.2,409.6,254.8)\n"
+//            "|  +- [20] ComboBox (176.16,371.64,327.68,25.48)\n"
+//            "|  |  +- Karate\n"
+//            "|  |  +- Judo\n"
+//            "|  |  +- Box\n"
+//            "|  |  +->Progtest<\n"
+//            "|  +- [21] ComboBox (176.16,422.6,327.68,25.48)\n"
+//            "|  |  +->PA2<\n"
+//            "|  |  +- OSY\n"
+//            "|  |  +- Both\n"
+//            "|  +- [12] Panel (176.16,371.64,327.68,178.36)\n"
+//            "|     +- [20] ComboBox (208.928,425.148,262.144,17.836)\n"
+//            "|     |  +- Karate\n"
+//            "|     |  +- Judo\n"
+//            "|     |  +- Box\n"
+//            "|     |  +->Progtest<\n"
+//            "|     +- [21] ComboBox (208.928,460.82,262.144,17.836)\n"
+//            "|        +->PA2<\n"
+//            "|        +- OSY\n"
+//            "|        +- Both\n"
+//            "+- [12] Panel (135.2,295.2,409.6,254.8)\n"
+//            "   +- [20] ComboBox (176.16,371.64,327.68,25.48)\n"
+//            "   |  +- Karate\n"
+//            "   |  +- Judo\n"
+//            "   |  +- Box\n"
+//            "   |  +->Progtest<\n"
+//            "   +- [21] ComboBox (176.16,422.6,327.68,25.48)\n"
+//            "   |  +->PA2<\n"
+//            "   |  +- OSY\n"
+//            "   |  +- Both\n"
+//            "   +- [12] Panel (176.16,371.64,327.68,178.36)\n"
+//            "   |  +- [20] ComboBox (208.928,425.148,262.144,17.836)\n"
+//            "   |  |  +- Karate\n"
+//            "   |  |  +- Judo\n"
+//            "   |  |  +- Box\n"
+//            "   |  |  +->Progtest<\n"
+//            "   |  +- [21] ComboBox (208.928,460.82,262.144,17.836)\n"
+//            "   |     +->PA2<\n"
+//            "   |     +- OSY\n"
+//            "   |     +- Both\n"
+//            "   +- [12] Panel (176.16,371.64,327.68,178.36)\n"
+//            "      +- [20] ComboBox (208.928,425.148,262.144,17.836)\n"
+//            "      |  +- Karate\n"
+//            "      |  +- Judo\n"
+//            "      |  +- Box\n"
+//            "      |  +->Progtest<\n"
+//            "      +- [21] ComboBox (208.928,460.82,262.144,17.836)\n"
+//            "      |  +->PA2<\n"
+//            "      |  +- OSY\n"
+//            "      |  +- Both\n"
+//            "      +- [12] Panel (208.928,425.148,262.144,124.852)\n"
+//            "         +- [20] ComboBox (235.142,462.604,209.715,12.4852)\n"
+//            "         |  +- Karate\n"
+//            "         |  +- Judo\n"
+//            "         |  +- Box\n"
+//            "         |  +->Progtest<\n"
+//            "         +- [21] ComboBox (235.142,487.574,209.715,12.4852)\n"
+//            "            +->PA2<\n"
+//            "            +- OSY\n"
+//            "            +- Both\n");
+//    assert (toString(b) ==
+//            "[0] Window \"Sample window\" (20,30,640,520)\n"
+//            "+- [1] Button \"Ok\" (84,446,192,52)\n"
+//            "+- [2] Button \"Cancel\" (404,446,192,52)\n"
+//            "+- [10] Label \"Username:\" (84,82,128,52)\n"
+//            "+- [11] Input \"chucknorris@fit.cvut.cz\" (276,82,320,52)\n"
+//            "+- [12] Panel (84,186,512,364)\n"
+//            "   +- [20] ComboBox (135.2,295.2,409.6,36.4)\n"
+//            "   |  +- Karate\n"
+//            "   |  +- Judo\n"
+//            "   |  +- Box\n"
+//            "   |  +->Progtest<\n"
+//            "   +- [21] ComboBox (135.2,368,409.6,36.4)\n"
+//            "   |  +->PA2<\n"
+//            "   |  +- OSY\n"
+//            "   |  +- Both\n"
+//            "   +- [12] Panel (135.2,295.2,409.6,254.8)\n"
+//            "   |  +- [20] ComboBox (176.16,371.64,327.68,25.48)\n"
+//            "   |  |  +- Karate\n"
+//            "   |  |  +- Judo\n"
+//            "   |  |  +- Box\n"
+//            "   |  |  +->Progtest<\n"
+//            "   |  +- [21] ComboBox (176.16,422.6,327.68,25.48)\n"
+//            "   |     +->PA2<\n"
+//            "   |     +- OSY\n"
+//            "   |     +- Both\n"
+//            "   +- [12] Panel (135.2,295.2,409.6,254.8)\n"
+//            "   |  +- [20] ComboBox (176.16,371.64,327.68,25.48)\n"
+//            "   |  |  +- Karate\n"
+//            "   |  |  +- Judo\n"
+//            "   |  |  +- Box\n"
+//            "   |  |  +->Progtest<\n"
+//            "   |  +- [21] ComboBox (176.16,422.6,327.68,25.48)\n"
+//            "   |  |  +->PA2<\n"
+//            "   |  |  +- OSY\n"
+//            "   |  |  +- Both\n"
+//            "   |  +- [12] Panel (176.16,371.64,327.68,178.36)\n"
+//            "   |     +- [20] ComboBox (208.928,425.148,262.144,17.836)\n"
+//            "   |     |  +- Karate\n"
+//            "   |     |  +- Judo\n"
+//            "   |     |  +- Box\n"
+//            "   |     |  +->Progtest<\n"
+//            "   |     +- [21] ComboBox (208.928,460.82,262.144,17.836)\n"
+//            "   |        +->PA2<\n"
+//            "   |        +- OSY\n"
+//            "   |        +- Both\n"
+//            "   +- [12] Panel (135.2,295.2,409.6,254.8)\n"
+//            "      +- [20] ComboBox (176.16,371.64,327.68,25.48)\n"
+//            "      |  +- Karate\n"
+//            "      |  +- Judo\n"
+//            "      |  +- Box\n"
+//            "      |  +->Progtest<\n"
+//            "      +- [21] ComboBox (176.16,422.6,327.68,25.48)\n"
+//            "      |  +->PA2<\n"
+//            "      |  +- OSY\n"
+//            "      |  +- Both\n"
+//            "      +- [12] Panel (176.16,371.64,327.68,178.36)\n"
+//            "      |  +- [20] ComboBox (208.928,425.148,262.144,17.836)\n"
+//            "      |  |  +- Karate\n"
+//            "      |  |  +- Judo\n"
+//            "      |  |  +- Box\n"
+//            "      |  |  +->Progtest<\n"
+//            "      |  +- [21] ComboBox (208.928,460.82,262.144,17.836)\n"
+//            "      |     +->PA2<\n"
+//            "      |     +- OSY\n"
+//            "      |     +- Both\n"
+//            "      +- [12] Panel (176.16,371.64,327.68,178.36)\n"
+//            "         +- [20] ComboBox (208.928,425.148,262.144,17.836)\n"
+//            "         |  +- Karate\n"
+//            "         |  +- Judo\n"
+//            "         |  +- Box\n"
+//            "         |  +->Progtest<\n"
+//            "         +- [21] ComboBox (208.928,460.82,262.144,17.836)\n"
+//            "         |  +->PA2<\n"
+//            "         |  +- OSY\n"
+//            "         |  +- Both\n"
+//            "         +- [12] Panel (208.928,425.148,262.144,124.852)\n"
+//            "            +- [20] ComboBox (235.142,462.604,209.715,12.4852)\n"
+//            "            |  +- Karate\n"
+//            "            |  +- Judo\n"
+//            "            |  +- Box\n"
+//            "            |  +->Progtest<\n"
+//            "            +- [21] ComboBox (235.142,487.574,209.715,12.4852)\n"
+//            "               +->PA2<\n"
+//            "               +- OSY\n"
+//            "               +- Both\n");
+//    assert (toString(a) ==
+//            "[0] Window \"Sample window\" (10,10,600,480)\n"
+//            "+- [1] Button \"Ok\" (70,394,180,48)\n"
+//            "+- [2] Button \"Cancel\" (370,394,180,48)\n"
+//            "+- [10] Label \"Username:\" (70,58,120,48)\n"
+//            "+- [11] Input \"chucknorris\" (250,58,300,48)\n"
+//            "+- [12] Panel (70,154,480,336)\n"
+//            "   +- [20] ComboBox (118,254.8,384,33.6)\n"
+//            "      +->Karate<\n"
+//            "      +- Judo\n"
+//            "      +- Box\n"
+//            "      +- Progtest\n");
     return EXIT_SUCCESS;
 }
 
