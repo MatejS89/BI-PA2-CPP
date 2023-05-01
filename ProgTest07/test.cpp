@@ -31,9 +31,9 @@ using namespace std;
 template<typename M_>
 class CContest {
 public:
-    CContest() = default;
+    CContest() {};
 
-    ~CContest() = default;
+    ~CContest() {};
 
     CContest &addMatch(const string &team1, const string &team2, const M_ &result) {
         pair tmp = make_pair(team1, team2);
@@ -48,9 +48,9 @@ public:
         set<int> wins;
         map<string, set<string>> graph;
         for (const auto &match: m_Matches) {
+            const auto &result = match.second;
             const auto &team1 = match.first.first;
             const auto &team2 = match.first.second;
-            const auto &result = match.second;
             if (cmp(result) > 0)
                 graph[team1].insert(team2);
             else if (cmp(result) < 0)
@@ -77,19 +77,19 @@ public:
                     }
                 }
             }
-            if (wins.insert(teamWins).second == false)
+            if (!wins.insert(teamWins).second)
                 return false;
         }
         return true;
     }
 
-    list<string> results(const function<int(const M_ &match)> &cmp) {
+    list<string> results(const function<int(const M_ &match)> &cmp) const {
         map<string, int> leaderboard;
         map<string, set<string>> graph;
         for (const auto &match: m_Matches) {
+            const auto &result = match.second;
             const auto &team1 = match.first.first;
             const auto &team2 = match.first.second;
-            const auto &result = match.second;
             leaderboard.insert({team1, 0});
             leaderboard.insert({team2, 0});
             if (cmp(result) > 0)
@@ -136,7 +136,6 @@ public:
     }
 
 private:
-
     map<pair<string, string>, M_> m_Matches;
 };
 
