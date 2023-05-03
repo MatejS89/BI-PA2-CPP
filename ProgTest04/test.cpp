@@ -13,7 +13,7 @@
 using namespace std;
 #endif /* __PROGTEST__ */
 
-//--- Classes and their declarations ---------------------------------------------------------------------------------//
+//--- Classes and declarations of methods ----------------------------------------------------------------------------//
 //**----------------------------------------------------------------------------------------------------------------**//
 //--- CString class --------------------------------------------------------------------------------------------------//
 
@@ -23,9 +23,9 @@ public:
 
     CString(const char *src);
 
-    ~CString();
-
     CString(const CString &src);
+
+    ~CString();
 
     CString &operator=(CString other);
 
@@ -121,20 +121,20 @@ class CMailIterator {
 public:
     CMailIterator();
 
-    explicit operator bool(void) const;
+    explicit operator bool() const;
 
-    bool operator!(void) const;
+    bool operator!() const;
 
-    const CMail &operator*(void) const;
+    const CMail &operator*() const;
 
-    CMailIterator &operator++(void);
+    CMailIterator &operator++();
 
 private:
     CMail *m_Ptr;
     size_t m_Pos;
     CVector<CMail> m_MailVector;
 
-    CMailIterator &fillMailVector(const CVector<CMail> &src);
+    void fillMailVector(const CVector<CMail> &src);
 
     friend class CMailServer;
 };
@@ -143,33 +143,34 @@ private:
 
 class CMailServer {
 public:
-    CMailServer(void);
+    CMailServer();
 
     CMailServer(const CMailServer &src);
 
     CMailServer &operator=(const CMailServer &src);
 
-    ~CMailServer(void);
-
     void sendMail(const CMail &m);
 
-    CMailIterator outbox(const char *email) const;
+    CMailIterator outbox(const char *needle) const;
 
-    CMailIterator inbox(const char *email) const;
+    CMailIterator inbox(const char *needle) const;
 
 private:
     CVector<CMailBox> m_MailBoxVector;
 };
 
 //**----------------------------------------------------------------------------------------------------------------**//
-//--- Definitions of methods -----------------------------------------------------------------------------------------//
+//--- Methods definitions --------------------------------------------------------------------------------------------//
 //**----------------------------------------------------------------------------------------------------------------**//
 
-//--- CString class methods definitions ------------------------------------------------------------------------------//
+//*-- CString class methods definitions -----------------------------------------------------------------------------*//
+//*------------------------------------------------------------------------------------------------------------------*//
 
 CString::CString() : m_Len(0), m_Max(1), m_Data(new char[m_Max]) {
     m_Data[0] = '\0';
 }
+
+//--------------------------------------------------------------------------------------------------------------------//
 
 CString::CString(const char *src) : m_Len(strlen(src)),
                                     m_Max(m_Len + 1),
@@ -177,15 +178,23 @@ CString::CString(const char *src) : m_Len(strlen(src)),
     memcpy(m_Data, src, m_Max);
 }
 
-CString::~CString() {
-    delete[] m_Data;
-}
+//--------------------------------------------------------------------------------------------------------------------//
+
 
 CString::CString(const CString &src) : m_Len(src.m_Len),
                                        m_Max(src.m_Max),
                                        m_Data(new char[m_Max]) {
     memcpy(m_Data, src.m_Data, m_Max);
 }
+
+//--------------------------------------------------------------------------------------------------------------------//
+
+
+CString::~CString() {
+    delete[] m_Data;
+}
+
+//--------------------------------------------------------------------------------------------------------------------//
 
 CString &CString::operator=(CString other) {
     m_Max = other.m_Max;
@@ -194,26 +203,35 @@ CString &CString::operator=(CString other) {
     return *this;
 }
 
+//--------------------------------------------------------------------------------------------------------------------//
 ostream &operator<<(ostream &os, const CString &src) {
     os << src.m_Data;
     return os;
 }
 
+//--------------------------------------------------------------------------------------------------------------------//
+
 bool CString::operator==(const CString &right) const {
     return strcmp(m_Data, right.m_Data) == 0;
 }
 
-//--- CVector class methods definitions ------------------------------------------------------------------------------//
+//*------------------------------------------------------------------------------------------------------------------*//
+//*-- CVector class methods definitions -----------------------------------------------------------------------------*//
+//*------------------------------------------------------------------------------------------------------------------*//
 
 template<typename T>
 CVector<T>::CVector() : m_Size(0), m_Cap(1) {
     m_Data = (new T[m_Cap]);
 }
 
+//--------------------------------------------------------------------------------------------------------------------//
+
 template<typename T>
 CVector<T>::~CVector() {
     delete[] m_Data;
 }
+
+//--------------------------------------------------------------------------------------------------------------------//
 
 template<typename T>
 CVector<T> &CVector<T>::operator=(const CVector<T> &other) {
@@ -228,15 +246,21 @@ CVector<T> &CVector<T>::operator=(const CVector<T> &other) {
     return *this;
 }
 
+//--------------------------------------------------------------------------------------------------------------------//
+
 template<typename T>
 const T &CVector<T>::operator[](size_t idx) const {
     return m_Data[idx];
 }
 
+//--------------------------------------------------------------------------------------------------------------------//
+
 template<typename T>
 T &CVector<T>::operator[](size_t idx) {
     return m_Data[idx];
 }
+
+//--------------------------------------------------------------------------------------------------------------------//
 
 template<typename T>
 void CVector<T>::pushBack(const T &src) {
@@ -253,16 +277,35 @@ void CVector<T>::pushBack(const T &src) {
     m_Data[m_Size++] = src;
 }
 
+//--------------------------------------------------------------------------------------------------------------------//
+
+
 template<typename T>
 size_t CVector<T>::size() const {
     return m_Size;
 }
 
-//--- CMail class methods definitions --------------------------------------------------------------------------------//
+//*------------------------------------------------------------------------------------------------------------------*//
+//*-- CMail class methods definitions -------------------------------------------------------------------------------*//
+//*------------------------------------------------------------------------------------------------------------------*//
+
+CMail::CMail() : m_From(), m_To(), m_Body() {}
+
+//--------------------------------------------------------------------------------------------------------------------//
 
 CMail::CMail(const char *from, const char *to, const char *body) : m_From(from),
                                                                    m_To(to),
-                                                                   m_Body(body) {}
+                                                                   m_Body(body) {};
+
+//--------------------------------------------------------------------------------------------------------------------//
+
+CMail::CMail(const CMail &other) :
+        m_From(other.m_From),
+        m_To(other.m_To),
+        m_Body(other.m_Body) {}
+
+//--------------------------------------------------------------------------------------------------------------------//
+
 
 bool CMail::operator==(const CMail &x) const {
     return (m_From == x.m_From
@@ -270,27 +313,30 @@ bool CMail::operator==(const CMail &x) const {
             && m_Body == x.m_Body);
 }
 
-CMail::CMail(const CMail &other) :
-        m_From(other.m_From),
-        m_To(other.m_To),
-        m_Body(other.m_Body) {}
-
-CMail::CMail() : m_From(), m_To(), m_Body() {}
+//--------------------------------------------------------------------------------------------------------------------//
 
 ostream &operator<<(ostream &os, const CMail &m) {
     os << "From: " << m.m_From << ", To: " << m.m_To << ", Body: " << m.m_Body;
     return os;
 }
 
-//--- CMailBox class methods definitions -----------------------------------------------------------------------------//
+//*------------------------------------------------------------------------------------------------------------------*//
+//*-- CMailBox class methods definitions ----------------------------------------------------------------------------*//
+//*------------------------------------------------------------------------------------------------------------------*//
 
 CMailBox::CMailBox() : m_Email(), m_Inbox(), m_Outbox() {}
 
+//--------------------------------------------------------------------------------------------------------------------//
+
 CMailBox::CMailBox(const CString &mail) : m_Email(mail) {}
+
+//--------------------------------------------------------------------------------------------------------------------//
 
 CMailBox::CMailBox(const CMailBox &other) : m_Email(other.m_Email),
                                             m_Inbox(other.m_Inbox),
-                                            m_Outbox(other.m_Outbox) {}
+                                            m_Outbox(other.m_Outbox) {};
+
+//--------------------------------------------------------------------------------------------------------------------//
 
 CMailBox &CMailBox::operator=(const CMailBox &other) {
     if (this != &other) {
@@ -301,6 +347,8 @@ CMailBox &CMailBox::operator=(const CMailBox &other) {
     return *this;
 }
 
+//--------------------------------------------------------------------------------------------------------------------//
+
 bool CMailBox::addToInbox(const CMail &mail) {
     if (mail.m_To == m_Email) {
         m_Inbox.pushBack(mail);
@@ -308,6 +356,8 @@ bool CMailBox::addToInbox(const CMail &mail) {
     }
     return false;
 }
+
+//--------------------------------------------------------------------------------------------------------------------//
 
 bool CMailBox::addToOutbox(const CMail &mail) {
     if (mail.m_From == m_Email) {
@@ -317,15 +367,19 @@ bool CMailBox::addToOutbox(const CMail &mail) {
     return false;
 }
 
-//--- CMailServer class methods definitions --------------------------------------------------------------------------//
+//*------------------------------------------------------------------------------------------------------------------*//
+//*-- CMailServer class methods definitions -------------------------------------------------------------------------*//
+//*------------------------------------------------------------------------------------------------------------------*//
 
 CMailServer::CMailServer() : m_MailBoxVector() {}
+
+//--------------------------------------------------------------------------------------------------------------------//
 
 CMailServer::CMailServer(const CMailServer &src) {
     m_MailBoxVector = src.m_MailBoxVector;
 }
 
-CMailServer::~CMailServer(void) = default;
+//--------------------------------------------------------------------------------------------------------------------//
 
 CMailServer &CMailServer::operator=(const CMailServer &src) {
     if (this != &src) {
@@ -334,18 +388,20 @@ CMailServer &CMailServer::operator=(const CMailServer &src) {
     return *this;
 }
 
+//--------------------------------------------------------------------------------------------------------------------//
+
 void CMailServer::sendMail(const CMail &m) {
-    bool senderFound = false, recepientFound = false;
+    bool senderFound = false, recipientFound = false;
     for (size_t i = 0; i < m_MailBoxVector.size(); i++) {
         if (m_MailBoxVector[i].addToOutbox(m))
             senderFound = true;
         if (m_MailBoxVector[i].addToInbox(m))
-            recepientFound = true;
-        if (senderFound && recepientFound)
-            break;
+            recipientFound = true;
+        if (senderFound && recipientFound)
+            return;
     }
 
-    if (!recepientFound) {
+    if (!recipientFound) {
         CMailBox tmp(m.m_To);
         tmp.addToInbox(m);
         if (m.m_To == m.m_From) {
@@ -363,6 +419,8 @@ void CMailServer::sendMail(const CMail &m) {
     }
 }
 
+//--------------------------------------------------------------------------------------------------------------------//
+
 CMailIterator CMailServer::outbox(const char *needle) const {
     CMailIterator tmp;
     for (size_t i = 0; i < m_MailBoxVector.size(); i++) {
@@ -376,11 +434,13 @@ CMailIterator CMailServer::outbox(const char *needle) const {
     return tmp;
 }
 
-CMailIterator CMailServer::inbox(const char *email) const {
+//--------------------------------------------------------------------------------------------------------------------//
+
+CMailIterator CMailServer::inbox(const char *needle) const {
     CMailIterator tmp;
     for (size_t i = 0; i < m_MailBoxVector.size(); i++) {
         const CString &currMail = m_MailBoxVector[i].m_Email;
-        if (currMail == email) {
+        if (currMail == needle) {
             const CMailBox &currMailBox = m_MailBoxVector[i];
             tmp.fillMailVector(currMailBox.m_Inbox);
             break;
@@ -389,13 +449,19 @@ CMailIterator CMailServer::inbox(const char *email) const {
     return tmp;
 }
 
-//--- CMailIterator class methods definitions ------------------------------------------------------------------------//
+//*------------------------------------------------------------------------------------------------------------------*//
+//*-- CMailIterator class methods definitions -----------------------------------------------------------------------*//
+//*------------------------------------------------------------------------------------------------------------------*//
 
 CMailIterator::CMailIterator() : m_Ptr(nullptr), m_Pos(0), m_MailVector() {}
+
+//--------------------------------------------------------------------------------------------------------------------//
 
 const CMail &CMailIterator::operator*() const {
     return *m_Ptr;
 }
+
+//--------------------------------------------------------------------------------------------------------------------//
 
 CMailIterator &CMailIterator::operator++() {
     if (++m_Pos >= m_MailVector.size())
@@ -405,21 +471,27 @@ CMailIterator &CMailIterator::operator++() {
     return *this;
 }
 
+//--------------------------------------------------------------------------------------------------------------------//
+
 CMailIterator::operator bool() const {
     return m_Ptr != nullptr;
 }
+
+//--------------------------------------------------------------------------------------------------------------------//
 
 bool CMailIterator::operator!() const {
     return m_Ptr == nullptr;
 }
 
-CMailIterator &CMailIterator::fillMailVector(const CVector<CMail> &src) {
+//--------------------------------------------------------------------------------------------------------------------//
+
+void CMailIterator::fillMailVector(const CVector<CMail> &src) {
     m_MailVector = src;
     if (src.size() != 0)
         m_Ptr = &m_MailVector[0];
-    return *this;
 }
 
+//*------------------------------------------------------------------------------------------------------------------*//
 //**----------------------------------------------------------------------------------------------------------------**//
 
 #ifndef __PROGTEST__
