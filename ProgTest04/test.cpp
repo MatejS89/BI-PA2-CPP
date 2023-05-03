@@ -25,13 +25,13 @@ public:
 
     CString(const CString &src);
 
-    ~CString();
-
     CString &operator=(CString other);
 
-    friend ostream &operator<<(ostream &os, const CString &src);
+    ~CString();
 
     bool operator==(const CString &right) const;
+
+    friend ostream &operator<<(ostream &os, const CString &src);
 
 private:
     size_t m_Len;
@@ -41,14 +41,15 @@ private:
 
 //--- CVector class --------------------------------------------------------------------------------------------------//
 
+// Uses a template to create a vector of different datatypes
 template<typename T>
 class CVector {
 public:
     CVector();
 
-    ~CVector();
-
     CVector &operator=(const CVector<T> &other);
+
+    ~CVector();
 
     const T &operator[](size_t idx) const;
 
@@ -75,6 +76,8 @@ public:
           const char *body);
 
     CMail(const CMail &other);
+
+    ~CMail();
 
     bool operator==(const CMail &x) const;
 
@@ -103,6 +106,8 @@ public:
 
     CMailBox &operator=(const CMailBox &other);
 
+    ~CMailBox();
+
     bool addToInbox(const CMail &mail);
 
     bool addToOutbox(const CMail &mail);
@@ -120,6 +125,8 @@ private:
 class CMailIterator {
 public:
     CMailIterator();
+
+    ~CMailIterator();
 
     explicit operator bool() const;
 
@@ -149,6 +156,8 @@ public:
 
     CMailServer &operator=(const CMailServer &src);
 
+    ~CMailServer();
+
     void sendMail(const CMail &m);
 
     CMailIterator outbox(const char *needle) const;
@@ -166,6 +175,7 @@ private:
 //*-- CString class methods definitions -----------------------------------------------------------------------------*//
 //*------------------------------------------------------------------------------------------------------------------*//
 
+// Creates new instance of a string, the string is empty
 CString::CString() : m_Len(0), m_Max(1), m_Data(new char[m_Max]) {
     m_Data[0] = '\0';
 }
@@ -180,18 +190,10 @@ CString::CString(const char *src) : m_Len(strlen(src)),
 
 //--------------------------------------------------------------------------------------------------------------------//
 
-
 CString::CString(const CString &src) : m_Len(src.m_Len),
                                        m_Max(src.m_Max),
                                        m_Data(new char[m_Max]) {
     memcpy(m_Data, src.m_Data, m_Max);
-}
-
-//--------------------------------------------------------------------------------------------------------------------//
-
-
-CString::~CString() {
-    delete[] m_Data;
 }
 
 //--------------------------------------------------------------------------------------------------------------------//
@@ -204,9 +206,9 @@ CString &CString::operator=(CString other) {
 }
 
 //--------------------------------------------------------------------------------------------------------------------//
-ostream &operator<<(ostream &os, const CString &src) {
-    os << src.m_Data;
-    return os;
+
+CString::~CString() {
+    delete[] m_Data;
 }
 
 //--------------------------------------------------------------------------------------------------------------------//
@@ -215,10 +217,18 @@ bool CString::operator==(const CString &right) const {
     return strcmp(m_Data, right.m_Data) == 0;
 }
 
+//--------------------------------------------------------------------------------------------------------------------//
+
+ostream &operator<<(ostream &os, const CString &src) {
+    os << src.m_Data;
+    return os;
+}
+
 //*------------------------------------------------------------------------------------------------------------------*//
 //*-- CVector class methods definitions -----------------------------------------------------------------------------*//
 //*------------------------------------------------------------------------------------------------------------------*//
 
+// Creates instance of a CVector, only allocates space for 1 element
 template<typename T>
 CVector<T>::CVector() : m_Size(0), m_Cap(1) {
     m_Data = (new T[m_Cap]);
@@ -233,6 +243,9 @@ CVector<T>::~CVector() {
 
 //--------------------------------------------------------------------------------------------------------------------//
 
+// Creates a deep copy of a given vector
+// Allocates the same capacity as source vector, creates a copy of each element in the source vector
+// Operator = must be overloaded for each datatype we plan to store in this vector
 template<typename T>
 CVector<T> &CVector<T>::operator=(const CVector<T> &other) {
     if (this != &other) {
@@ -262,6 +275,7 @@ T &CVector<T>::operator[](size_t idx) {
 
 //--------------------------------------------------------------------------------------------------------------------//
 
+// Reallocates the vector and adds the src element at the end
 template<typename T>
 void CVector<T>::pushBack(const T &src) {
     if (m_Size >= m_Cap) {
@@ -279,7 +293,6 @@ void CVector<T>::pushBack(const T &src) {
 
 //--------------------------------------------------------------------------------------------------------------------//
 
-
 template<typename T>
 size_t CVector<T>::size() const {
     return m_Size;
@@ -289,10 +302,12 @@ size_t CVector<T>::size() const {
 //*-- CMail class methods definitions -------------------------------------------------------------------------------*//
 //*------------------------------------------------------------------------------------------------------------------*//
 
+// Creates instance which has 3 empty strings as members ( see non-parametric constructor of CString class )
 CMail::CMail() : m_From(), m_To(), m_Body() {}
 
 //--------------------------------------------------------------------------------------------------------------------//
 
+// Creates instance of CMail from 3 standard strings
 CMail::CMail(const char *from, const char *to, const char *body) : m_From(from),
                                                                    m_To(to),
                                                                    m_Body(body) {};
@@ -306,7 +321,11 @@ CMail::CMail(const CMail &other) :
 
 //--------------------------------------------------------------------------------------------------------------------//
 
+CMail::~CMail() = default;
 
+//--------------------------------------------------------------------------------------------------------------------//
+
+// Uses overloaded operator == from CString method to compare strings
 bool CMail::operator==(const CMail &x) const {
     return (m_From == x.m_From
             && m_To == x.m_To
@@ -324,6 +343,7 @@ ostream &operator<<(ostream &os, const CMail &m) {
 //*-- CMailBox class methods definitions ----------------------------------------------------------------------------*//
 //*------------------------------------------------------------------------------------------------------------------*//
 
+// Uses non-parametric constructor of CString method
 CMailBox::CMailBox() : m_Email(), m_Inbox(), m_Outbox() {}
 
 //--------------------------------------------------------------------------------------------------------------------//
@@ -349,6 +369,11 @@ CMailBox &CMailBox::operator=(const CMailBox &other) {
 
 //--------------------------------------------------------------------------------------------------------------------//
 
+CMailBox::~CMailBox() = default;
+
+//--------------------------------------------------------------------------------------------------------------------//
+
+// Tries to add desired mail into an inbox, returns true on success, false on fail
 bool CMailBox::addToInbox(const CMail &mail) {
     if (mail.m_To == m_Email) {
         m_Inbox.pushBack(mail);
@@ -359,94 +384,13 @@ bool CMailBox::addToInbox(const CMail &mail) {
 
 //--------------------------------------------------------------------------------------------------------------------//
 
+// Tries to add desired mail into an outbox, returns true on success, false on fail
 bool CMailBox::addToOutbox(const CMail &mail) {
     if (mail.m_From == m_Email) {
         m_Outbox.pushBack(mail);
         return true;
     }
     return false;
-}
-
-//*------------------------------------------------------------------------------------------------------------------*//
-//*-- CMailServer class methods definitions -------------------------------------------------------------------------*//
-//*------------------------------------------------------------------------------------------------------------------*//
-
-CMailServer::CMailServer() : m_MailBoxVector() {}
-
-//--------------------------------------------------------------------------------------------------------------------//
-
-CMailServer::CMailServer(const CMailServer &src) {
-    m_MailBoxVector = src.m_MailBoxVector;
-}
-
-//--------------------------------------------------------------------------------------------------------------------//
-
-CMailServer &CMailServer::operator=(const CMailServer &src) {
-    if (this != &src) {
-        m_MailBoxVector = src.m_MailBoxVector;
-    }
-    return *this;
-}
-
-//--------------------------------------------------------------------------------------------------------------------//
-
-void CMailServer::sendMail(const CMail &m) {
-    bool senderFound = false, recipientFound = false;
-    for (size_t i = 0; i < m_MailBoxVector.size(); i++) {
-        if (m_MailBoxVector[i].addToOutbox(m))
-            senderFound = true;
-        if (m_MailBoxVector[i].addToInbox(m))
-            recipientFound = true;
-        if (senderFound && recipientFound)
-            return;
-    }
-
-    if (!recipientFound) {
-        CMailBox tmp(m.m_To);
-        tmp.addToInbox(m);
-        if (m.m_To == m.m_From) {
-            tmp.addToOutbox(m);
-            m_MailBoxVector.pushBack(tmp);
-            return;
-        }
-        m_MailBoxVector.pushBack(tmp);
-    }
-
-    if (!senderFound) {
-        CMailBox tmp(m.m_From);
-        tmp.addToOutbox(m);
-        m_MailBoxVector.pushBack(tmp);
-    }
-}
-
-//--------------------------------------------------------------------------------------------------------------------//
-
-CMailIterator CMailServer::outbox(const char *needle) const {
-    CMailIterator tmp;
-    for (size_t i = 0; i < m_MailBoxVector.size(); i++) {
-        const CString &currMail = m_MailBoxVector[i].m_Email;
-        if (currMail == needle) {
-            const CMailBox &currMailBox = m_MailBoxVector[i];
-            tmp.fillMailVector(currMailBox.m_Outbox);
-            break;
-        }
-    }
-    return tmp;
-}
-
-//--------------------------------------------------------------------------------------------------------------------//
-
-CMailIterator CMailServer::inbox(const char *needle) const {
-    CMailIterator tmp;
-    for (size_t i = 0; i < m_MailBoxVector.size(); i++) {
-        const CString &currMail = m_MailBoxVector[i].m_Email;
-        if (currMail == needle) {
-            const CMailBox &currMailBox = m_MailBoxVector[i];
-            tmp.fillMailVector(currMailBox.m_Inbox);
-            break;
-        }
-    }
-    return tmp;
 }
 
 //*------------------------------------------------------------------------------------------------------------------*//
@@ -457,12 +401,19 @@ CMailIterator::CMailIterator() : m_Ptr(nullptr), m_Pos(0), m_MailVector() {}
 
 //--------------------------------------------------------------------------------------------------------------------//
 
+CMailIterator::~CMailIterator() = default;
+
+//--------------------------------------------------------------------------------------------------------------------//
+
 const CMail &CMailIterator::operator*() const {
     return *m_Ptr;
 }
 
 //--------------------------------------------------------------------------------------------------------------------//
 
+// Checks if the element m_Ptr is not out of range of the vector
+// if the incremented element is out of range, sets m_Ptr to nullptr
+// if the incremented element isn't out of range, sets m_Ptr to incremented element
 CMailIterator &CMailIterator::operator++() {
     if (++m_Pos >= m_MailVector.size())
         m_Ptr = nullptr;
@@ -485,10 +436,111 @@ bool CMailIterator::operator!() const {
 
 //--------------------------------------------------------------------------------------------------------------------//
 
+// Creates deep copy of a CMail vector if the src vector isn't empty
+// if the src vector is empty, m_Ptr remains nullptr ( see default constructor of CMailIterator )
 void CMailIterator::fillMailVector(const CVector<CMail> &src) {
     m_MailVector = src;
     if (src.size() != 0)
         m_Ptr = &m_MailVector[0];
+}
+
+//*------------------------------------------------------------------------------------------------------------------*//
+//*-- CMailServer class methods definitions -------------------------------------------------------------------------*//
+//*------------------------------------------------------------------------------------------------------------------*//
+
+// Uses non-parametric constructor of CVector
+CMailServer::CMailServer() : m_MailBoxVector() {}
+
+//--------------------------------------------------------------------------------------------------------------------//
+
+CMailServer::CMailServer(const CMailServer &src) {
+    m_MailBoxVector = src.m_MailBoxVector;
+}
+
+//--------------------------------------------------------------------------------------------------------------------//
+
+CMailServer &CMailServer::operator=(const CMailServer &src) {
+    if (this != &src) {
+        m_MailBoxVector = src.m_MailBoxVector;
+    }
+    return *this;
+}
+
+//--------------------------------------------------------------------------------------------------------------------//
+
+CMailServer::~CMailServer() = default;
+
+//--------------------------------------------------------------------------------------------------------------------//
+
+// Method assigns the m CMail to appropriate inbox and outbox
+// If there isn't a record of recipient or sender present in the m_MailBoxVector
+// creates a new CMailBox with appropriate m_Email name
+void CMailServer::sendMail(const CMail &m) {
+    bool senderFound = false, recipientFound = false;
+    for (size_t i = 0; i < m_MailBoxVector.size(); i++) {
+        if (m_MailBoxVector[i].addToOutbox(m))
+            senderFound = true;
+        if (m_MailBoxVector[i].addToInbox(m))
+            recipientFound = true;
+        if (senderFound && recipientFound)
+            return;
+    }
+
+    if (!recipientFound) {
+        CMailBox tmp(m.m_To);
+        tmp.addToInbox(m);
+        // Check for same name of sender( m_From ) and recipient ( m_To )
+        if (m.m_To == m.m_From) {
+            tmp.addToOutbox(m);
+            m_MailBoxVector.pushBack(tmp);
+            return;
+        }
+        m_MailBoxVector.pushBack(tmp);
+    }
+
+    if (!senderFound) {
+        CMailBox tmp(m.m_From);
+        tmp.addToOutbox(m);
+        m_MailBoxVector.pushBack(tmp);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------------------------//
+
+// Searches m_MailBoxVector, finds a matching m_Email name,
+// if the desired name ( needle ) is present in the vector,
+// creates a hard copy of the outbox CMail vector into an instance of CMailIterator
+// ( see fillMailVector method )
+CMailIterator CMailServer::outbox(const char *needle) const {
+    CMailIterator tmp;
+    for (size_t i = 0; i < m_MailBoxVector.size(); i++) {
+        const CString &currMail = m_MailBoxVector[i].m_Email;
+        if (currMail == needle) {
+            const CMailBox &currMailBox = m_MailBoxVector[i];
+            tmp.fillMailVector(currMailBox.m_Outbox);
+            break;
+        }
+    }
+    return tmp;
+}
+
+//--------------------------------------------------------------------------------------------------------------------//
+
+// Searches m_MailBoxVector, finds a matching m_Email name,
+// if the desired name ( needle ) is present in the vector,
+// creates a hard copy of the inbox CMail vector into an instance of CMailIterator
+// ( see fillMailVector method )
+CMailIterator CMailServer::inbox(const char *needle) const {
+    CMailIterator tmp;
+    for (size_t i = 0; i < m_MailBoxVector.size(); i++) {
+        const CString &currMail = m_MailBoxVector[i].m_Email;
+        if (currMail == needle) {
+            const CMailBox &currMailBox = m_MailBoxVector[i];
+            tmp.fillMailVector(currMailBox.m_Inbox);
+            break;
+        }
+    }
+    return tmp;
 }
 
 //*------------------------------------------------------------------------------------------------------------------*//
