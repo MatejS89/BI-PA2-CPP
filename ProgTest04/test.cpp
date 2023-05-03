@@ -19,9 +19,9 @@ using namespace std;
 
 class CString {
 public:
-    CString(const char *src);
-
     CString();
+
+    CString(const char *src);
 
     ~CString();
 
@@ -54,7 +54,7 @@ public:
 
     T &operator[](size_t idx);
 
-    void push_back(const T &src);
+    void pushBack(const T &src);
 
     size_t size() const;
 
@@ -68,11 +68,11 @@ private:
 
 class CMail {
 public:
+    CMail();
+
     CMail(const char *from,
           const char *to,
           const char *body);
-
-    CMail();
 
     CMail(const CMail &other);
 
@@ -134,6 +134,8 @@ private:
     size_t m_Pos;
     CVector<CMail> m_MailVector;
 
+    CMailIterator &fillMailVector(const CVector<CMail> &src);
+
     friend class CMailServer;
 };
 
@@ -165,14 +167,14 @@ private:
 
 //--- CString class methods definitions ------------------------------------------------------------------------------//
 
+CString::CString() : m_Len(0), m_Max(1), m_Data(new char[m_Max]) {
+    m_Data[0] = '\0';
+}
+
 CString::CString(const char *src) : m_Len(strlen(src)),
                                     m_Max(m_Len + 1),
                                     m_Data(new char[m_Max]) {
     memcpy(m_Data, src, m_Max);
-}
-
-CString::CString() : m_Len(0), m_Max(1), m_Data(new char[m_Max]) {
-    m_Data[0] = '\0';
 }
 
 CString::~CString() {
@@ -237,7 +239,7 @@ T &CVector<T>::operator[](size_t idx) {
 }
 
 template<typename T>
-void CVector<T>::push_back(const T &src) {
+void CVector<T>::pushBack(const T &src) {
     if (m_Size >= m_Cap) {
         m_Cap += 2;
         m_Cap *= 2;
@@ -301,7 +303,7 @@ CMailBox &CMailBox::operator=(const CMailBox &other) {
 
 bool CMailBox::addToInbox(const CMail &mail) {
     if (mail.m_To == m_Email) {
-        m_Inbox.push_back(mail);
+        m_Inbox.pushBack(mail);
         return true;
     }
     return false;
@@ -309,7 +311,7 @@ bool CMailBox::addToInbox(const CMail &mail) {
 
 bool CMailBox::addToOutbox(const CMail &mail) {
     if (mail.m_From == m_Email) {
-        m_Outbox.push_back(mail);
+        m_Outbox.pushBack(mail);
         return true;
     }
     return false;
@@ -333,8 +335,7 @@ CMailServer &CMailServer::operator=(const CMailServer &src) {
 }
 
 void CMailServer::sendMail(const CMail &m) {
-    bool senderFound = false;
-    bool recepientFound = false;
+    bool senderFound = false, recepientFound = false;
     for (size_t i = 0; i < m_MailBoxVector.size(); i++) {
         if (m_MailBoxVector[i].addToOutbox(m))
             senderFound = true;
@@ -349,54 +350,42 @@ void CMailServer::sendMail(const CMail &m) {
         tmp.addToInbox(m);
         if (m.m_To == m.m_From) {
             tmp.addToOutbox(m);
-            m_MailBoxVector.push_back(tmp);
+            m_MailBoxVector.pushBack(tmp);
             return;
         }
-        m_MailBoxVector.push_back(tmp);
+        m_MailBoxVector.pushBack(tmp);
     }
 
     if (!senderFound) {
         CMailBox tmp(m.m_From);
         tmp.addToOutbox(m);
-        m_MailBoxVector.push_back(tmp);
+        m_MailBoxVector.pushBack(tmp);
     }
 }
 
-CMailIterator CMailServer::outbox(const char *email) const {
+CMailIterator CMailServer::outbox(const char *needle) const {
     CMailIterator tmp;
-    bool found = false;
     for (size_t i = 0; i < m_MailBoxVector.size(); i++) {
-        if (m_MailBoxVector[i].m_Email == email) {
-            for (size_t j = 0; j < m_MailBoxVector[i].m_Outbox.size(); j++)
-                tmp.m_MailVector.push_back(m_MailBoxVector[i].m_Outbox[j]);
-            if (m_MailBoxVector[i].m_Outbox.size() != 0)
-                found = true;
+        const CString &currMail = m_MailBoxVector[i].m_Email;
+        if (currMail == needle) {
+            const CMailBox &currMailBox = m_MailBoxVector[i];
+            tmp.fillMailVector(currMailBox.m_Outbox);
             break;
         }
     }
-
-    if (found)
-        tmp.m_Ptr = &tmp.m_MailVector[0];
-    
     return tmp;
 }
 
 CMailIterator CMailServer::inbox(const char *email) const {
     CMailIterator tmp;
-    bool found = false;
     for (size_t i = 0; i < m_MailBoxVector.size(); i++) {
-        if (m_MailBoxVector[i].m_Email == email) {
-            for (size_t j = 0; j < m_MailBoxVector[i].m_Inbox.size(); j++)
-                tmp.m_MailVector.push_back(m_MailBoxVector[i].m_Inbox[j]);
-            if (m_MailBoxVector[i].m_Inbox.size() != 0)
-                found = true;
+        const CString &currMail = m_MailBoxVector[i].m_Email;
+        if (currMail == email) {
+            const CMailBox &currMailBox = m_MailBoxVector[i];
+            tmp.fillMailVector(currMailBox.m_Inbox);
             break;
         }
     }
-
-    if (found)
-        tmp.m_Ptr = &tmp.m_MailVector[0];
-
     return tmp;
 }
 
@@ -422,6 +411,13 @@ CMailIterator::operator bool() const {
 
 bool CMailIterator::operator!() const {
     return m_Ptr == nullptr;
+}
+
+CMailIterator &CMailIterator::fillMailVector(const CVector<CMail> &src) {
+    m_MailVector = src;
+    if (src.size() != 0)
+        m_Ptr = &m_MailVector[0];
+    return *this;
 }
 
 //**----------------------------------------------------------------------------------------------------------------**//
