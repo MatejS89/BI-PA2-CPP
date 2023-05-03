@@ -321,7 +321,7 @@ CMail::CMail() : m_From(), m_To(), m_Body() {}
 // Creates instance of CMail from 3 standard strings
 CMail::CMail(const char *from, const char *to, const char *body) : m_From(from),
                                                                    m_To(to),
-                                                                   m_Body(body) {};
+                                                                   m_Body(body) {}
 
 //--------------------------------------------------------------------------------------------------------------------//
 
@@ -365,7 +365,7 @@ CMailBox::CMailBox(const CString &mail) : m_Email(mail) {}
 
 CMailBox::CMailBox(const CMailBox &other) : m_Email(other.m_Email),
                                             m_Inbox(other.m_Inbox),
-                                            m_Outbox(other.m_Outbox) {};
+                                            m_Outbox(other.m_Outbox) {}
 
 //--------------------------------------------------------------------------------------------------------------------//
 
