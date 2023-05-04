@@ -1,0 +1,10 @@
+# ninja log v5
+9	1131	7049348269069801	CMakeFiles/Aurorion.dir/main.cpp.obj	b0b6b97410866bd9
+1131	1352	7049348270859743	Aurorion.exe	7abc8c3f010ef2ba
+1	97	7049356560020618	build.ninja	1b9404236bc0c18d
+1	1124	7049348269009766	CMakeFiles/Aurorion.dir/game.cpp.obj	9a0cd84ab66d4b08
+0	1158	7049356764856986	CMakeFiles/Aurorion.dir/game.cpp.obj	578f1aff2dfefce2
+6	1193	7049356765206972	CMakeFiles/Aurorion.dir/main.cpp.obj	6e42c22e7d58584b
+1193	1402	7049356766927142	Aurorion.exe	e3026d4bc199affd
+1	1224	7049363892613093	CMakeFiles/Aurorion.dir/main.cpp.obj	6e42c22e7d58584b
+1225	1437	7049363894353142	Aurorion.exe	e3026d4bc199affd

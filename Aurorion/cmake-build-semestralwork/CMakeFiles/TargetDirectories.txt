@@ -1,0 +1,3 @@
+C:/Users/brami/Dev/C++/sedlam53/Aurorion/cmake-build-semestralwork/CMakeFiles/Aurorion.dir
+C:/Users/brami/Dev/C++/sedlam53/Aurorion/cmake-build-semestralwork/CMakeFiles/edit_cache.dir
+C:/Users/brami/Dev/C++/sedlam53/Aurorion/cmake-build-semestralwork/CMakeFiles/rebuild_cache.dir
