@@ -1,4 +1,5 @@
 #include "game.h"
+#include "texture_manager.h"
 
 Game::Game() {}
 
@@ -23,6 +24,10 @@ void Game::init(const char *title, int xPos, int yPos, int width, int height, bo
             std::cout << "Renderer created." << std::endl;
         }
         m_IsRunning = true;
+
+        m_Player = TextureManager::LoadTexture(
+                "Legacy-Fantasy - High Forest 2.3/Character/Attack-01/Attack-01-Sheet.png",
+                m_Renderer);
     } else
         m_IsRunning = false;
 }
@@ -46,6 +51,7 @@ void Game::update() {}
 void Game::render() {
     SDL_RenderClear(m_Renderer);
     // Add things to render
+    SDL_RenderCopy(m_Renderer, m_Player, NULL, NULL);
     SDL_RenderPresent(m_Renderer);
 }
 

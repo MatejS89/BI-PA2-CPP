@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include <iostream>
+#include <SDL_image.h>
 
 #ifndef AURORION_GAME_H
 #define AURORION_GAME_H
@@ -26,6 +27,7 @@ private:
     bool m_IsRunning;
     SDL_Window *m_Window;
     SDL_Renderer *m_Renderer;
+    SDL_Texture *m_Player;
 };
 
 #endif //AURORION_GAME_H
