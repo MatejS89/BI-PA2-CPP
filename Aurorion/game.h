@@ -1,9 +1,8 @@
+#pragma once
+
 #include <SDL.h>
 #include <iostream>
 #include <SDL_image.h>
-
-#ifndef AURORION_GAME_H
-#define AURORION_GAME_H
 
 class Game {
 public:
@@ -24,10 +23,9 @@ public:
     bool running();
 
 private:
+    int m_Height;
+    int m_Width;
     bool m_IsRunning;
     SDL_Window *m_Window;
     SDL_Renderer *m_Renderer;
-    SDL_Texture *m_Player;
 };
-
-#endif //AURORION_GAME_H

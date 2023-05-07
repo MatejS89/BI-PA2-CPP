@@ -1,5 +1,10 @@
 #include "game.h"
 #include "texture_manager.h"
+#include "GameObject.h"
+#include "player.h"
+
+GameObject *objPlayer = nullptr;
+//GameObject *enemy = nullptr;
 
 Game::Game() {}
 
@@ -7,9 +12,8 @@ Game::~Game() {}
 
 void Game::init(const char *title, int xPos, int yPos, int width, int height, bool fullScreen) {
     int fullscreenFlag = 0;
-    if (fullScreen) {
+    if (fullScreen)
         fullscreenFlag = SDL_WINDOW_FULLSCREEN;
-    }
 
     if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
         std::cout << "Initialized" << std::endl;
@@ -24,34 +28,47 @@ void Game::init(const char *title, int xPos, int yPos, int width, int height, bo
             std::cout << "Renderer created." << std::endl;
         }
         m_IsRunning = true;
-
-        m_Player = TextureManager::LoadTexture(
-                "Legacy-Fantasy - High Forest 2.3/Character/Attack-01/Attack-01-Sheet.png",
-                m_Renderer);
+        m_Height = height;
+        m_Width = width;
     } else
         m_IsRunning = false;
+
+    Player player("pajko1.png", m_Renderer, 0, 0);
+    objPlayer = player.clone();
 }
 
 void Game::handleEvents() {
     SDL_Event event;
     SDL_PollEvent(&event);
 
-    switch (event.type) {
-        case SDL_QUIT:
-            m_IsRunning = false;
-            break;
-
-        default:
-            break;
+    if (event.type == SDL_QUIT) {
+        m_IsRunning = false;
+        return;
     }
+    if (event.type == SDL_KEYDOWN)
+        switch (event.key.keysym.sym) {
+            case SDLK_UP:
+                objPlayer->move(0);
+                break;
+            case SDLK_DOWN:
+                objPlayer->move(2);
+                break;
+            case SDLK_RIGHT:
+                objPlayer->move(1);
+                break;
+            case SDLK_LEFT:
+                objPlayer->move(3);
+                break;
+        }
 }
 
-void Game::update() {}
+void Game::update() {
+    objPlayer->Update();
+}
 
 void Game::render() {
     SDL_RenderClear(m_Renderer);
-    // Add things to render
-    SDL_RenderCopy(m_Renderer, m_Player, NULL, NULL);
+    objPlayer->Render();
     SDL_RenderPresent(m_Renderer);
 }
 

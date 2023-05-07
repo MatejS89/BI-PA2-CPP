@@ -73,6 +73,30 @@ build CMakeFiles\Aurorion.dir\texture_manager.cpp.obj: CXX_COMPILER__Aurorion_De
   TARGET_COMPILE_PDB = CMakeFiles\Aurorion.dir\
   TARGET_PDB = Aurorion.pdb
 
+build CMakeFiles\Aurorion.dir\GameObject.cpp.obj: CXX_COMPILER__Aurorion_Debug C$:\Users\brami\Dev\C++\sedlam53\Aurorion\GameObject.cpp || cmake_object_order_depends_target_Aurorion
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi -std:c++17
+  INCLUDES = -IC:\Users\brami\Dev\C++\sedlam53\Aurorion\src\SDL2\include -IC:\Users\brami\Dev\C++\sedlam53\Aurorion\src\SDL2_image-2.6.3\include
+  OBJECT_DIR = CMakeFiles\Aurorion.dir
+  OBJECT_FILE_DIR = CMakeFiles\Aurorion.dir
+  TARGET_COMPILE_PDB = CMakeFiles\Aurorion.dir\
+  TARGET_PDB = Aurorion.pdb
+
+build CMakeFiles\Aurorion.dir\player.cpp.obj: CXX_COMPILER__Aurorion_Debug C$:\Users\brami\Dev\C++\sedlam53\Aurorion\player.cpp || cmake_object_order_depends_target_Aurorion
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi -std:c++17
+  INCLUDES = -IC:\Users\brami\Dev\C++\sedlam53\Aurorion\src\SDL2\include -IC:\Users\brami\Dev\C++\sedlam53\Aurorion\src\SDL2_image-2.6.3\include
+  OBJECT_DIR = CMakeFiles\Aurorion.dir
+  OBJECT_FILE_DIR = CMakeFiles\Aurorion.dir
+  TARGET_COMPILE_PDB = CMakeFiles\Aurorion.dir\
+  TARGET_PDB = Aurorion.pdb
+
+build CMakeFiles\Aurorion.dir\Entity.cpp.obj: CXX_COMPILER__Aurorion_Debug C$:\Users\brami\Dev\C++\sedlam53\Aurorion\Entity.cpp || cmake_object_order_depends_target_Aurorion
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi -std:c++17
+  INCLUDES = -IC:\Users\brami\Dev\C++\sedlam53\Aurorion\src\SDL2\include -IC:\Users\brami\Dev\C++\sedlam53\Aurorion\src\SDL2_image-2.6.3\include
+  OBJECT_DIR = CMakeFiles\Aurorion.dir
+  OBJECT_FILE_DIR = CMakeFiles\Aurorion.dir
+  TARGET_COMPILE_PDB = CMakeFiles\Aurorion.dir\
+  TARGET_PDB = Aurorion.pdb
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Aurorion
@@ -81,7 +105,7 @@ build CMakeFiles\Aurorion.dir\texture_manager.cpp.obj: CXX_COMPILER__Aurorion_De
 #############################################
 # Link the executable Aurorion.exe
 
-build Aurorion.exe: CXX_EXECUTABLE_LINKER__Aurorion_Debug CMakeFiles\Aurorion.dir\main.cpp.obj CMakeFiles\Aurorion.dir\game.cpp.obj CMakeFiles\Aurorion.dir\texture_manager.cpp.obj
+build Aurorion.exe: CXX_EXECUTABLE_LINKER__Aurorion_Debug CMakeFiles\Aurorion.dir\main.cpp.obj CMakeFiles\Aurorion.dir\game.cpp.obj CMakeFiles\Aurorion.dir\texture_manager.cpp.obj CMakeFiles\Aurorion.dir\GameObject.cpp.obj CMakeFiles\Aurorion.dir\player.cpp.obj CMakeFiles\Aurorion.dir\Entity.cpp.obj
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
   LINK_LIBRARIES = SDL2main.lib  SDL2.lib  SDL2_image.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
