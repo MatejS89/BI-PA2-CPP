@@ -11,7 +11,7 @@ set(SDL2_IMAGE_INCLUDE src/SDL2_image-2.6.3/include)
 include_directories(${SDL2_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE})
 link_directories(${SDL2_LIB_DIR} ${SDL2_IMAGE_LIB})
 
-add_executable(Aurorion Sources/main.cpp Sources/game.h Sources/game.cpp Sources/game.cpp Sources/game.h
-        Sources/texture_manager.cpp Sources/texture_manager.h Sources/CGameObject.cpp Sources/CGameObject.h Sources/player.cpp Sources/player.h)
+add_executable(Aurorion Sources/main.cpp Sources/CGame.h Sources/CGame.cpp Sources/CGame.cpp Sources/CGame.h
+        Sources/CTextureManager.cpp Sources/CTextureManager.h)
 
 target_link_libraries(${PROJECT_NAME} SDL2main SDL2 SDL2_image)

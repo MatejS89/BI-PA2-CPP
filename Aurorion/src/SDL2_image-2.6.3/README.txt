@@ -17,7 +17,7 @@ or
 	SDL_Surface *IMG_LoadTyped_RW(SDL_RWops *src, int freesrc, char *type);
 
 where type is a string specifying the format (i.e. "PNG" or "pcx").
-Note that IMG_Load_RW cannot load TGA images.
+Note that IMG_Load_RW cannot Load TGA images.
 
 To create a surface from an XPM image included in C source, use:
 
@@ -30,7 +30,7 @@ Documentation is also available online at https://wiki.libsdl.org/SDL_image
 This library is under the zlib License, see the file "LICENSE.txt" for details.
 
 Note:
-Support for AVIF, JPEG-XL, TIFF, and WebP are not included by default because of the size of the decode libraries, but you can get them by running external/download.sh
+Support for AVIF, JPEG-XL, TIFF, and WebP are not included by default because of the size of the decode libraries, but you can get them by Running external/download.sh
 - When building with CMake, you can enable the appropriate SUPPORT_* options defined in CMakeLists.txt.
 - When building with configure/make, you can build and install them normally and the configure script will detect and use them.
 - When building with Visual Studio, you will need to build the libraries and then add the appropriate LOAD_* preprocessor define to the Visual Studio project.

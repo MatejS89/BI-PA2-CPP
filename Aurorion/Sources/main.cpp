@@ -1,5 +1,5 @@
 #include <iostream>
-#include "game.h"
+#include "CGame.h"
 
 int main(int argc, char *args[]) {
     const int targetFps = 60;
@@ -9,18 +9,19 @@ int main(int argc, char *args[]) {
     int frameTime;
 
     CGame *game = new CGame();
-    game->init("Aurorion", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, false);
-    while (game->running()) {
+    if (!game->Init("Aurorion", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, false))
+        std::cout << "Initialization failed" << std::endl;
+    while (game->Running()) {
         frameStart = SDL_GetTicks64();
-        game->handleEvents();
-        game->update();
-        game->render();
+        game->HandleEvents();
+        game->Update();
+        game->Render();
         frameTime = SDL_GetTicks64() - frameStart;
 
         if (frameDelay > frameTime) {
             SDL_Delay(frameDelay - frameTime);
         }
     }
-    game->clean();
+    game->Clean();
     return 0;
 }

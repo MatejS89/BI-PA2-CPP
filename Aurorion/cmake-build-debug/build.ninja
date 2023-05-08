@@ -56,29 +56,15 @@ build CMakeFiles/Aurorion.dir/Sources/main.cpp.o: CXX_COMPILER__Aurorion_Debug /
   OBJECT_DIR = CMakeFiles/Aurorion.dir
   OBJECT_FILE_DIR = CMakeFiles/Aurorion.dir/Sources
 
-build CMakeFiles/Aurorion.dir/Sources/game.cpp.o: CXX_COMPILER__Aurorion_Debug /home/matejsedlak/Dev/C++/Aurorion/Sources/game.cpp || cmake_object_order_depends_target_Aurorion
-  DEP_FILE = CMakeFiles/Aurorion.dir/Sources/game.cpp.o.d
+build CMakeFiles/Aurorion.dir/Sources/CGame.cpp.o: CXX_COMPILER__Aurorion_Debug /home/matejsedlak/Dev/C++/Aurorion/Sources/CGame.cpp || cmake_object_order_depends_target_Aurorion
+  DEP_FILE = CMakeFiles/Aurorion.dir/Sources/CGame.cpp.o.d
   FLAGS = -g -fdiagnostics-color=always
   INCLUDES = -I/home/matejsedlak/Dev/C++/Aurorion/src/SDL2/include -I/home/matejsedlak/Dev/C++/Aurorion/src/SDL2_image-2.6.3/include
   OBJECT_DIR = CMakeFiles/Aurorion.dir
   OBJECT_FILE_DIR = CMakeFiles/Aurorion.dir/Sources
 
-build CMakeFiles/Aurorion.dir/Sources/texture_manager.cpp.o: CXX_COMPILER__Aurorion_Debug /home/matejsedlak/Dev/C++/Aurorion/Sources/texture_manager.cpp || cmake_object_order_depends_target_Aurorion
-  DEP_FILE = CMakeFiles/Aurorion.dir/Sources/texture_manager.cpp.o.d
-  FLAGS = -g -fdiagnostics-color=always
-  INCLUDES = -I/home/matejsedlak/Dev/C++/Aurorion/src/SDL2/include -I/home/matejsedlak/Dev/C++/Aurorion/src/SDL2_image-2.6.3/include
-  OBJECT_DIR = CMakeFiles/Aurorion.dir
-  OBJECT_FILE_DIR = CMakeFiles/Aurorion.dir/Sources
-
-build CMakeFiles/Aurorion.dir/Sources/GameObject.cpp.o: CXX_COMPILER__Aurorion_Debug /home/matejsedlak/Dev/C++/Aurorion/Sources/GameObject.cpp || cmake_object_order_depends_target_Aurorion
-  DEP_FILE = CMakeFiles/Aurorion.dir/Sources/GameObject.cpp.o.d
-  FLAGS = -g -fdiagnostics-color=always
-  INCLUDES = -I/home/matejsedlak/Dev/C++/Aurorion/src/SDL2/include -I/home/matejsedlak/Dev/C++/Aurorion/src/SDL2_image-2.6.3/include
-  OBJECT_DIR = CMakeFiles/Aurorion.dir
-  OBJECT_FILE_DIR = CMakeFiles/Aurorion.dir/Sources
-
-build CMakeFiles/Aurorion.dir/Sources/player.cpp.o: CXX_COMPILER__Aurorion_Debug /home/matejsedlak/Dev/C++/Aurorion/Sources/player.cpp || cmake_object_order_depends_target_Aurorion
-  DEP_FILE = CMakeFiles/Aurorion.dir/Sources/player.cpp.o.d
+build CMakeFiles/Aurorion.dir/Sources/CTextureManager.cpp.o: CXX_COMPILER__Aurorion_Debug /home/matejsedlak/Dev/C++/Aurorion/Sources/CTextureManager.cpp || cmake_object_order_depends_target_Aurorion
+  DEP_FILE = CMakeFiles/Aurorion.dir/Sources/CTextureManager.cpp.o.d
   FLAGS = -g -fdiagnostics-color=always
   INCLUDES = -I/home/matejsedlak/Dev/C++/Aurorion/src/SDL2/include -I/home/matejsedlak/Dev/C++/Aurorion/src/SDL2_image-2.6.3/include
   OBJECT_DIR = CMakeFiles/Aurorion.dir
@@ -92,7 +78,7 @@ build CMakeFiles/Aurorion.dir/Sources/player.cpp.o: CXX_COMPILER__Aurorion_Debug
 #############################################
 # Link the executable Aurorion
 
-build Aurorion: CXX_EXECUTABLE_LINKER__Aurorion_Debug CMakeFiles/Aurorion.dir/Sources/main.cpp.o CMakeFiles/Aurorion.dir/Sources/game.cpp.o CMakeFiles/Aurorion.dir/Sources/texture_manager.cpp.o CMakeFiles/Aurorion.dir/Sources/GameObject.cpp.o CMakeFiles/Aurorion.dir/Sources/player.cpp.o
+build Aurorion: CXX_EXECUTABLE_LINKER__Aurorion_Debug CMakeFiles/Aurorion.dir/Sources/main.cpp.o CMakeFiles/Aurorion.dir/Sources/CGame.cpp.o CMakeFiles/Aurorion.dir/Sources/CTextureManager.cpp.o
   FLAGS = -g
   LINK_LIBRARIES = -Wl,-rpath,/home/matejsedlak/Dev/C++/Aurorion/src/SDL2/lib/x64:/home/matejsedlak/Dev/C++/Aurorion/src/SDL2_image-2.6.3/lib/x64  -lSDL2main  -lSDL2  -lSDL2_image
   LINK_PATH = -L/home/matejsedlak/Dev/C++/Aurorion/src/SDL2/lib/x64   -L/home/matejsedlak/Dev/C++/Aurorion/src/SDL2_image-2.6.3/lib/x64

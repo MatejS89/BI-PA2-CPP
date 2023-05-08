@@ -1,24 +1,23 @@
-.PHONY: all
-all:
-# Compiler)
-CXX = g++
+CC = g++
+CFLAGS = -Wall -c -pedantic
+LDFLAGS = -L/usr/local/lib
+LDLIBS = -lSDL2 -lSDL2_image
 
-# Compiler flags
-CXXFLAGS = -std=c++14 -Wall -Wpedantic
+SOURCES := $(wildcard Sources/*.cpp)
+OBJECTS := $(SOURCES:Sources/%.cpp=obj/%.o)
 
-# Libraries to link
-LIBS = -lSDL2 -lSDL2_image
+EXECUTABLE = Aurorion
 
-# Source files
-SRCS = $(wildcard Sources/*.cpp)
+all: $(SOURCES) $(EXECUTABLE)
 
-# Object files
-OBJS = $(SRCS:Sources/%.cpp=obj%.o)
+$(EXECUTABLE): $(OBJECTS)
+	$(CC) $(OBJECTS) $(LDFLAGS) $(LDLIBS) -o $@
 
-OBJ_NAME = a.out
+obj/%.o: Sources/%.cpp
+	$(CC) $(CFLAGS) $< -o $@
 
-all: $(SRCS)
-	$(CXX) $(SRCS) $(CXXFLAGS) $(LIBS) -o $(OBJ_NAME)
+clean:
+	rm -f obj/*.o $(EXECUTABLE)
 
-run: a.out
-	./a.out
+run: $(EXECUTABLE)
+	./$(EXECUTABLE)
