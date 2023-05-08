@@ -117,8 +117,8 @@ extern DECLSPEC char *SDLCALL SDL_GetBasePath(void);
  * - Always use a unique app string for each one, and make sure it never
  *   changes for an app once you've decided on it.
  * - Unicode characters are legal, as long as it's UTF-8 encoded, but...
- * - ...only use letters, numbers, and spaces. Avoid punctuation like "Game
- *   Name 2: Bad Guy's Revenge!" ... "Game Name 2" is sufficient.
+ * - ...only use letters, numbers, and spaces. Avoid punctuation like "CGame
+ *   Name 2: Bad Guy's Revenge!" ... "CGame Name 2" is sufficient.
  *
  * The returned path is guaranteed to end with a path separator ('\' on
  * Windows, '/' on most other platforms).
@@ -142,6 +142,7 @@ extern DECLSPEC char *SDLCALL SDL_GetPrefPath(const char *org, const char *app);
 #ifdef __cplusplus
 }
 #endif
+
 #include "close_code.h"
 
 #endif /* SDL_filesystem_h_ */

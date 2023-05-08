@@ -92,7 +92,7 @@ extern "C" {
  * By default this hint is not set and the APK expansion files are not searched.
  */
 #define SDL_HINT_ANDROID_APK_EXPANSION_MAIN_FILE_VERSION "SDL_ANDROID_APK_EXPANSION_MAIN_FILE_VERSION"
- 
+
 /**
  * \brief Android APK expansion patch file version. Should be a string number like "1", "2" etc.
  *
@@ -151,7 +151,7 @@ extern "C" {
  * This hint lets you specify the application name sent to the OS when
  * required. For example, this will often appear in volume control applets for
  * audio streams, and in lists of applications which are inhibiting the
- * screensaver.  You should use a string that describes your program ("My Game
+ * screensaver.  You should use a string that describes your program ("My CGame
  * 2: The Revenge")
  *
  * Setting this to "" or leaving it unset will have SDL use a reasonable
@@ -216,7 +216,7 @@ extern "C" {
  *
  * This hints lets you transmit that information to the OS. The contents of
  * this hint are used while opening an audio device. You should use a string
- * that describes your program ("My Game 2: The Revenge")
+ * that describes your program ("My CGame 2: The Revenge")
  *
  * Setting this to "" or leaving it unset will have SDL use a reasonable
  * default: this will be the name set with SDL_HINT_APP_NAME, if that hint is
@@ -258,11 +258,11 @@ extern "C" {
  *
  * This hints lets you transmit that information to the OS. The contents of
  * this hint are used while opening an audio device. You should use a string
- * that describes your what your program is playing (Game, Music, Movie,
+ * that describes your what your program is playing (CGame, Music, Movie,
  * etc...).
  *
  * Setting this to "" or leaving it unset will have SDL use a reasonable
- * default: "Game" or something similar.
+ * default: "CGame" or something similar.
  *
  * On targets where this is not supported, this hint does nothing.
  */
@@ -2223,13 +2223,13 @@ extern "C" {
  */
 #define SDL_HINT_XINPUT_ENABLED "SDL_XINPUT_ENABLED"
 
- /**
-  *  \brief  A variable that lets you disable the detection and use of DirectInput gamepad devices
-  *
-  *  The variable can be set to the following values:
-  *    "0"       - Disable DirectInput detection (only uses XInput)
-  *    "1"       - Enable DirectInput detection (the default)
-  */
+/**
+ *  \brief  A variable that lets you disable the detection and use of DirectInput gamepad devices
+ *
+ *  The variable can be set to the following values:
+ *    "0"       - Disable DirectInput detection (only uses XInput)
+ *    "1"       - Enable DirectInput detection (the default)
+ */
 #define SDL_HINT_DIRECTINPUT_ENABLED "SDL_DIRECTINPUT_ENABLED"
 
 /**
@@ -2391,8 +2391,7 @@ extern "C" {
 /**
  *  \brief  An enumeration of hint priorities
  */
-typedef enum
-{
+typedef enum {
     SDL_HINT_DEFAULT,
     SDL_HINT_NORMAL,
     SDL_HINT_OVERRIDE
@@ -2482,7 +2481,7 @@ extern DECLSPEC void SDLCALL SDL_ResetHints(void);
  * \sa SDL_SetHint
  * \sa SDL_SetHintWithPriority
  */
-extern DECLSPEC const char * SDLCALL SDL_GetHint(const char *name);
+extern DECLSPEC const char *SDLCALL SDL_GetHint(const char *name);
 
 /**
  * Get the boolean value of a hint variable.
@@ -2562,6 +2561,7 @@ extern DECLSPEC void SDLCALL SDL_ClearHints(void);
 #ifdef __cplusplus
 }
 #endif
+
 #include "close_code.h"
 
 #endif /* SDL_hints_h_ */

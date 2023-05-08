@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="CMakePresetLoader">{
+  &quot;useNewFormat&quot;: true
+}</component>
+  <component name="CMakeReloadState">
+    <option name="reloaded" value="true" />
+  </component>
+  <component name="CMakeRunConfigurationManager">
+    <generated>
+      <config projectName="Aurorion" targetName="Aurorion" />
+    </generated>
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="ed30a93f-96e0-4b59-88b6-343e02730e11" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/matejsedlak.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameObject.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/CGameObject.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameObject.h" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/CGameObject.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Assets/Buildings.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Assets/Buildings.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Assets/Hive.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Assets/Hive.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Assets/Interior-01.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Assets/Props-Rocks.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Assets/Props-Rocks.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Assets/Sprite-0011.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Assets/Tiles.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Assets/Tiles.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Assets/Tree-Assets.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Assets/Tree-Assets.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Background/Background.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Background/Background.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Character/Attack-01/Attack-01-Sheet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Character/Attack-01/Attack-01.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Character/Attack-01/Attack-01.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Character/Dead/Dead-Sheet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Character/Dead/Dead.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Character/Dead/Dead.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Character/Idle/Idle-Sheet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Character/Idle/Idle.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Character/Idle/Idle.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Character/Jumlp-All/Jump-All-Sheet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Character/Jumlp-All/Jump-All.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Character/Jumlp-All/Sprite-0003.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Character/Jump-End/Jump-End-Sheet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Character/Jump-End/Jump-End.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Character/Jump-End/Jump-End.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Character/Jump-Start/Jump-Start-Sheet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Character/Jump-Start/Jump-Start.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Character/Jump/Jump.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Character/Jump/Jump.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Character/Run/Run-Sheet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Character/Run/Run.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Character/Run/Run.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/HUD/Base-01.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/HUD/Base-01.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Boar/Hit-Vanish/Hit-Sheet-Black.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Boar/Hit-Vanish/Hit-Sheet-White.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Boar/Hit-Vanish/Hit-Sheet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Boar/Hit-Vanish/Hit.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Boar/Idle/Idle-Sheet-White.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Boar/Idle/Idle-Sheet-export-Back.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Boar/Idle/Idle-Sheet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Boar/Idle/Idle.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Boar/Run/Run-Sheet-Black.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Boar/Run/Run-Sheet-White.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Boar/Run/Run-Sheet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Boar/Run/Run.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Boar/Walk/Walk-Base-Sheet-White.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Boar/Walk/Walk-Base-Sheet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Boar/Walk/Walk-Base-SheetBlack.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Boar/Walk/Walk-Base.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Small Bee/Attack/Attack-Sheet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Small Bee/Attack/Attack.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Small Bee/Fly/Fly-Sheet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Small Bee/Fly/Fly.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Small Bee/Hit/Hit-Sheet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Small Bee/Hit/Hit.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Snail/Dead-Sheet.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Snail/Dead-Sheet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Snail/Hide-Sheet.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Snail/Hide-Sheet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Snail/all.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Snail/walk-Sheet.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Mob/Snail/walk-Sheet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Trees/Background.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Trees/Background.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Trees/Dark-Tree.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Trees/Dark-Tree.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Trees/Golden-Tree.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Trees/Golden-Tree.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Trees/Green-Tree.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Trees/Green-Tree.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Trees/Red-Tree.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Trees/Red-Tree.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Trees/Yellow-Tree.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Legacy-Fantasy - High Forest 2.3/Trees/Yellow-Tree.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/.cmake/api/v1/query/cache-v2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/.cmake/api/v1/query/cmakeFiles-v1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/.cmake/api/v1/query/codemodel-v2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/.cmake/api/v1/query/toolchains-v1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/.cmake/api/v1/reply/cache-v2-0a55ff88e81cf4841c90.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/.cmake/api/v1/reply/cmakeFiles-v1-7a38a6055c0b02ed2a42.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/.cmake/api/v1/reply/directory-.-Debug-d0094a50bb2071803777.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/.cmake/api/v1/reply/toolchains-v1-b474d236ef76f97b6564.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/.ninja_deps" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/.ninja_log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/Aurorion.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/Aurorion.ilk" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/Aurorion.pdb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeCache.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/3.25.2/CMakeCCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/3.25.2/CMakeCXXCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/3.25.2/CMakeDetermineCompilerABI_C.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/3.25.2/CMakeDetermineCompilerABI_CXX.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/3.25.2/CMakeRCCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/3.25.2/CMakeSystem.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/3.25.2/CompilerIdC/CMakeCCompilerId.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/3.25.2/CompilerIdC/CMakeCCompilerId.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/3.25.2/CompilerIdC/CMakeCCompilerId.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/3.25.2/CompilerIdCXX/CMakeCXXCompilerId.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/3.25.2/CompilerIdCXX/CMakeCXXCompilerId.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/3.25.2/CompilerIdCXX/CMakeCXXCompilerId.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/Aurorion.dir/embed.manifest" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/Aurorion.dir/game.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/Aurorion.dir/intermediate.manifest" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/Aurorion.dir/main.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/Aurorion.dir/manifest.rc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/Aurorion.dir/manifest.res" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/Aurorion.dir/texture_manager.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/Aurorion.dir/vc140.pdb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/CMakeOutput.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/ShowIncludes/foo.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/ShowIncludes/main.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/ShowIncludes/main.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/TargetDirectories.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/clion-SemestralWork-log.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/clion-environment.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/cmake.check_cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/CMakeFiles/rules.ninja" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/Testing/Temporary/LastTest.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/build.ninja" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-semestralwork/cmake_install.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/game.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game.h" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/game.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pajko1.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/pajko1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pajko2.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/pajko2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/player.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/player.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/player.h" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/player.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SDL2/include/SDL_events.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/SDL2/include/SDL_events.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SDL2/include/SDL_filesystem.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/SDL2/include/SDL_filesystem.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SDL2/include/SDL_gamecontroller.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/SDL2/include/SDL_gamecontroller.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SDL2/include/SDL_hints.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/SDL2/include/SDL_hints.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SDL2/include/SDL_joystick.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/SDL2/include/SDL_joystick.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/texture_manager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/texture_manager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/texture_manager.h" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/texture_manager.h" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="FormatOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectApplicationVersion">
+    <option name="ide" value="CLion" />
+    <option name="majorVersion" value="2023" />
+    <option name="minorVersion" value="1.2" />
+  </component>
+  <component name="ProjectId" id="2PVaEEEf5jYg10726gH4siHXU8o" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "last_opened_file_path": "/home/matejsedlak/Dev/C++/Aurorion",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "settings.sync",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/assets" />
+    </key>
+  </component>
+  <component name="RunManager" selected="CMake Application.Aurorion">
+    <configuration name="Aurorion" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Aurorion" TARGET_NAME="Aurorion" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Aurorion" RUN_TARGET_NAME="Aurorion">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Makefile" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile">
+      <makefile filename="$PROJECT_DIR$/Makefile" target="all" workingDirectory="$PROJECT_DIR$" arguments="">
+        <envs />
+      </makefile>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="CMake Application.Aurorion" />
+      <item itemvalue="Makefile Target.Makefile" />
+    </list>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ed30a93f-96e0-4b59-88b6-343e02730e11" name="Changes" comment="" />
+      <created>1683544588506</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1683544588506</updated>
+      <workItem from="1683544589535" duration="4259000" />
+      <workItem from="1683553632601" duration="4285000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VCPKGProject">
+    <isAutomaticEditVcpkgJson value="false" />
+    <isAutomaticCheckingOnLaunch value="false" />
+    <isAutomaticFoundErrors value="true" />
+    <isAutomaticFoundErrors value="true" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

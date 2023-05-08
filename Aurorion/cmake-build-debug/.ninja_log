@@ -1,0 +1,22 @@
+# ninja log v5
+0	18	1683560990913183789	build.ninja	7dede5f8013da15b
+1	626	1683549456739025613	CMakeFiles/Aurorion.dir/Sources/game.cpp.o	27a5af7275d3b7f5
+521	643	1683551555889938619	Aurorion	1f489400e39fdb6
+1	654	1683549456767025896	CMakeFiles/Aurorion.dir/Sources/GameObject.cpp.o	5013646a59bf8ebc
+0	3	0	clean	e6790da01637084f
+1	838	1683549456951027753	CMakeFiles/Aurorion.dir/Sources/texture_manager.cpp.o	a904f792507064a6
+1	521	1683551555769937466	CMakeFiles/Aurorion.dir/Sources/main.cpp.o	757e257f294180e9
+2	844	1683549456955027793	CMakeFiles/Aurorion.dir/Sources/player.cpp.o	fcb038baee79fd1f
+0	26	1683560990913183789	build.ninja	7dede5f8013da15b
+2	784	1683560991709190380	CMakeFiles/Aurorion.dir/Sources/player.cpp.o	fcb038baee79fd1f
+1	790	1683560991713190413	CMakeFiles/Aurorion.dir/Sources/texture_manager.cpp.o	a904f792507064a6
+1	791	1683560991713190413	CMakeFiles/Aurorion.dir/Sources/game.cpp.o	27a5af7275d3b7f5
+1	898	1683560991821191308	CMakeFiles/Aurorion.dir/Sources/main.cpp.o	757e257f294180e9
+1	952	1683560991877191771	CMakeFiles/Aurorion.dir/Sources/GameObject.cpp.o	5013646a59bf8ebc
+952	1077	1683560991997192765	Aurorion	1f489400e39fdb6
+1	738	1683562121499138350	CMakeFiles/Aurorion.dir/Sources/texture_manager.cpp.o	a904f792507064a6
+2	750	1683562121511138458	CMakeFiles/Aurorion.dir/Sources/player.cpp.o	fcb038baee79fd1f
+1	793	1683562121551138813	CMakeFiles/Aurorion.dir/Sources/main.cpp.o	757e257f294180e9
+2	1014	1683562121771140769	CMakeFiles/Aurorion.dir/Sources/GameObject.cpp.o	5013646a59bf8ebc
+1	1025	1683562121783140876	CMakeFiles/Aurorion.dir/Sources/game.cpp.o	27a5af7275d3b7f5
+1025	1145	1683562121903141943	Aurorion	1f489400e39fdb6
