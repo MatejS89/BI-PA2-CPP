@@ -20,37 +20,12 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ed30a93f-96e0-4b59-88b6-343e02730e11" name="Changes" comment="Semestral work: updated file structure, add Makefile">
-      <change afterPath="$PROJECT_DIR$/Sources/CGame.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Sources/CGame.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Sources/CTextureManager.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Sources/CTextureManager.h" afterDir="false" />
+    <list default="true" id="ed30a93f-96e0-4b59-88b6-343e02730e11" name="Changes" comment="Semestral work: Redone CGame class, added Texture manager with animation of spritesheets">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sources/CGameObject.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sources/CGameObject.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sources/game.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sources/game.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sources/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sources/player.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sources/player.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sources/texture_manager.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sources/texture_manager.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/a.out" beforeDir="false" afterPath="$PROJECT_DIR$/a.out" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/codemodel-v2-f466df2a65f47389a859.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/index-2023-05-08T15-49-50-0926.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/target-Aurorion-Debug-255d41492f8195ddbe6d.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Aurorion" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Aurorion.dir/Sources/game.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Aurorion.dir/Sources/game.cpp.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Aurorion.dir/Sources/main.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Aurorion.dir/Sources/main.cpp.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Aurorion.dir/Sources/texture_manager.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Aurorion.dir/Sources/texture_manager.cpp.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/build.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/build.ninja" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SDL2_image-2.6.3/CHANGES.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/SDL2_image-2.6.3/CHANGES.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SDL2_image-2.6.3/README.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/SDL2_image-2.6.3/README.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sources/CGame.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/CGame.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sources/CGame.h" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/CGame.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sources/CTextureManager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/CTextureManager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sources/CTextureManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/CTextureManager.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -133,7 +108,7 @@
       <option name="presentableId" value="Default" />
       <updated>1683544588506</updated>
       <workItem from="1683544589535" duration="4259000" />
-      <workItem from="1683553632601" duration="9894000" />
+      <workItem from="1683553632601" duration="10717000" />
     </task>
     <task id="LOCAL-00001" summary="Semestral work: updated file structure, add Makefile">
       <created>1683562693934</created>
@@ -142,7 +117,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683562693934</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Semestral work: Redone CGame class, added Texture manager with animation of spritesheets">
+      <created>1683568151692</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1683568151692</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -156,7 +138,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Semestral work: updated file structure, add Makefile" />
-    <option name="LAST_COMMIT_MESSAGE" value="Semestral work: updated file structure, add Makefile" />
+    <MESSAGE value="Semestral work: Redone CGame class, added Texture manager with animation of spritesheets" />
+    <option name="LAST_COMMIT_MESSAGE" value="Semestral work: Redone CGame class, added Texture manager with animation of spritesheets" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

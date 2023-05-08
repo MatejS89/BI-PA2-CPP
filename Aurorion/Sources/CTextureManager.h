@@ -5,6 +5,7 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 
+// singleton class
 class CTextureManager {
 public:
     bool Load(std::string fileName, std::string id, SDL_Renderer *renderer);
@@ -16,6 +17,18 @@ public:
                    SDL_Renderer *renderer,
                    SDL_RendererFlip flip = SDL_FLIP_NONE);
 
+    static CTextureManager *Instance() {
+        if (m_Instance == nullptr) {
+            m_Instance = new CTextureManager();
+            return m_Instance;
+        }
+        return m_Instance;
+    }
+
 private:
+    CTextureManager();
+
+    static CTextureManager *m_Instance;
+
     std::map<std::string, SDL_Texture *> m_textureMap;
 };

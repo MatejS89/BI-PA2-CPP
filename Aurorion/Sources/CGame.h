@@ -31,5 +31,4 @@ private:
     static SDL_Window *m_window;
     static SDL_Renderer *m_renderer;
     int m_currentFrame;
-    CTextureManager m_textureManager;
 };

@@ -8,6 +8,8 @@ CGame::CGame() {}
 
 CGame::~CGame() {}
 
+typedef CTextureManager TheTextureManager;
+
 bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int height, bool fullScreen) {
     int fullscreenFlag = 0;
     if (fullScreen)
@@ -33,7 +35,7 @@ bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int he
         m_height = height;
         m_width = width;
 
-        m_textureManager.Load
+        TheTextureManager::Instance()->Load
                 ("assets/Character/Attack-01/Attack-01-Sheet.png", "animate", m_renderer);
     } else {
         m_isRunning = false;
@@ -70,9 +72,9 @@ void CGame::Update() {
 
 void CGame::Render() {
     SDL_RenderClear(m_renderer);
-    m_textureManager.Draw("animate", 0, 0, 96, 80, m_renderer);
+    TheTextureManager::Instance()->Draw("animate", 0, 0, 96, 80, m_renderer);
 
-    m_textureManager.DrawFrame("animate", 100, 100, 96, 80, 1, m_currentFrame, m_renderer);
+    TheTextureManager::Instance()->DrawFrame("animate", 100, 100, 96, 80, 1, m_currentFrame, m_renderer);
 
     SDL_RenderPresent(m_renderer);
 }
