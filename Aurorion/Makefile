@@ -1,7 +1,7 @@
 CC = g++
-CFLAGS = -Wall -c -pedantic
-LDFLAGS = -L/usr/local/lib
-LDLIBS = -lSDL2 -lSDL2_image
+CFLAGS = -Wall -c -pedantic -I/usr/include/libxml2
+LDFLAGS = -L/usr/local/lib -L/usr/lib
+LDLIBS = -lSDL2 -lSDL2_image -lxml2
 
 SOURCES := $(wildcard Sources/*.cpp)
 OBJECTS := $(SOURCES:Sources/%.cpp=obj/%.o)

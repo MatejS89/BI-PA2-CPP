@@ -1,9 +1,0 @@
-# ninja log v5
-0	23	1683565046102328344	build.ninja	7dede5f8013da15b
-1	633	1683563792582415565	CMakeFiles/Aurorion.dir/Sources/game.cpp.o	27a5af7275d3b7f5
-0	3	0	clean	e6790da01637084f
-2	1014	1683562121771140769	CMakeFiles/Aurorion.dir/Sources/GameObject.cpp.o	5013646a59bf8ebc
-1025	1145	1683562121903141943	Aurorion	1f489400e39fdb6
-2	642	1683563710085651787	CMakeFiles/Aurorion.dir/Sources/texture_manager.cpp.o	a904f792507064a6
-1	688	1683563710133652232	CMakeFiles/Aurorion.dir/Sources/main.cpp.o	757e257f294180e9
-2	750	1683562121511138458	CMakeFiles/Aurorion.dir/Sources/player.cpp.o	fcb038baee79fd1f
