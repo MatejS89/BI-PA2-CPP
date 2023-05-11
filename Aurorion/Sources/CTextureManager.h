@@ -9,6 +9,8 @@
 // singleton class
 class CTextureManager {
 public:
+    CTextureManager(const CTextureManager &other) = delete;
+
     bool Load(std::string fileName, std::string id, SDL_Renderer *renderer);
 
     void Draw(std::string id, int x, int y, int width, int height, SDL_Renderer *renderer,
@@ -18,12 +20,12 @@ public:
                    SDL_Renderer *renderer,
                    SDL_RendererFlip flip = SDL_FLIP_NONE);
 
-    static CTextureManager *Instance();
+    static CTextureManager &Instance();
 
 private:
     CTextureManager();
 
-    static CTextureManager *m_instance;
+    static CTextureManager m_instance;
 
     std::map<std::string, SDL_Texture *> m_textureMap;
 };

@@ -10,10 +10,8 @@ public:
 
     virtual void update() = 0;
 
-    virtual void clean();
-
 protected:
-    CGameObject(const SParamLoader *params) {};
+    CGameObject(std::shared_ptr<SParamLoader> params) {};
 
     virtual ~CGameObject();
 };

@@ -1,6 +1,5 @@
 #include "CGame.h"
 #include "CPlayer.h"
-#include "CInputHandler.h"
 
 SDL_Window *CGame::m_window = nullptr;
 
@@ -10,13 +9,9 @@ CGame::CGame() {}
 
 CGame::~CGame() {}
 
-CGame *CGame::m_instance = nullptr;
+CGame CGame::m_instance;
 
-CGame *CGame::Instance() {
-    if (m_instance == nullptr) {
-        m_instance = new CGame();
-        return m_instance;
-    }
+CGame &CGame::Instance() {
     return m_instance;
 }
 
@@ -45,22 +40,19 @@ bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int he
         m_height = height;
         m_width = width;
 
-        TheTextureManager::Instance()->Load
+        TheTextureManager::Instance().Load
                 ("assets/Character/Attack-01/Attack-01-Sheet.png", "animate", m_renderer);
-        TheTextureManager::Instance()->Load(
+        TheTextureManager::Instance().Load(
                 "assets/Character/Idle/Idle-Sheet.png", "idle", m_renderer
         );
 
-        m_gameObjects.push_back(new CPlayer(new SParamLoader(100, 100, 96, 82, "animate")));
-        m_gameObjects.push_back(new CPlayer(new SParamLoader(100, 10, 64, 82, "idle")));
+        m_gameObjects.push_back(std::make_shared<CPlayer>(std::make_unique<SParamLoader>(100, 100, 96, 82, "animate")));
+        m_gameObjects.push_back(std::make_shared<CPlayer>(std::make_unique<SParamLoader>(100, 10, 64, 82, "idle")));
     } else {
         m_isRunning = false;
         return false;
     }
     return true;
-}
-
-void CGame::HandleEvents() {
 }
 
 void CGame::Update() {

@@ -4,7 +4,9 @@
 
 class CInputHandler {
 public:
-    static CInputHandler *Instance();
+    CInputHandler(const CInputHandler &) = delete;
+
+    static CInputHandler &Instance();
 
     void Listen();
 
@@ -14,15 +16,13 @@ private:
 
     CInputHandler();
 
-    ~CInputHandler();
-
     void KeyUp();
 
     void KeyDown();
 
     const Uint8 *m_KeyStates;
 
-    static CInputHandler *m_instance;
+    static CInputHandler m_instance;
 };
 
 typedef CInputHandler TheInputHandler;

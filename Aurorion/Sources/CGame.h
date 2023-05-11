@@ -8,18 +8,17 @@
 #include "SDL2/SDL_image.h"
 #include "vector"
 #include "CInputHandler.h"
+#include "memory"
 
 class CGameObject;
 
 class CGame {
 public:
-    ~CGame();
+    static CGame &Instance();
 
-    static CGame *Instance();
+    CGame(const CGame &other) = delete;
 
     bool Init(const std::string &title, int xPos, int yPos, int width, int height, bool fullScreen);
-
-    void HandleEvents();
 
     void Update();
 
@@ -36,7 +35,9 @@ public:
 private:
     CGame();
 
-    static CGame *m_instance;
+    ~CGame();
+
+    static CGame m_instance;
     int m_height;
     int m_width;
     bool m_isRunning;
@@ -44,7 +45,7 @@ private:
     static SDL_Renderer *m_renderer;
     int m_currentFrame;
 
-    std::vector<CGameObject *> m_gameObjects;
+    std::vector<std::shared_ptr<CGameObject>> m_gameObjects;
 };
 
 typedef CGame TheGame;

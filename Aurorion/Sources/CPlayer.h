@@ -2,10 +2,9 @@
 
 #include "CEntity.h"
 
-
 class CPlayer : public CEntity {
 public:
-    CPlayer(const SParamLoader *params);
+    CPlayer(std::shared_ptr<SParamLoader> params);
 
     void draw() override;
 

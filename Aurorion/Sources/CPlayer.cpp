@@ -1,8 +1,7 @@
 #include "CPlayer.h"
 #include "CInputHandler.h"
 
-
-CPlayer::CPlayer(const SParamLoader *params) : CEntity(params) {}
+CPlayer::CPlayer(std::shared_ptr<SParamLoader> params) : CEntity(params) {}
 
 void CPlayer::draw() {
     CEntity::draw();
@@ -18,17 +17,17 @@ void CPlayer::clean() {
 }
 
 void CPlayer::handleInput() {
-    TheInputHandler::Instance()->Listen();
+    TheInputHandler::Instance().Listen();
 
     m_velocity.SetY(0);
     m_velocity.SetX(0);
 
-    if (TheInputHandler::Instance()->IsKeyDown(SDL_SCANCODE_UP))
+    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_UP))
         m_velocity.SetY(-2);
-    if (TheInputHandler::Instance()->IsKeyDown(SDL_SCANCODE_DOWN))
+    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_DOWN))
         m_velocity.SetY(2);
-    if (TheInputHandler::Instance()->IsKeyDown(SDL_SCANCODE_RIGHT))
+    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_RIGHT))
         m_velocity.SetX(2);
-    if (TheInputHandler::Instance()->IsKeyDown(SDL_SCANCODE_LEFT))
+    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_LEFT))
         m_velocity.SetX(-2);
 }

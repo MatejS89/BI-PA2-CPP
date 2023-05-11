@@ -6,7 +6,7 @@
 
 class CEntity : public CGameObject {
 public:
-    CEntity(const SParamLoader *params);
+    CEntity(std::shared_ptr<SParamLoader> params);
 
     virtual void draw();
 
