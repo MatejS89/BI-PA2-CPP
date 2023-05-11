@@ -20,14 +20,20 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ed30a93f-96e0-4b59-88b6-343e02730e11" name="Changes" comment="Semestral work: Added CVector2D class with its overloaded operators">
+    <list default="true" id="ed30a93f-96e0-4b59-88b6-343e02730e11" name="Changes" comment="Semestral work: Redone class structure">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sources/CEntity.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/CEntity.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sources/CEntity.h" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/CEntity.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Sources/CGame.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/CGame.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Sources/CGame.h" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/CGame.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sources/CTextureManager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/CTextureManager.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sources/CTextureManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/CTextureManager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sources/CGameObject.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/CGameObject.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sources/CGameObject.h" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/CGameObject.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sources/CPlayer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/CPlayer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sources/CPlayer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/CPlayer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sources/CVector2D.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/CVector2D.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sources/CVector2D.h" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/CVector2D.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Sources/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SDL2_image-2.6.3/CHANGES.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/SDL2_image-2.6.3/CHANGES.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,7 +92,12 @@
     </key>
   </component>
   <component name="RunManager" selected="CMake Application.Aurorion">
-    <configuration name="Aurorion" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Aurorion" TARGET_NAME="Aurorion" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Aurorion" RUN_TARGET_NAME="Aurorion">
+    <configuration name="Aurorion" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Aurorion" TARGET_NAME="Aurorion" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Aurorion" RUN_TARGET_NAME="Aurorion">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -137,7 +148,8 @@
       <workItem from="1683725234179" duration="8719000" />
       <workItem from="1683749333172" duration="2473000" />
       <workItem from="1683786975238" duration="5402000" />
-      <workItem from="1683795482474" duration="2726000" />
+      <workItem from="1683795482474" duration="6530000" />
+      <workItem from="1683814733972" duration="10627000" />
     </task>
     <task id="LOCAL-00001" summary="Semestral work: updated file structure, add Makefile">
       <created>1683562693934</created>
@@ -174,7 +186,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683736597489</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Semestral work: Redone class structure">
+      <created>1683798297561</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1683798297561</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -202,7 +221,8 @@
     <MESSAGE value="Semestral work: Redone CGame class, added Texture manager with animation of spritesheets" />
     <MESSAGE value="Semestral work: Modified Makefile and CMakeLists to include libxml2" />
     <MESSAGE value="Semestral work: Added CVector2D class with its overloaded operators" />
-    <option name="LAST_COMMIT_MESSAGE" value="Semestral work: Added CVector2D class with its overloaded operators" />
+    <MESSAGE value="Semestral work: Redone class structure" />
+    <option name="LAST_COMMIT_MESSAGE" value="Semestral work: Redone class structure" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

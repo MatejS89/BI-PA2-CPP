@@ -7,6 +7,7 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 #include "vector"
+#include "CInputHandler.h"
 
 class CGameObject;
 
@@ -14,13 +15,7 @@ class CGame {
 public:
     ~CGame();
 
-    static CGame *Instance() {
-        if (m_instance == nullptr) {
-            m_instance = new CGame();
-            return m_instance;
-        }
-        return m_instance;
-    }
+    static CGame *Instance();
 
     bool Init(const std::string &title, int xPos, int yPos, int width, int height, bool fullScreen);
 
@@ -35,6 +30,8 @@ public:
     bool Running();
 
     SDL_Renderer *GetRenderer() const;
+
+    void Quit();
 
 private:
     CGame();

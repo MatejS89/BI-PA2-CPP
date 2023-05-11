@@ -10,9 +10,9 @@ public:
 
     float GetY() const;
 
-    void setX(float x);
+    void SetX(float x);
 
-    void setY(float y);
+    void SetY(float y);
 
     float length() const;
 

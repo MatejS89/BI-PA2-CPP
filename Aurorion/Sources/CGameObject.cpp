@@ -2,3 +2,6 @@
 
 CGameObject::~CGameObject() {
 }
+
+void CGameObject::clean() {
+}

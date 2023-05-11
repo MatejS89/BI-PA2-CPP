@@ -3,22 +3,21 @@
 
 int main(int argc, char *args[]) {
     const int targetFps = 60;
-    const int frameDelay = 1000 / targetFps;
+    const float frameDelay = 1000.0F / targetFps;
 
-    Uint64 frameStart;
-    int frameTime;
+    Uint32 frameTime = 0, frameStart = 0;
 
     if (!TheGame::Instance()->Init("Aurorion", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, false))
         std::cout << "Initialization failed" << std::endl;
     while (TheGame::Instance()->Running()) {
         frameStart = SDL_GetTicks64();
-        TheGame::Instance()->HandleEvents();
+//        TheGame::Instance()->HandleEvents();
         TheGame::Instance()->Update();
         TheGame::Instance()->Render();
         frameTime = SDL_GetTicks64() - frameStart;
 
         if (frameDelay > frameTime) {
-            SDL_Delay(frameDelay - frameTime);
+            SDL_Delay((int) frameDelay - frameTime);
         }
     }
     TheGame::Instance()->Clean();

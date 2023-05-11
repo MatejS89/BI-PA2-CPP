@@ -1,5 +1,6 @@
 #include "CGame.h"
 #include "CPlayer.h"
+#include "CInputHandler.h"
 
 SDL_Window *CGame::m_window = nullptr;
 
@@ -10,6 +11,14 @@ CGame::CGame() {}
 CGame::~CGame() {}
 
 CGame *CGame::m_instance = nullptr;
+
+CGame *CGame::Instance() {
+    if (m_instance == nullptr) {
+        m_instance = new CGame();
+        return m_instance;
+    }
+    return m_instance;
+}
 
 bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int height, bool fullScreen) {
     int fullscreenFlag = 0;
@@ -38,35 +47,20 @@ bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int he
 
         TheTextureManager::Instance()->Load
                 ("assets/Character/Attack-01/Attack-01-Sheet.png", "animate", m_renderer);
+        TheTextureManager::Instance()->Load(
+                "assets/Character/Idle/Idle-Sheet.png", "idle", m_renderer
+        );
 
         m_gameObjects.push_back(new CPlayer(new SParamLoader(100, 100, 96, 82, "animate")));
+        m_gameObjects.push_back(new CPlayer(new SParamLoader(100, 10, 64, 82, "idle")));
     } else {
         m_isRunning = false;
         return false;
     }
-
     return true;
 }
 
 void CGame::HandleEvents() {
-    SDL_Event event;
-    SDL_PollEvent(&event);
-
-    if (event.type == SDL_QUIT) {
-        m_isRunning = false;
-        return;
-    }
-    if (event.type == SDL_KEYDOWN)
-        switch (event.key.keysym.sym) {
-            case SDLK_UP:
-                break;
-            case SDLK_DOWN:
-                break;
-            case SDLK_RIGHT:
-                break;
-            case SDLK_LEFT:
-                break;
-        }
 }
 
 void CGame::Update() {
@@ -96,4 +90,8 @@ bool CGame::Running() {
 
 SDL_Renderer *CGame::GetRenderer() const {
     return m_renderer;
+}
+
+void CGame::Quit() {
+    m_isRunning = false;
 }

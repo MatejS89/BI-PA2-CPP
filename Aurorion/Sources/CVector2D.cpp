@@ -13,11 +13,11 @@ float CVector2D::GetY() const {
     return m_Y;
 }
 
-void CVector2D::setX(float x) {
+void CVector2D::SetX(float x) {
     m_X = x;
 }
 
-void CVector2D::setY(float y) {
+void CVector2D::SetY(float y) {
     m_Y = y;
 }
 

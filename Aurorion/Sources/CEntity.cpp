@@ -2,8 +2,9 @@
 #include "CGame.h"
 
 CEntity::CEntity(const SParamLoader *params) : CGameObject(params),
-                                               m_X(params->m_X),
-                                               m_Y(params->m_Y),
+                                               m_pos(params->m_X,
+                                                     params->m_Y),
+                                               m_velocity(0, 0),
                                                m_W(params->m_W),
                                                m_H(params->m_H),
                                                m_currentRow(1),
@@ -11,14 +12,15 @@ CEntity::CEntity(const SParamLoader *params) : CGameObject(params),
                                                m_texture(params->m_texture) {}
 
 void CEntity::draw() {
-    CTextureManager::Instance()->DrawFrame(m_texture, m_X, m_Y, m_W, m_H, m_currentRow, m_currentFrame,
+    CTextureManager::Instance()->DrawFrame(m_texture, m_pos.GetX(), m_pos.GetY(), m_W, m_H, m_currentRow,
+                                           m_currentFrame,
                                            TheGame::Instance()->GetRenderer());
 }
 
 void CEntity::update() {
-
+    m_pos += m_velocity;
 }
 
 void CEntity::clean() {
-    
+
 }

@@ -2,20 +2,21 @@
 
 #include "CGameObject.h"
 #include "SParamLoader.h"
+#include "CVector2D.h"
 
 class CEntity : public CGameObject {
 public:
     CEntity(const SParamLoader *params);
 
-    void draw();
+    virtual void draw();
 
     virtual void update();
 
     virtual void clean();
 
 protected:
-    int m_X;
-    int m_Y;
+    CVector2D m_pos;
+    CVector2D m_velocity;
     int m_W;
     int m_H;
 

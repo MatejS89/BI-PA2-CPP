@@ -2,6 +2,7 @@
 
 #include "CEntity.h"
 
+
 class CPlayer : public CEntity {
 public:
     CPlayer(const SParamLoader *params);
@@ -11,4 +12,6 @@ public:
     void update() override;
 
     void clean() override;
+
+    void handleInput();
 };
