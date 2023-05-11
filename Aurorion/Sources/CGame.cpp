@@ -1,4 +1,5 @@
 #include "CGame.h"
+#include "CPlayer.h"
 
 SDL_Window *CGame::m_window = nullptr;
 
@@ -8,7 +9,7 @@ CGame::CGame() {}
 
 CGame::~CGame() {}
 
-typedef CTextureManager TheTextureManager;
+CGame *CGame::m_instance = nullptr;
 
 bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int height, bool fullScreen) {
     int fullscreenFlag = 0;
@@ -37,6 +38,8 @@ bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int he
 
         TheTextureManager::Instance()->Load
                 ("assets/Character/Attack-01/Attack-01-Sheet.png", "animate", m_renderer);
+
+        m_gameObjects.push_back(new CPlayer(new SParamLoader(100, 100, 96, 82, "animate")));
     } else {
         m_isRunning = false;
         return false;
@@ -67,15 +70,16 @@ void CGame::HandleEvents() {
 }
 
 void CGame::Update() {
-    m_currentFrame = int(((SDL_GetTicks() / 100) % 8));
+    for (const auto &item: m_gameObjects) {
+        item->update();
+    }
 }
 
 void CGame::Render() {
     SDL_RenderClear(m_renderer);
-    TheTextureManager::Instance()->Draw("animate", 0, 0, 96, 80, m_renderer);
-
-    TheTextureManager::Instance()->DrawFrame("animate", 100, 100, 96, 80, 1, m_currentFrame, m_renderer);
-
+    for (const auto &item: m_gameObjects) {
+        item->draw();
+    }
     SDL_RenderPresent(m_renderer);
 }
 
@@ -88,4 +92,8 @@ void CGame::Clean() {
 
 bool CGame::Running() {
     return m_isRunning;
+}
+
+SDL_Renderer *CGame::GetRenderer() const {
+    return m_renderer;
 }

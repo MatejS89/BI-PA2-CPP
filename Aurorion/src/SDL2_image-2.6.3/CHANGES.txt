@@ -169,7 +169,7 @@ Gautier Portet - Fri, 19 Mar 2004 17:35:12 +0100
  * Added support for 32-bit BMP files with alpha
 
 1.2.4:
-Pierre G. Richard - Fri, 30 Jul 2004 11:13:11 +0000 (UTC)
+Pierre GetRenderer. Richard - Fri, 30 Jul 2004 11:13:11 +0000 (UTC)
  * Added support for RLE encoded BMP files
 Marc Le Douarain - Fri, 26 Dec 2003 18:23:42 +0100
  * Added EHB and HAM mode support to the ILBM loader

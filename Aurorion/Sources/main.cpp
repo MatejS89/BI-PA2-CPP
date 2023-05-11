@@ -8,20 +8,19 @@ int main(int argc, char *args[]) {
     Uint64 frameStart;
     int frameTime;
 
-    CGame *game = new CGame();
-    if (!game->Init("Aurorion", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, false))
+    if (!TheGame::Instance()->Init("Aurorion", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, false))
         std::cout << "Initialization failed" << std::endl;
-    while (game->Running()) {
+    while (TheGame::Instance()->Running()) {
         frameStart = SDL_GetTicks64();
-        game->HandleEvents();
-        game->Update();
-        game->Render();
+        TheGame::Instance()->HandleEvents();
+        TheGame::Instance()->Update();
+        TheGame::Instance()->Render();
         frameTime = SDL_GetTicks64() - frameStart;
 
         if (frameDelay > frameTime) {
             SDL_Delay(frameDelay - frameTime);
         }
     }
-    game->Clean();
+    TheGame::Instance()->Clean();
     return 0;
 }

@@ -4,6 +4,7 @@
 #include <string>
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
+#include "libxml/parser.h"
 
 // singleton class
 class CTextureManager {
@@ -17,18 +18,14 @@ public:
                    SDL_Renderer *renderer,
                    SDL_RendererFlip flip = SDL_FLIP_NONE);
 
-    static CTextureManager *Instance() {
-        if (m_Instance == nullptr) {
-            m_Instance = new CTextureManager();
-            return m_Instance;
-        }
-        return m_Instance;
-    }
+    static CTextureManager *Instance();
 
 private:
     CTextureManager();
 
-    static CTextureManager *m_Instance;
+    static CTextureManager *m_instance;
 
     std::map<std::string, SDL_Texture *> m_textureMap;
 };
+
+typedef CTextureManager TheTextureManager;

@@ -1,13 +1,13 @@
 #include "CTextureManager.h"
 
-CTextureManager *CTextureManager::m_Instance = nullptr;
+CTextureManager *CTextureManager::m_instance = nullptr;
 
 CTextureManager::CTextureManager() = default;
 
 bool CTextureManager::Load(std::string fileName, std::string id, SDL_Renderer *renderer) {
     SDL_Surface *tmpSurface = IMG_Load(fileName.c_str());
 
-    if (tmpSurface == 0)
+    if (tmpSurface == nullptr)
         return false;
 
     SDL_Texture *texture =
@@ -15,7 +15,7 @@ bool CTextureManager::Load(std::string fileName, std::string id, SDL_Renderer *r
 
     SDL_FreeSurface(tmpSurface);
 
-    if (texture != 0) {
+    if (texture != nullptr) {
         m_textureMap[id] = texture;
         return true;
     }
@@ -56,4 +56,12 @@ void CTextureManager::DrawFrame(std::string id, int x, int y, int width, int hei
     destRect.w = width;
     destRect.h = height;
     SDL_RenderCopyEx(renderer, m_textureMap[id], &srcRect, &destRect, 0, 0, flip);
+}
+
+CTextureManager *CTextureManager::Instance() {
+    if (m_instance == nullptr) {
+        m_instance = new CTextureManager();
+        return m_instance;
+    }
+    return m_instance;
 }
