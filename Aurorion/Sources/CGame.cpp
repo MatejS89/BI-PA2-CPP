@@ -41,13 +41,15 @@ bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int he
         m_width = width;
 
         TheTextureManager::Instance().Load
-                ("assets/Character/Attack-01/Attack-01-Sheet.png", "animate", m_renderer);
+                ("assets/Character/Attack-01/Attack-01-Sheet.png", "attacking", m_renderer);
         TheTextureManager::Instance().Load(
                 "assets/Character/Idle/Idle-Sheet.png", "idle", m_renderer
         );
 
-        m_gameObjects.push_back(std::make_shared<CPlayer>(std::make_unique<SParamLoader>(100, 100, 96, 82, "animate")));
-        m_gameObjects.push_back(std::make_shared<CPlayer>(std::make_unique<SParamLoader>(100, 10, 64, 82, "idle")));
+        m_gameObjects.push_back(
+                std::make_shared<CPlayer>(std::make_unique<SParamLoader>(100, 100, 96, 82, "attacking")));
+        m_gameObjects.push_back(
+                std::make_shared<CPlayer>(std::make_unique<SParamLoader>(100, 10, 64, 82, "idle")));
     } else {
         m_isRunning = false;
         return false;
@@ -73,7 +75,7 @@ void CGame::Clean() {
     SDL_DestroyWindow(m_window);
     SDL_DestroyRenderer(m_renderer);
     SDL_Quit();
-    std::cout << "CGame quit and cleaned" << std::endl;
+    std::cout << "Game quit and cleaned" << std::endl;
 }
 
 bool CGame::Running() {

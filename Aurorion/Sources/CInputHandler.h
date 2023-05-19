@@ -13,7 +13,6 @@ public:
     bool IsKeyDown(SDL_Scancode key);
 
 private:
-
     CInputHandler();
 
     void KeyUp();

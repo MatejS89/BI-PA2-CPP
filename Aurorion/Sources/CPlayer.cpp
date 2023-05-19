@@ -9,14 +9,14 @@ void CPlayer::draw() {
 
 void CPlayer::update() {
     m_currentFrame = (((SDL_GetTicks() / 100) % 8));
-    handleInput();
+    HandleInput();
     CEntity::update();
 }
 
 void CPlayer::clean() {
 }
 
-void CPlayer::handleInput() {
+void CPlayer::HandleInput() {
     TheInputHandler::Instance().Listen();
 
     m_velocity.SetY(0);

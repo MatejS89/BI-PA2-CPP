@@ -1,5 +1,7 @@
 #include <iostream>
 #include "CGame.h"
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 
 int main(int argc, char *args[]) {
     const int targetFps = 60;

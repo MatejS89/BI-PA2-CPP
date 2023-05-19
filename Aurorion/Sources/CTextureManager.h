@@ -4,12 +4,13 @@
 #include <string>
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
-#include "libxml/parser.h"
 
 // singleton class
 class CTextureManager {
 public:
     CTextureManager(const CTextureManager &other) = delete;
+
+    ~CTextureManager();
 
     bool Load(std::string fileName, std::string id, SDL_Renderer *renderer);
 

@@ -60,3 +60,9 @@ void CTextureManager::DrawFrame(std::string id, int x, int y, int width, int hei
 CTextureManager &CTextureManager::Instance() {
     return m_instance;
 }
+
+CTextureManager::~CTextureManager() {
+    for (const auto &textureMap: m_textureMap) {
+        SDL_DestroyTexture(textureMap.second);
+    }
+}

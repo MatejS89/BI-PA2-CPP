@@ -12,5 +12,5 @@ public:
 
     void clean() override;
 
-    void handleInput();
+    void HandleInput();
 };
