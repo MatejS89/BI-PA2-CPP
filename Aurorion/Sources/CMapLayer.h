@@ -2,7 +2,7 @@
 
 class CMapLayer {
 public:
-    void LayerRender();
+    virtual void LayerRender();
 
-    void LayerUpdate();
+    virtual void LayerUpdate();
 };

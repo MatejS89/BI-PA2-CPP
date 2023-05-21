@@ -72,8 +72,8 @@ void CGame::Render() {
 }
 
 void CGame::Clean() {
-    SDL_DestroyWindow(m_window);
     SDL_DestroyRenderer(m_renderer);
+    SDL_DestroyWindow(m_window);
     SDL_Quit();
     std::cout << "Game quit and cleaned" << std::endl;
 }

@@ -6,6 +6,8 @@
 
 class CMap {
 public:
+    CMap();
+
     void MapRender();
 
     void MapUpdate();
@@ -14,4 +16,6 @@ public:
 
 private:
     std::vector<std::shared_ptr<CMapLayer>> m_MapLayers;
+
+    friend class CMapParser;
 };

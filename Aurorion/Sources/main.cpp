@@ -1,12 +1,14 @@
 #include <iostream>
 #include "CGame.h"
-
+#include "CMapParser.h"
 
 int main(int argc, char *args[]) {
     const int targetFps = 60;
     const float frameDelay = 1000.0F / targetFps;
 
     Uint32 frameTime = 0, frameStart = 0;
+
+    CMapParser::Instance().Load();
 
     if (!TheGame::Instance().Init("Aurorion", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, false))
         std::cout << "Initialization failed" << std::endl;
