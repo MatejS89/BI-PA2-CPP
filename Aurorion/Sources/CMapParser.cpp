@@ -1,5 +1,7 @@
 #include "CMapParser.h"
 
+#include <utility>
+
 CMapParser CMapParser::m_Instance;
 
 CMapParser &CMapParser::Instance() {
@@ -7,7 +9,7 @@ CMapParser &CMapParser::Instance() {
 }
 
 bool CMapParser::Load() {
-    return Parse("level1", "assets/map/map.tmx");
+    return Parse("MAP", "assets/map/map.tmx");
 }
 
 bool CMapParser::Parse(const char *name, const char *source) {
@@ -55,7 +57,7 @@ STileSet CMapParser::ParseTileSet(xmlNodePtr ptr) {
     tileSet.m_NumRows = tileSet.m_TileCount / tileSet.m_NumCol;
     xmlNodePtr image = xmlFirstElementChild(ptr);
     if (xmlStrcmp(image->name, reinterpret_cast<const xmlChar *> ("image")) == 0) {
-        tileSet.m_TileSetSource = "assets/map" + GetAttributeContent(image, "source");
+        tileSet.m_TileSetSource = "assets/map/" + GetAttributeContent(image, "source");
     }
     return tileSet;
 }
@@ -77,11 +79,11 @@ CTileLayer CMapParser::ParseTileLayer(xmlNodePtr ptr, TilesetList tileSets,
         }
     }
 
-    xmlChar *a = xmlNodeGetContent(data);
+    xmlChar *content = xmlNodeGetContent(data);
 
     TileMap tileMap;
 
-    std::string csvData(reinterpret_cast<char *>(a));
+    std::string csvData(reinterpret_cast<char *>(content));
     std::stringstream ss(csvData);
     std::string token;
 
@@ -92,6 +94,8 @@ CTileLayer CMapParser::ParseTileLayer(xmlNodePtr ptr, TilesetList tileSets,
         while (std::getline(row, num, ',')) {
             rowData.push_back(stoi(num));
         }
+        if (rowData.empty())
+            continue;
         tileMap.push_back(rowData);
     }
 
@@ -101,7 +105,8 @@ CTileLayer CMapParser::ParseTileLayer(xmlNodePtr ptr, TilesetList tileSets,
         }
         std::cout << std::endl;
     }
-    xmlFree(a);
+
+    xmlFree(content);
     return CTileLayer(tileSize, rowCount, colCount, tileMap, tileSets);
 }
 

@@ -5,6 +5,7 @@
 #include <memory>
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
+#include "CGame.h"
 
 // singleton class
 class CTextureManager {
@@ -17,6 +18,8 @@ public:
 
     void Draw(std::string id, int x, int y, int width, int height, SDL_Renderer *renderer,
               SDL_RendererFlip flip = SDL_FLIP_NONE);
+
+    void DrawTile(std::string tileSetId, int tileSize, int x, int y, int row, int frame, SDL_RendererFlip flip);
 
     void DrawFrame(std::string id, int x, int y, int width, int height, int currentRow, int currentFrame,
                    SDL_Renderer *renderer,

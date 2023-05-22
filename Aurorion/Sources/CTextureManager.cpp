@@ -61,4 +61,11 @@ CTextureManager &CTextureManager::Instance() {
     return m_instance;
 }
 
+void CTextureManager::DrawTile(std::string tileSetId, int tileSize, int x, int y, int row, int frame,
+                               SDL_RendererFlip flip) {
+    SDL_Rect destRect = {x, y, tileSize, tileSize};
+    SDL_Rect srcRect = {tileSize * frame, tileSize * row, tileSize, tileSize};
+    SDL_RenderCopyEx(TheGame::Instance().GetRenderer(), m_textureMap[tileSetId], &srcRect, &destRect, 0, 0, flip);
+}
+
 CTextureManager::~CTextureManager() = default;

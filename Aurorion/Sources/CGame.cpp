@@ -1,5 +1,7 @@
 #include "CGame.h"
 #include "CPlayer.h"
+#include "CMapParser.h"
+#include <iostream>
 
 SDL_Window *CGame::m_window = nullptr;
 
@@ -46,6 +48,12 @@ bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int he
                 "assets/Character/Idle/Idle-Sheet.png", "idle", m_renderer
         );
 
+        if (!TheMapParser::Instance().Load()) {
+            std::cout << "FAILED LOAD" << std::endl;
+        }
+
+        m_LevelMap = TheMapParser::Instance().GetMaps("MAP");
+
         m_gameObjects.push_back(
                 std::make_shared<CPlayer>(std::make_unique<SParamLoader>(100, 100, 96, 82, "attacking")));
         m_gameObjects.push_back(
@@ -58,6 +66,7 @@ bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int he
 }
 
 void CGame::Update() {
+    m_LevelMap->MapUpdate();
     for (const auto &item: m_gameObjects) {
         item->update();
     }
@@ -65,6 +74,8 @@ void CGame::Update() {
 
 void CGame::Render() {
     SDL_RenderClear(m_renderer);
+
+    m_LevelMap->MapRender();
     for (const auto &item: m_gameObjects) {
         item->draw();
     }

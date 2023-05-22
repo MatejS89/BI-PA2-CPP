@@ -9,6 +9,7 @@
 #include "vector"
 #include "CInputHandler.h"
 #include "memory"
+#include "CMap.h"
 
 class CGameObject;
 
@@ -32,6 +33,7 @@ public:
 
     void Quit();
 
+    static SDL_Renderer *m_renderer;
 private:
     CGame();
 
@@ -42,8 +44,9 @@ private:
     int m_width;
     bool m_isRunning;
     static SDL_Window *m_window;
-    static SDL_Renderer *m_renderer;
     int m_currentFrame;
+
+    std::shared_ptr<CMap> m_LevelMap;
 
     std::vector<std::shared_ptr<CGameObject>> m_gameObjects;
 };

@@ -41,3 +41,5 @@ private:
 
     static CMapParser m_Instance;
 };
+
+typedef CMapParser TheMapParser;
