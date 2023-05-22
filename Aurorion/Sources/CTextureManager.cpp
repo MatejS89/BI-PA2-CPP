@@ -4,14 +4,14 @@ CTextureManager CTextureManager::m_instance;
 
 CTextureManager::CTextureManager() = default;
 
-bool CTextureManager::Load(std::string fileName, std::string id, SDL_Renderer *renderer) {
-    SDL_Surface *tmpSurface = IMG_Load(fileName.c_str());
+bool CTextureManager::Load(const char *fileName, std::string id) {
+    SDL_Surface *tmpSurface = IMG_Load(fileName);
 
     if (tmpSurface == nullptr)
         return false;
 
     SDL_Texture *texture =
-            SDL_CreateTextureFromSurface(renderer, tmpSurface);
+            SDL_CreateTextureFromSurface(m_Renderer, tmpSurface);
 
     SDL_FreeSurface(tmpSurface);
 
@@ -22,50 +22,36 @@ bool CTextureManager::Load(std::string fileName, std::string id, SDL_Renderer *r
     return false;
 }
 
-void CTextureManager::Draw(std::string id, int x, int y, int width, int height, SDL_Renderer *renderer,
+void CTextureManager::Draw(const std::string &id, int x, int y, int width, int height,
                            SDL_RendererFlip flip) {
-    SDL_Rect srcRect;
-    SDL_Rect destRect;
-
-    srcRect.x = 0;
-    srcRect.y = 0;
-    srcRect.w = width;
-    srcRect.h = height;
-
-    destRect.x = x;
-    destRect.y = y;
-    destRect.w = width;
-    destRect.h = height;
-
-    SDL_RenderCopyEx(renderer, m_textureMap[id], &srcRect, &destRect, 0, 0, flip);
-
+    SDL_Rect srcRect{0, 0, width, height};
+    SDL_Rect destRect{x, y, width, height};
+    SDL_RenderCopyEx(m_Renderer, m_textureMap[id], &srcRect, &destRect, 0, 0, flip);
 }
 
-void CTextureManager::DrawFrame(std::string id, int x, int y, int width, int height, int currentRow, int currentFrame,
-                                SDL_Renderer *renderer, SDL_RendererFlip flip) {
-    SDL_Rect srcRect;
-    SDL_Rect destRect;
-    srcRect.x = width * currentFrame;
-    srcRect.y = height * (currentRow - 1);
-    srcRect.w = width;
-    srcRect.h = height;
-
-    destRect.x = x;
-    destRect.y = y;
-    destRect.w = width;
-    destRect.h = height;
-    SDL_RenderCopyEx(renderer, m_textureMap[id], &srcRect, &destRect, 0, 0, flip);
+void
+CTextureManager::DrawFrame(const std::string &id, int x, int y, int width, int height, int currentRow, int currentFrame,
+                           SDL_RendererFlip flip) {
+    SDL_Rect srcRect{width * currentFrame,
+                     height * (currentRow - 1),
+                     width, height};
+    SDL_Rect destRect{x, y, width, height};
+    SDL_RenderCopyEx(m_Renderer, m_textureMap[id], &srcRect, &destRect, 0, 0, flip);
 }
 
 CTextureManager &CTextureManager::Instance() {
     return m_instance;
 }
 
-void CTextureManager::DrawTile(std::string tileSetId, int tileSize, int x, int y, int row, int frame,
+void CTextureManager::DrawTile(const std::string &tileSetId, int tileSize, int x, int y, int row, int frame,
                                SDL_RendererFlip flip) {
     SDL_Rect destRect = {x, y, tileSize, tileSize};
     SDL_Rect srcRect = {tileSize * frame, tileSize * row, tileSize, tileSize};
-    SDL_RenderCopyEx(TheGame::Instance().GetRenderer(), m_textureMap[tileSetId], &srcRect, &destRect, 0, 0, flip);
+    SDL_RenderCopyEx(m_Renderer, m_textureMap[tileSetId], &srcRect, &destRect, 0, 0, flip);
+}
+
+void CTextureManager::AddRenderer(SDL_Renderer *renderer) {
+    m_Renderer = renderer;
 }
 
 CTextureManager::~CTextureManager() = default;

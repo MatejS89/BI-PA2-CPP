@@ -14,21 +14,24 @@ public:
 
     ~CTextureManager();
 
-    bool Load(std::string fileName, std::string id, SDL_Renderer *renderer);
+    bool Load(const char *fileName, std::string id);
 
-    void Draw(std::string id, int x, int y, int width, int height, SDL_Renderer *renderer,
+    void Draw(const std::string &id, int x, int y, int width, int height,
               SDL_RendererFlip flip = SDL_FLIP_NONE);
 
-    void DrawTile(std::string tileSetId, int tileSize, int x, int y, int row, int frame, SDL_RendererFlip flip);
+    void DrawTile(const std::string &tileSetId, int tileSize, int x, int y, int row, int frame, SDL_RendererFlip flip);
 
-    void DrawFrame(std::string id, int x, int y, int width, int height, int currentRow, int currentFrame,
-                   SDL_Renderer *renderer,
+    void DrawFrame(const std::string &id, int x, int y, int width, int height, int currentRow, int currentFrame,
                    SDL_RendererFlip flip = SDL_FLIP_NONE);
 
     static CTextureManager &Instance();
 
+    void AddRenderer(SDL_Renderer *renderer);
+
 private:
     CTextureManager();
+
+    SDL_Renderer *m_Renderer;
 
     static CTextureManager m_instance;
 
