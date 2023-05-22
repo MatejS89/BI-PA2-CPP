@@ -4,9 +4,8 @@ CTextureManager CTextureManager::m_instance;
 
 CTextureManager::CTextureManager() = default;
 
-bool CTextureManager::Load(const char *fileName, std::string id) {
-    SDL_Surface *tmpSurface = IMG_Load(fileName);
-
+bool CTextureManager::Load(const std::string &fileName, std::string id) {
+    SDL_Surface *tmpSurface = IMG_Load(fileName.c_str());
     if (tmpSurface == nullptr)
         return false;
 

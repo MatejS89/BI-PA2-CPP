@@ -14,7 +14,7 @@ public:
 
     ~CTextureManager();
 
-    bool Load(const char *fileName, std::string id);
+    bool Load(const std::string &fileName, std::string id);
 
     void Draw(const std::string &id, int x, int y, int width, int height,
               SDL_RendererFlip flip = SDL_FLIP_NONE);
