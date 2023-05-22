@@ -29,15 +29,16 @@ public:
 
     bool Running();
 
-    SDL_Renderer *GetRenderer() const;
+    SDL_Renderer *GetRenderer();
 
     void Quit();
 
-    static SDL_Renderer *m_renderer;
 private:
     CGame();
 
     ~CGame();
+
+    static SDL_Renderer *m_renderer;
 
     static CGame m_instance;
     int m_height;

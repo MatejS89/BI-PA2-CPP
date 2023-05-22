@@ -38,15 +38,14 @@ bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int he
         } else
             return false;
 
+        TheTextureManager::Instance().AddRenderer(m_renderer);
+
         m_isRunning = true;
         m_height = height;
         m_width = width;
 
         TheTextureManager::Instance().Load
-                ("assets/Character/Attack-01/Attack-01-Sheet.png", "attacking", m_renderer);
-        TheTextureManager::Instance().Load(
-                "assets/Character/Idle/Idle-Sheet.png", "idle", m_renderer
-        );
+                ("assets/Character/Attack-01/Attack-01-Sheet.png", "attacking");
 
         if (!TheMapParser::Instance().Load()) {
             std::cout << "FAILED LOAD" << std::endl;
@@ -93,7 +92,7 @@ bool CGame::Running() {
     return m_isRunning;
 }
 
-SDL_Renderer *CGame::GetRenderer() const {
+SDL_Renderer *CGame::GetRenderer() {
     return m_renderer;
 }
 

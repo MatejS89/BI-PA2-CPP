@@ -10,20 +10,19 @@ TileMap CTileLayer::GetTileMap() const {
 }
 
 CTileLayer::CTileLayer(int tileSize, int rowCount, int colCount,
-                       TileMap tileMap, TilesetList tileSets) :
+                       TileMap tileMap, const TilesetList &tileSets) :
         m_TileSize(tileSize), m_RowCount(rowCount),
         m_ColCount(colCount), m_TileMap(tileMap),
         m_TileSets(tileSets) {
     for (const auto &item: m_TileSets) {
-        TheTextureManager::Instance().Load(item.m_TileSetSource, item.m_TileSetName, TheGame::Instance().m_renderer);
+        TheTextureManager::Instance().Load(item.m_TileSetSource, item.m_TileSetName);
     }
 }
 
 void CTileLayer::LayerRender() {
     size_t tilesetIndex = 0;
-    for (size_t i = 0; i < m_RowCount; i++) {
-        for (size_t j = 0; j < m_ColCount; j++) {
-//            std::cout << i << " " << j << std::endl;
+    for (int i = 0; i < m_RowCount; i++) {
+        for (int j = 0; j < m_ColCount; j++) {
             int tileId = m_TileMap[i][j];
             if (tileId == 0)
                 continue;

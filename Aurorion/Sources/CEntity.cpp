@@ -13,8 +13,7 @@ CEntity::CEntity(std::shared_ptr<SParamLoader> params) : CGameObject(params),
 
 void CEntity::draw() {
     CTextureManager::Instance().DrawFrame(m_texture, m_pos.GetX(), m_pos.GetY(), m_W, m_H, m_currentRow,
-                                          m_currentFrame,
-                                          TheGame::Instance().GetRenderer());
+                                          m_currentFrame);
 }
 
 void CEntity::update() {
