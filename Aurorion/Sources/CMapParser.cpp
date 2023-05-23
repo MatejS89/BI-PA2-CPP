@@ -99,13 +99,6 @@ CTileLayer CMapParser::ParseTileLayer(xmlNodePtr ptr, TilesetList tileSets,
         tileMap.push_back(rowData);
     }
 
-    for (const auto &item: tileMap) {
-        for (const auto &row: item) {
-            std::cout << row << ",";
-        }
-        std::cout << std::endl;
-    }
-
     xmlFree(content);
     return CTileLayer(tileSize, rowCount, colCount, tileMap, std::move(tileSets));
 }
