@@ -9,8 +9,10 @@ void CPlayer::draw() {
 
 void CPlayer::update() {
     m_currentFrame = (((SDL_GetTicks() / 100) % 8));
-    m_velocity.SetX(m_velocity.GetX() + CEntity::m_RigitBody->GetPosition().GetX());
-    m_velocity.SetY(m_velocity.GetY() + CEntity::m_RigitBody->GetPosition().GetY());
+    CEntity::m_RigitBody->ApplyForceX(
+            CEntity::m_RigitBody->GetPosition().GetX() + CEntity::m_RigitBody->GetPosition().GetX());
+    CEntity::m_RigitBody->ApplyForceY(
+            CEntity::m_RigitBody->GetPosition().GetY() + CEntity::m_RigitBody->GetPosition().GetY());
     HandleInput();
     CEntity::update(CEntity::m_RigitBody);
 }

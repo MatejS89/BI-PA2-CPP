@@ -35,6 +35,10 @@ public:
 
     void Update(float dt);
 
+    void SetPosition(const CVector2D &pos);
+
+    void SetVelocity(const CVector2D &pos);
+
     CVector2D &GetPosition();
 
     CVector2D &GetVelocity();

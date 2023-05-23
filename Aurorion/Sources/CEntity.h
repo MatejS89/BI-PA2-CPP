@@ -16,15 +16,13 @@ public:
     virtual void clean();
 
 protected:
-    CVector2D m_pos;
-    CVector2D m_velocity;
     int m_W;
     int m_H;
 
     int m_currentRow;
     int m_currentFrame;
 
-    std::shared_ptr<CRigidBody> m_RigitBody;
-
     std::string m_texture;
+
+    std::shared_ptr<CRigidBody> m_RigitBody;
 };
