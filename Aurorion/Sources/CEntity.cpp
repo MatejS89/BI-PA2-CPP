@@ -7,18 +7,18 @@ CEntity::CEntity(std::shared_ptr<SParamLoader> params) : CGameObject(params),
                                                          m_currentRow(1),
                                                          m_currentFrame(1),
                                                          m_texture(params->m_texture),
-                                                         m_RigitBody(std::make_shared<CRigidBody>()) {
-    m_RigitBody->SetPosition({params->m_X, params->m_Y});
+                                                         m_RigidBody(std::make_shared<CRigidBody>()) {
+    m_RigidBody->SetPosition({params->m_X, params->m_Y});
 }
 
 void CEntity::draw() {
-    CTextureManager::Instance().DrawFrame(m_texture, m_RigitBody->GetPosition().GetX(),
-                                          m_RigitBody->GetPosition().GetY(), m_W, m_H, m_currentRow,
+    CTextureManager::Instance().DrawFrame(m_texture, m_RigidBody->GetPosition().GetX(),
+                                          m_RigidBody->GetPosition().GetY(), m_W, m_H, m_currentRow,
                                           m_currentFrame);
 }
 
 void CEntity::update(std::shared_ptr<CRigidBody> body) {
-    m_RigitBody->Update(0.5);
+    m_RigidBody->Update(0.5);
 }
 
 void CEntity::clean() {

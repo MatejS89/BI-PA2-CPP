@@ -24,5 +24,5 @@ protected:
 
     std::string m_texture;
 
-    std::shared_ptr<CRigidBody> m_RigitBody;
+    std::shared_ptr<CRigidBody> m_RigidBody;
 };

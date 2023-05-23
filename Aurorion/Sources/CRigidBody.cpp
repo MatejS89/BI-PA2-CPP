@@ -1,7 +1,7 @@
 #include "CRigidBody.h"
 
 #define CONST_MASS 1.0f
-#define CONST_GRAVITY 2.0f
+#define CONST_GRAVITY 9.8f
 
 
 CRigidBody::CRigidBody() : m_Mass(CONST_MASS), m_Gravity(CONST_GRAVITY) {}

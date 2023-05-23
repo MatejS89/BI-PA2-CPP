@@ -9,12 +9,12 @@ void CPlayer::draw() {
 
 void CPlayer::update() {
     m_currentFrame = (((SDL_GetTicks() / 100) % 4));
-    CEntity::m_RigitBody->ApplyForceX(
-            CEntity::m_RigitBody->GetPosition().GetX() + CEntity::m_RigitBody->GetPosition().GetX());
-    CEntity::m_RigitBody->ApplyForceY(
-            CEntity::m_RigitBody->GetPosition().GetY() + CEntity::m_RigitBody->GetPosition().GetY());
+    CEntity::m_RigidBody->ApplyForceX(
+            CEntity::m_RigidBody->GetPosition().GetX() + CEntity::m_RigidBody->GetPosition().GetX());
+    CEntity::m_RigidBody->ApplyForceY(
+            CEntity::m_RigidBody->GetPosition().GetY() + CEntity::m_RigidBody->GetPosition().GetY());
     HandleInput();
-    CEntity::update(CEntity::m_RigitBody);
+    CEntity::update(CEntity::m_RigidBody);
 }
 
 void CPlayer::clean() {
@@ -22,13 +22,13 @@ void CPlayer::clean() {
 
 void CPlayer::HandleInput() {
     TheInputHandler::Instance().Listen();
-    CEntity::m_RigitBody->UnsetForce();
+    CEntity::m_RigidBody->UnsetForce();
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_UP))
-        CEntity::m_RigitBody->ApplyForceY(5 * UP);
+        CEntity::m_RigidBody->ApplyForceY(5 * UP);
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_DOWN))
-        CEntity::m_RigitBody->ApplyForceY(5 * DOWN);
+        CEntity::m_RigidBody->ApplyForceY(5 * DOWN);
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_RIGHT))
-        CEntity::m_RigitBody->ApplyForceX(5 * RIGHT);
+        CEntity::m_RigidBody->ApplyForceX(5 * RIGHT);
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_LEFT))
-        CEntity::m_RigitBody->ApplyForceX(5 * LEFT);
+        CEntity::m_RigidBody->ApplyForceX(5 * LEFT);
 }
