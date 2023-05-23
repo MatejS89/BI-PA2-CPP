@@ -11,7 +11,7 @@ public:
 
     virtual void draw();
 
-    virtual void update(std::shared_ptr<CRigidBody> body);
+    virtual void update(float deltaTime);
 
     virtual void clean();
 

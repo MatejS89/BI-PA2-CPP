@@ -1,6 +1,7 @@
 #include "CGame.h"
 #include "CPlayer.h"
 #include "CMapParser.h"
+#include "CTimer.h"
 #include <iostream>
 
 SDL_Window *CGame::m_window = nullptr;
@@ -63,9 +64,10 @@ bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int he
 }
 
 void CGame::Update() {
+    float deltaTime = TheTimer::Instance().GetDeltaTime();
     m_LevelMap->MapUpdate();
     for (const auto &item: m_gameObjects) {
-        item->update();
+        item->update(deltaTime);
     }
 }
 

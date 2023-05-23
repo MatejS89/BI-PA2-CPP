@@ -1,7 +1,7 @@
 #include "CRigidBody.h"
 
 #define CONST_MASS 1.0f
-#define CONST_GRAVITY 9.8f
+#define CONST_GRAVITY 1.0f
 
 
 CRigidBody::CRigidBody() : m_Mass(CONST_MASS), m_Gravity(CONST_GRAVITY) {}
@@ -42,7 +42,7 @@ void CRigidBody::Update(float dt) {
     m_Acceleration.SetX(m_Force.GetX() + m_Friction.GetX() / m_Mass);
     m_Acceleration.SetY(m_Gravity + m_Force.GetY() / m_Mass);
     m_Velocity = m_Acceleration * dt;
-    m_Position = {m_Position + m_Velocity * dt};
+    m_Position = m_Position + m_Velocity * dt;
 }
 
 CVector2D &CRigidBody::GetPosition() {

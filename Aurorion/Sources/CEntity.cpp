@@ -17,7 +17,7 @@ void CEntity::draw() {
                                           m_currentFrame);
 }
 
-void CEntity::update(std::shared_ptr<CRigidBody> body) {
+void CEntity::update(float deltaTime) {
     m_RigidBody->Update(0.5);
 }
 
