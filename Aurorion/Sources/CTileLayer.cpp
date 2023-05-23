@@ -29,7 +29,7 @@ void CTileLayer::LayerRender() {
             if (m_TileSets.size() > 1) {
                 for (size_t k = 0; k < m_TileSets.size(); k++) {
                     const auto &tileSet = m_TileSets[k];
-                    if (tileId > tileSet.m_FirstID && tileId < tileSet.m_LastID) {
+                    if (tileId >= tileSet.m_FirstID && tileId <= tileSet.m_LastID) {
                         tileId += tileSet.m_TileCount - tileSet.m_LastID;
                         tilesetIndex = k;
                         break;
