@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CEntity.h"
+#include "CRigidBody.h"
 
 class CPlayer : public CEntity {
 public:
@@ -13,4 +14,7 @@ public:
     void clean() override;
 
     void HandleInput();
+
+private:
+    std::shared_ptr<CRigidBody> m_RigidBody;
 };

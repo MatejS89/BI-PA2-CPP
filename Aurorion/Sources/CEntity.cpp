@@ -16,8 +16,8 @@ void CEntity::draw() {
                                           m_currentFrame);
 }
 
-void CEntity::update() {
-    m_pos += m_velocity;
+void CEntity::update(std::shared_ptr<CRigidBody> body) {
+    m_pos += body->GetVelocity();
 }
 
 void CEntity::clean() {

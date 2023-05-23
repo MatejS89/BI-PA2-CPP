@@ -3,6 +3,7 @@
 #include "CGameObject.h"
 #include "SParamLoader.h"
 #include "CVector2D.h"
+#include "CRigidBody.h"
 
 class CEntity : public CGameObject {
 public:
@@ -10,7 +11,7 @@ public:
 
     virtual void draw();
 
-    virtual void update();
+    virtual void update(std::shared_ptr<CRigidBody> body);
 
     virtual void clean();
 
