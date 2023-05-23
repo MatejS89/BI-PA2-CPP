@@ -24,5 +24,7 @@ protected:
     int m_currentRow;
     int m_currentFrame;
 
+    std::shared_ptr<CRigidBody> m_RigitBody;
+
     std::string m_texture;
 };
