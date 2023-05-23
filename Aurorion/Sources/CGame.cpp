@@ -45,7 +45,7 @@ bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int he
         m_width = width;
 
         TheTextureManager::Instance().Load
-                ("assets/Character/Attack-01/Attack-01-Sheet.png", "attacking");
+                ("assets/Character/Idle/Idle-Sheet.png", "idle");
 
         if (!TheMapParser::Instance().Load()) {
             std::cout << "FAILED LOAD" << std::endl;
@@ -54,9 +54,7 @@ bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int he
         m_LevelMap = TheMapParser::Instance().GetMaps("MAP");
 
         m_gameObjects.push_back(
-                std::make_shared<CPlayer>(std::make_unique<SParamLoader>(100, 100, 96, 82, "attacking")));
-        m_gameObjects.push_back(
-                std::make_shared<CPlayer>(std::make_unique<SParamLoader>(100, 10, 64, 82, "idle")));
+                std::make_shared<CPlayer>(std::make_unique<SParamLoader>(100, 100, 64, 80, "idle")));
     } else {
         m_isRunning = false;
         return false;
