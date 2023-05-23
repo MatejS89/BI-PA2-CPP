@@ -23,6 +23,12 @@ void CPlayer::clean() {
 void CPlayer::HandleInput() {
     TheInputHandler::Instance().Listen();
     CEntity::m_RigidBody->UnsetForce();
+    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_UP) &&
+        TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_DOWN))
+        return;
+    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_RIGHT) &&
+        TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_LEFT))
+        return;
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_UP))
         CEntity::m_RigidBody->ApplyForceY(1.5 * UP);
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_DOWN))
