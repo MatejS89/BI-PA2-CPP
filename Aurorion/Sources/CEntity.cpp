@@ -8,6 +8,7 @@ CEntity::CEntity(std::shared_ptr<SParamLoader> params) : CGameObject(params),
                                                          m_currentFrame(1),
                                                          m_texture(params->m_texture),
                                                          m_RigidBody(std::make_shared<CRigidBody>()) {
+    m_Centre = std::make_shared<CVector2D>(params->m_X + m_W / 2, params->m_Y + m_H / 2);
     m_RigidBody->SetPosition({params->m_X, params->m_Y});
 }
 
@@ -19,6 +20,7 @@ void CEntity::draw() {
 
 void CEntity::update(float deltaTime) {
     m_RigidBody->Update(deltaTime);
+    *m_Centre = *m_Centre + m_RigidBody->GetVelocity() * deltaTime;
 }
 
 void CEntity::clean() {

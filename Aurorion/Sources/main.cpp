@@ -4,7 +4,7 @@
 #include "CMapParser.h"
 
 int main(int argc, char *args[]) {
-    if (!TheGame::Instance().Init("Aurorion", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920, 600, false))
+    if (!TheGame::Instance().Init("Aurorion", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, false))
         std::cout << "Initialization failed" << std::endl;
     while (TheGame::Instance().Running()) {
         TheTimer::Instance().Tick();

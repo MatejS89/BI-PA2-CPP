@@ -58,7 +58,7 @@ bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int he
         std::shared_ptr<CPlayer> player = std::make_shared<CPlayer>(
                 std::make_unique<SParamLoader>(100, 100, 64, 80, "idle"));
 
-        TheCamera::Instance().SetTarget(std::shared_ptr<CVector2D>(player->GetPosition()));
+        TheCamera::Instance().SetTarget(std::shared_ptr<CVector2D>(player->GetCentre()));
         m_gameObjects.push_back(player);
     } else {
         m_isRunning = false;

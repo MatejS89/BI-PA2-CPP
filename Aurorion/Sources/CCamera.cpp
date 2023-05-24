@@ -26,8 +26,8 @@ void CCamera::Update(float deltaTime) {
     if (m_Target == nullptr)
         return;
 
-    m_ViewPort.x = m_Target->GetX() - TheGame::Instance().GetWindowWidth() / 2 + 30;
-    m_ViewPort.y = m_Target->GetY() - TheGame::Instance().GetWindowHeight() / 2 + 30;
+    m_ViewPort.x = m_Target->GetX() - TheGame::Instance().GetWindowWidth() / 2;
+    m_ViewPort.y = m_Target->GetY() - TheGame::Instance().GetWindowHeight() / 2;
 
     if (m_ViewPort.x < 0)
         m_ViewPort.x = 0;
