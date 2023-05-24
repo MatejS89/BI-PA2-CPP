@@ -35,13 +35,17 @@ void CCamera::Update(float deltaTime) {
     if (m_ViewPort.y < 0)
         m_ViewPort.y = 0;
 
-    if (m_ViewPort.x > (2 * TheGame::Instance().GetWindowWidth() - m_ViewPort.w))
-        m_ViewPort.x = (2 * TheGame::Instance().GetWindowWidth() - m_ViewPort.w);
+//    if (m_ViewPort.x > (2 * TheGame::Instance().GetWindowWidth() - m_ViewPort.w))
+//        m_ViewPort.x = (2 * TheGame::Instance().GetWindowWidth() - m_ViewPort.w);
 
     if (m_ViewPort.y > (2 * TheGame::Instance().GetWindowHeight() - m_ViewPort.h))
         m_ViewPort.y = (2 * TheGame::Instance().GetWindowHeight() - m_ViewPort.h);
 
+    if (m_ViewPort.x > TheGame::Instance().GetMapWidth() - TheGame::Instance().GetWindowWidth())
+        m_ViewPort.x = TheGame::Instance().GetMapWidth() - TheGame::Instance().GetWindowWidth();
+
     m_Position = {static_cast<float>(m_ViewPort.x), static_cast<float>(m_ViewPort.y)};
     std::cout << "TARGET : " << m_Target->GetX() << " " << m_Target->GetY() << std::endl;
     std::cout << "VIEW : " << m_ViewPort.x << " " << m_ViewPort.y << std::endl;
+    std::cout << "POS: " << m_Position.GetX() << m_Position.GetY() << std::endl;
 }
