@@ -37,6 +37,8 @@ public:
 
     int GetWindowHeight() const;
 
+    int GetMapWidth() const;
+
 private:
     CGame();
 

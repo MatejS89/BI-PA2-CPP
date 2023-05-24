@@ -54,7 +54,7 @@ bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int he
         }
 
         m_LevelMap = TheMapParser::Instance().GetMaps("MAP");
- 
+
         std::shared_ptr<CPlayer> player = std::make_shared<CPlayer>(
                 std::make_unique<SParamLoader>(100, 100, 64, 80, "idle"));
 
@@ -110,4 +110,8 @@ int CGame::GetWindowHeight() const {
 
 int CGame::GetWindowWidth() const {
     return m_width;
+}
+
+int CGame::GetMapWidth() const {
+    return m_LevelMap->GetMapWidth();
 }
