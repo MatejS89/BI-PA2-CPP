@@ -2,6 +2,7 @@
 #include "CPlayer.h"
 #include "CMapParser.h"
 #include "CTimer.h"
+#include "CCamera.h"
 #include <iostream>
 
 SDL_Window *CGame::m_window = nullptr;
@@ -53,9 +54,12 @@ bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int he
         }
 
         m_LevelMap = TheMapParser::Instance().GetMaps("MAP");
+ 
+        std::shared_ptr<CPlayer> player = std::make_shared<CPlayer>(
+                std::make_unique<SParamLoader>(100, 100, 64, 80, "idle"));
 
-        m_gameObjects.push_back(
-                std::make_shared<CPlayer>(std::make_unique<SParamLoader>(100, 100, 64, 80, "idle")));
+        TheCamera::Instance().SetTarget(std::shared_ptr<CVector2D>(player->GetPosition()));
+        m_gameObjects.push_back(player);
     } else {
         m_isRunning = false;
         return false;
@@ -69,11 +73,11 @@ void CGame::Update() {
     for (const auto &item: m_gameObjects) {
         item->update(deltaTime);
     }
+    CCamera::Instance().Update(deltaTime);
 }
 
 void CGame::Render() {
     SDL_RenderClear(m_renderer);
-
     m_LevelMap->MapRender();
     for (const auto &item: m_gameObjects) {
         item->draw();
@@ -98,4 +102,12 @@ SDL_Renderer *CGame::GetRenderer() {
 
 void CGame::Quit() {
     m_isRunning = false;
+}
+
+int CGame::GetWindowHeight() const {
+    return m_height;
+}
+
+int CGame::GetWindowWidth() const {
+    return m_width;
 }

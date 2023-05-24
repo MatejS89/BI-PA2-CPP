@@ -33,6 +33,10 @@ public:
 
     void Quit();
 
+    int GetWindowWidth() const;
+
+    int GetWindowHeight() const;
+
 private:
     CGame();
 
