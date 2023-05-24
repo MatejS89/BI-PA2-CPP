@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CVector2D.h"
+#include <memory>
 
 #define LEFT -1
 #define RIGHT 1
@@ -37,9 +38,9 @@ public:
 
     void SetPosition(const CVector2D &pos);
 
-    void SetVelocity(const CVector2D &pos);
+    void SetVelocity(const CVector2D &vel);
 
-    CVector2D &GetPosition();
+    std::shared_ptr<CVector2D> GetPosition();
 
     CVector2D &GetVelocity();
 
@@ -50,7 +51,7 @@ private:
     float m_Gravity;
     CVector2D m_Force;
     CVector2D m_Friction;
-    CVector2D m_Position;
+    std::shared_ptr<CVector2D> m_Position;
     CVector2D m_Velocity;
     CVector2D m_Acceleration;
 };
