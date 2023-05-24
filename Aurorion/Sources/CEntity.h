@@ -15,6 +15,8 @@ public:
 
     virtual void clean();
 
+    std::shared_ptr<CVector2D> GetPosition();
+
 protected:
     int m_W;
     int m_H;

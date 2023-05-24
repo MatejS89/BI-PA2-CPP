@@ -12,14 +12,18 @@ CEntity::CEntity(std::shared_ptr<SParamLoader> params) : CGameObject(params),
 }
 
 void CEntity::draw() {
-    CTextureManager::Instance().DrawFrame(m_texture, m_RigidBody->GetPosition().GetX(),
-                                          m_RigidBody->GetPosition().GetY(), m_W, m_H, m_currentRow,
+    CTextureManager::Instance().DrawFrame(m_texture, m_RigidBody->GetPosition()->GetX(),
+                                          m_RigidBody->GetPosition()->GetY(), m_W, m_H, m_currentRow,
                                           m_currentFrame);
 }
 
 void CEntity::update(float deltaTime) {
-    m_RigidBody->Update(0.5);
+    m_RigidBody->Update(deltaTime);
 }
 
 void CEntity::clean() {
+}
+
+std::shared_ptr<CVector2D> CEntity::GetPosition() {
+    return m_RigidBody->GetPosition();
 }
