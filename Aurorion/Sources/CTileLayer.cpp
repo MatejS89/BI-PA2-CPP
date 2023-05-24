@@ -47,10 +47,10 @@ void CTileLayer::LayerRender() {
 
             TheTextureManager::Instance().DrawTile(tileSet.m_TileSetName, tileSet.m_TileSize, j * tileSet.m_TileSize,
                                                    i * tileSet.m_TileSize, tileRow, tileCol, SDL_FLIP_NONE);
-
         }
     }
 }
 
 void CTileLayer::LayerUpdate() {
+    LayerRender();
 }
