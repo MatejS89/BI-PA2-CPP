@@ -9,7 +9,7 @@ CMapParser &CMapParser::Instance() {
 }
 
 bool CMapParser::Load() {
-    return Parse("MAP", "assets/map/map.tmx");
+    return Parse("MAP", "assets/map/map1.tmx");
 }
 
 bool CMapParser::Parse(const char *name, const char *source) {
@@ -40,6 +40,7 @@ bool CMapParser::Parse(const char *name, const char *source) {
         }
     }
 
+    gameMap.m_MapWidth = colCount * tileWidth;
     m_Maps[name] = std::make_shared<CMap>(gameMap);
     xmlFreeDoc(doc);
     xmlCleanupParser();
