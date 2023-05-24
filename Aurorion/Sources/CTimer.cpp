@@ -18,8 +18,8 @@ float CTimer::GetDeltaTime() const {
 }
 
 void CTimer::Tick() {
-    m_DeltaTime = (SDL_GetTicks() - m_LastTime) * (TARGET_FPS / 1000.0F);
+    m_DeltaTime = (SDL_GetPerformanceCounter() - m_LastTime) * (TARGET_FPS / 1000.0F);
     if (m_DeltaTime > TARGET_DELTA)
         m_DeltaTime = TARGET_DELTA;
-    m_LastTime = SDL_GetTicks();
+    m_LastTime = SDL_GetPerformanceCounter();
 }
