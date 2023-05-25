@@ -17,7 +17,8 @@ CEntity::CEntity(std::shared_ptr<SParamLoader> params) : CGameObject(params),
                                                          m_IsGrounded(true),
                                                          m_Collider(
                                                                  params->m_X, params->m_Y, params->m_W,
-                                                                 params->m_H) {
+                                                                 params->m_H),
+                                                         m_Flip(SDL_FLIP_NONE) {
     m_Centre = std::make_shared<CVector2D>(params->m_X + m_W / 2, params->m_Y + m_H / 2);
     m_RigidBody->SetPosition({params->m_X, params->m_Y});
 }

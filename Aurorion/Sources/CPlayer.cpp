@@ -52,5 +52,4 @@ void CPlayer::HandleInput(float deltatime) {
     } else {
         m_IsJumping = false;
     }
-//    std::cout << m_JumpTime << std::endl;
 }
