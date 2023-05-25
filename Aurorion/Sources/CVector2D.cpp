@@ -3,26 +3,26 @@
 
 CVector2D::CVector2D() : m_X(0), m_Y(0) {}
 
-CVector2D::CVector2D(float x, float y) : m_X(x), m_Y(y) {}
+CVector2D::CVector2D(int x, int y) : m_X(x), m_Y(y) {}
 
-float CVector2D::GetX() const {
+int CVector2D::GetX() const {
     return m_X;
 }
 
-float CVector2D::GetY() const {
+int CVector2D::GetY() const {
     return m_Y;
 }
 
-void CVector2D::SetX(float x) {
+void CVector2D::SetX(int x) {
     m_X = x;
 }
 
-void CVector2D::SetY(float y) {
+void CVector2D::SetY(int y) {
     m_Y = y;
 }
 
-float CVector2D::length() const {
-    return hypotf(m_X, m_Y);
+double CVector2D::length() const {
+    return hypot(m_X, m_Y);
 }
 
 CVector2D CVector2D::operator+(const CVector2D &other) const {
@@ -35,11 +35,11 @@ CVector2D &CVector2D::operator+=(CVector2D &other) {
     return *this;
 }
 
-CVector2D CVector2D::operator*(float scalar) {
+CVector2D CVector2D::operator*(int scalar) {
     return CVector2D(m_X * scalar, m_Y * scalar);
 }
 
-CVector2D &CVector2D::operator*=(float scalar) {
+CVector2D &CVector2D::operator*=(int scalar) {
     m_X *= scalar;
     m_Y *= scalar;
     return *this;
@@ -59,7 +59,7 @@ CVector2D CVector2D::operator/(const CVector2D &other) const {
     return CVector2D(m_X / other.m_X, m_Y / other.m_Y);
 }
 
-CVector2D &CVector2D::operator/=(float scalar) {
+CVector2D &CVector2D::operator/=(int scalar) {
     m_X /= scalar;
     m_Y /= scalar;
     return *this;

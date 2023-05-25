@@ -4,25 +4,25 @@ class CVector2D {
 public:
     CVector2D();
 
-    CVector2D(float x, float y);
+    CVector2D(int x, int y);
 
-    float GetX() const;
+    int GetX() const;
 
-    float GetY() const;
+    int GetY() const;
 
-    void SetX(float x);
+    void SetX(int x);
 
-    void SetY(float y);
+    void SetY(int y);
 
-    float length() const;
+    double length() const;
 
     CVector2D operator+(const CVector2D &other) const;
 
     CVector2D &operator+=(CVector2D &other);
 
-    CVector2D operator*(float scalar);
+    CVector2D operator*(int scalar);
 
-    CVector2D &operator*=(float scalar);
+    CVector2D &operator*=(int scalar);
 
     CVector2D operator-(const CVector2D &other) const;
 
@@ -30,12 +30,12 @@ public:
 
     CVector2D operator/(const CVector2D &other) const;
 
-    CVector2D &operator/=(float scalar);
+    CVector2D &operator/=(int scalar);
 
     // Creates a normalized vector ( unit vector ) which is used to describe the direction
     void normalize();
 
 private:
-    float m_X;
-    float m_Y;
+    int m_X;
+    int m_Y;
 };

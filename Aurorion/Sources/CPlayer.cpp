@@ -2,7 +2,9 @@
 #include "CInputHandler.h"
 #include "CCollisionHandler.h"
 
-CPlayer::CPlayer(std::shared_ptr<SParamLoader> params) : CEntity(params) {}
+CPlayer::CPlayer(std::shared_ptr<SParamLoader> params) : CEntity(params) {
+    m_Collider.SetBuffer(20, 10, 40, 30);
+}
 
 void CPlayer::Draw() {
     CEntity::Draw();
@@ -28,12 +30,12 @@ void CPlayer::HandleInput(float deltatime) {
         return;
     }
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_DOWN))
-        CEntity::m_RigidBody->ApplyForceY(1.2 * DOWN);
+        CEntity::m_RigidBody->ApplyForceY(2 * DOWN);
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_RIGHT)) {
-        CEntity::m_RigidBody->ApplyForceX(1.2 * RIGHT);
+        CEntity::m_RigidBody->ApplyForceX(2 * RIGHT);
     }
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_LEFT)) {
-        CEntity::m_RigidBody->ApplyForceX(1.2 * LEFT);
+        CEntity::m_RigidBody->ApplyForceX(2 * LEFT);
 
     }
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_UP) && m_IsGrounded) {

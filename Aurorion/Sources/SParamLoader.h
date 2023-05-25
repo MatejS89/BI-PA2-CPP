@@ -3,11 +3,11 @@
 #include "string"
 
 struct SParamLoader {
-    SParamLoader(float xPos, float yPos, int width, int height, std::string texture);
+    SParamLoader(int xPos, int yPos, int width, int height, std::string texture);
 
 protected:
-    float m_X;
-    float m_Y;
+    int m_X;
+    int m_Y;
     int m_W;
     int m_H;
 
