@@ -27,4 +27,10 @@ protected:
     std::string m_texture;
 
     std::shared_ptr<CRigidBody> m_RigidBody;
+
+    SDL_Rect m_Collider;
+
+    std::shared_ptr<CVector2D> m_Pos;
+
+    std::shared_ptr<CVector2D> m_LastSafePos;
 };

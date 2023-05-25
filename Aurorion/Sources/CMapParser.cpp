@@ -70,7 +70,7 @@ std::string CMapParser::GetAttributeContent(xmlNodePtr ptr, const char *needle) 
     return contentStr;
 }
 
-CTileLayer CMapParser::ParseTileLayer(xmlNodePtr ptr, TilesetList tileSets,
+CTileLayer CMapParser::ParseTileLayer(xmlNodePtr ptr, const TilesetList &tileSets,
                                       int tileSize, int rowCount, int colCount) {
     xmlNodePtr data;
     for (xmlNodePtr elem = xmlFirstElementChild(ptr); elem != nullptr; elem = xmlNextElementSibling(elem)) {
@@ -82,7 +82,7 @@ CTileLayer CMapParser::ParseTileLayer(xmlNodePtr ptr, TilesetList tileSets,
 
     xmlChar *content = xmlNodeGetContent(data);
 
-    TileMap tileMap;
+    std::shared_ptr<TileMap> tileMap = std::make_shared<TileMap>();
 
     std::string csvData(reinterpret_cast<char *>(content));
     std::stringstream ss(csvData);
@@ -97,11 +97,11 @@ CTileLayer CMapParser::ParseTileLayer(xmlNodePtr ptr, TilesetList tileSets,
         }
         if (rowData.empty())
             continue;
-        tileMap.push_back(rowData);
+        tileMap->push_back(rowData);
     }
 
     xmlFree(content);
-    return CTileLayer(tileSize, rowCount, colCount, tileMap, std::move(tileSets));
+    return CTileLayer(tileSize, rowCount, colCount, tileMap, tileSets);
 }
 
 std::shared_ptr<CMap> CMapParser::GetMaps(const std::string &id) {

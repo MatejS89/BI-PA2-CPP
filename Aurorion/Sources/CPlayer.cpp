@@ -1,5 +1,6 @@
 #include "CPlayer.h"
 #include "CInputHandler.h"
+#include "CCollisionHandler.h"
 
 CPlayer::CPlayer(std::shared_ptr<SParamLoader> params) : CEntity(params) {}
 
@@ -9,10 +10,6 @@ void CPlayer::draw() {
 
 void CPlayer::update(float deltaTime) {
     m_currentFrame = (((SDL_GetTicks() / 100) % 4));
-//    CEntity::m_RigidBody->ApplyForceX(
-//            CEntity::m_RigidBody->GetPosition()->GetX() + CEntity::m_RigidBody->GetPosition()->GetX());
-//    CEntity::m_RigidBody->ApplyForceY(
-//            CEntity::m_RigidBody->GetPosition()->GetY() + CEntity::m_RigidBody->GetPosition()->GetY());
     HandleInput();
     CEntity::update(deltaTime);
 }
@@ -30,11 +27,11 @@ void CPlayer::HandleInput() {
         TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_LEFT))
         return;
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_UP))
-        CEntity::m_RigidBody->ApplyForceY(2 * UP);
+        CEntity::m_RigidBody->ApplyForceY(1.2 * UP);
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_DOWN))
-        CEntity::m_RigidBody->ApplyForceY(2 * DOWN);
+        CEntity::m_RigidBody->ApplyForceY(1.2 * DOWN);
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_RIGHT))
-        CEntity::m_RigidBody->ApplyForceX(2 * RIGHT);
+        CEntity::m_RigidBody->ApplyForceX(1.2 * RIGHT);
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_LEFT))
-        CEntity::m_RigidBody->ApplyForceX(2 * LEFT);
+        CEntity::m_RigidBody->ApplyForceX(1.2 * LEFT);
 }

@@ -12,8 +12,8 @@ void CMap::MapUpdate() {
     }
 }
 
-std::vector<std::shared_ptr<CMapLayer>> CMap::GetMapLayers() const {
-    return std::vector<std::shared_ptr<CMapLayer>>();
+std::vector<std::shared_ptr<CMapLayer>> CMap::GetMapLayers() {
+    return m_MapLayers;
 }
 
 CMap::CMap() {

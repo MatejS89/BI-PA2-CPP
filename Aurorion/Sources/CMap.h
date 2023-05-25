@@ -12,7 +12,7 @@ public:
 
     void MapUpdate();
 
-    std::vector<std::shared_ptr<CMapLayer>> GetMapLayers() const;
+    std::vector<std::shared_ptr<CMapLayer>> GetMapLayers();
 
     int GetMapWidth() const;
 

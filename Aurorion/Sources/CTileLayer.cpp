@@ -5,15 +5,11 @@
 #include "CGame.h"
 #include <iostream>
 
-TileMap CTileLayer::GetTileMap() const {
-    return m_TileMap;
-}
-
 CTileLayer::CTileLayer(int tileSize, int rowCount, int colCount,
-                       TileMap tileMap, const TilesetList &tileSets) :
+                       std::shared_ptr<TileMap> tileMap, TilesetList tileSets) :
         m_TileSize(tileSize), m_RowCount(rowCount),
-        m_ColCount(colCount), m_TileMap(tileMap),
-        m_TileSets(tileSets) {
+        m_ColCount(colCount), m_TileMap(std::move(tileMap)),
+        m_TileSets(std::move(tileSets)) {
     for (const auto &item: m_TileSets) {
         TheTextureManager::Instance().Load(item.m_TileSetSource, item.m_TileSetName);
     }
@@ -23,7 +19,7 @@ void CTileLayer::LayerRender() {
     size_t tilesetIndex = 0;
     for (int i = 0; i < m_RowCount; i++) {
         for (int j = 0; j < m_ColCount; j++) {
-            int tileId = m_TileMap[i][j];
+            int tileId = (*m_TileMap)[i][j];
             if (tileId == 0)
                 continue;
             if (m_TileSets.size() > 1) {
@@ -53,4 +49,8 @@ void CTileLayer::LayerRender() {
 
 void CTileLayer::LayerUpdate() {
     LayerRender();
+}
+
+std::shared_ptr<TileMap> CTileLayer::GetTileMap() {
+    return m_TileMap;
 }

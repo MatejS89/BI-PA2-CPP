@@ -39,6 +39,8 @@ public:
 
     int GetMapWidth() const;
 
+    std::shared_ptr<CMap> GetMap();
+
 private:
     CGame();
 

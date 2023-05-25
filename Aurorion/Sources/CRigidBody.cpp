@@ -1,8 +1,8 @@
 #include "CRigidBody.h"
 #include <iostream>
 
-#define CONST_MASS 1.0f
-#define CONST_GRAVITY 0.0f
+#define CONST_MASS 1.0F
+#define CONST_GRAVITY 0.0F
 
 
 CRigidBody::CRigidBody() : m_Mass(CONST_MASS), m_Gravity(CONST_GRAVITY),
@@ -44,8 +44,7 @@ void CRigidBody::Update(float dt) {
     m_Acceleration.SetX(m_Force.GetX() + m_Friction.GetX() / m_Mass);
     m_Acceleration.SetY(m_Gravity + m_Force.GetY() / m_Mass);
     m_Velocity = m_Acceleration * dt;
-    *m_Position = *m_Position + m_Velocity * dt;
-//    std::cout << m_Position.GetX() << m_Position.GetY() << std::endl;
+    *m_Position = m_Velocity * dt;
 }
 
 std::shared_ptr<CVector2D> CRigidBody::GetPosition() {

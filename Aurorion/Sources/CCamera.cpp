@@ -45,7 +45,7 @@ void CCamera::Update(float deltaTime) {
         m_ViewPort.x = TheGame::Instance().GetMapWidth() - TheGame::Instance().GetWindowWidth();
 
     m_Position = {static_cast<float>(m_ViewPort.x), static_cast<float>(m_ViewPort.y)};
-    std::cout << "TARGET : " << m_Target->GetX() << " " << m_Target->GetY() << std::endl;
-    std::cout << "VIEW : " << m_ViewPort.x << " " << m_ViewPort.y << std::endl;
-    std::cout << "POS: " << m_Position.GetX() << m_Position.GetY() << std::endl;
+//    std::cout << "TARGET : " << m_Target->GetX() << " " << m_Target->GetY() << std::endl;
+//    std::cout << "VIEW : " << m_ViewPort.x << " " << m_ViewPort.y << std::endl;
+//    std::cout << "POS: " << m_Position.GetX() << m_Position.GetY() << std::endl;
 }

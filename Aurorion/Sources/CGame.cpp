@@ -4,6 +4,7 @@
 #include "CTimer.h"
 #include "CCamera.h"
 #include <iostream>
+#include "CCollisionHandler.h"
 
 SDL_Window *CGame::m_window = nullptr;
 
@@ -60,6 +61,7 @@ bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int he
 
         TheCamera::Instance().SetTarget(std::shared_ptr<CVector2D>(player->GetCentre()));
         m_gameObjects.push_back(player);
+        TheCollisionHandler::Instance().LoadCollisionLayer();
     } else {
         m_isRunning = false;
         return false;
@@ -114,4 +116,8 @@ int CGame::GetWindowWidth() const {
 
 int CGame::GetMapWidth() const {
     return m_LevelMap->GetMapWidth();
+}
+
+std::shared_ptr<CMap> CGame::GetMap() {
+    return m_LevelMap;
 }

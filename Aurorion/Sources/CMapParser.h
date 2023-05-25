@@ -30,7 +30,7 @@ private:
 
     STileSet ParseTileSet(xmlNodePtr tileset);
 
-    CTileLayer ParseTileLayer(xmlNodePtr ptr, TilesetList tileSets, int tileSize,
+    CTileLayer ParseTileLayer(xmlNodePtr ptr, const TilesetList &tileSets, int tileSize,
                               int rowCount, int colCount);
 
     std::string GetAttributeContent(xmlNodePtr ptr, const char *needle);
