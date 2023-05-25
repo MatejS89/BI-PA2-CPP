@@ -8,6 +8,7 @@ int main(int argc, char *args[]) {
         std::cout << "Initialization failed" << std::endl;
     while (TheGame::Instance().Running()) {
         TheTimer::Instance().Tick();
+        TheInputHandler::Instance().Listen();
         TheGame::Instance().Update();
         TheGame::Instance().Render();
         SDL_Delay(TheTimer::Instance().GetDeltaTime());

@@ -19,8 +19,7 @@ void CPlayer::Update(float deltaTime) {
 void CPlayer::clean() {
 }
 
-void CPlayer::HandleInput(float deltatime) {
-    TheInputHandler::Instance().Listen();
+void CPlayer::HandleInput(float deltaTime) {
     CEntity::m_RigidBody->UnsetForce();
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_UP) &&
         TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_DOWN))
@@ -47,7 +46,7 @@ void CPlayer::HandleInput(float deltatime) {
 
     }
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_UP) && m_IsJumping && m_JumpTime > 0) {
-        m_JumpTime -= deltatime;
+        m_JumpTime -= deltaTime;
         m_RigidBody->ApplyForceY(UP * JUMP_FORCE);
     } else {
         m_IsJumping = false;
