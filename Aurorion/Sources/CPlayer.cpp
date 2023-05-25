@@ -4,34 +4,50 @@
 
 CPlayer::CPlayer(std::shared_ptr<SParamLoader> params) : CEntity(params) {}
 
-void CPlayer::draw() {
-    CEntity::draw();
+void CPlayer::Draw() {
+    CEntity::Draw();
 }
 
-void CPlayer::update(float deltaTime) {
+void CPlayer::Update(float deltaTime) {
     m_currentFrame = (((SDL_GetTicks() / 100) % 4));
-    HandleInput();
-    CEntity::update(deltaTime);
+    HandleInput(deltaTime);
+    CEntity::Update(deltaTime);
 }
 
 void CPlayer::clean() {
 }
 
-void CPlayer::HandleInput() {
+void CPlayer::HandleInput(float deltatime) {
     TheInputHandler::Instance().Listen();
     CEntity::m_RigidBody->UnsetForce();
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_UP) &&
         TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_DOWN))
         return;
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_RIGHT) &&
-        TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_LEFT))
+        TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_LEFT)) {
         return;
-    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_UP))
-        CEntity::m_RigidBody->ApplyForceY(1.2 * UP);
+    }
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_DOWN))
         CEntity::m_RigidBody->ApplyForceY(1.2 * DOWN);
-    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_RIGHT))
+    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_RIGHT)) {
         CEntity::m_RigidBody->ApplyForceX(1.2 * RIGHT);
-    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_LEFT))
+    }
+    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_LEFT)) {
         CEntity::m_RigidBody->ApplyForceX(1.2 * LEFT);
+
+    }
+    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_UP) && m_IsGrounded) {
+        CEntity::m_RigidBody->ApplyForceY(JUMP_FORCE * UP);
+        m_IsGrounded = false;
+        m_IsJumping = true;
+        m_JumpTime = JUMP_TIME;
+
+    }
+    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_UP) && m_IsJumping && m_JumpTime > 0) {
+        m_JumpTime -= deltatime;
+        m_RigidBody->ApplyForceY(UP * JUMP_FORCE);
+    } else {
+        m_IsJumping = false;
+    }
+//    std::cout << m_JumpTime << std::endl;
 }

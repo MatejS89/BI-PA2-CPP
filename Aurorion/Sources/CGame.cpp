@@ -59,7 +59,7 @@ bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int he
         std::shared_ptr<CPlayer> player = std::make_shared<CPlayer>(
                 std::make_unique<SParamLoader>(100, 100, 64, 80, "idle"));
 
-        TheCamera::Instance().SetTarget(std::shared_ptr<CVector2D>(player->GetCentre()));
+        TheCamera::Instance().SetTarget(player->GetCentre());
         m_gameObjects.push_back(player);
         TheCollisionHandler::Instance().LoadCollisionLayer();
     } else {
@@ -73,7 +73,7 @@ void CGame::Update() {
     float deltaTime = TheTimer::Instance().GetDeltaTime();
     m_LevelMap->MapUpdate();
     for (const auto &item: m_gameObjects) {
-        item->update(deltaTime);
+        item->Update(deltaTime);
     }
     CCamera::Instance().Update(deltaTime);
 }
@@ -82,7 +82,7 @@ void CGame::Render() {
     SDL_RenderClear(m_renderer);
     m_LevelMap->MapRender();
     for (const auto &item: m_gameObjects) {
-        item->draw();
+        item->Draw();
     }
     SDL_RenderPresent(m_renderer);
 }

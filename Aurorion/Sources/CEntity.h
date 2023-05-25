@@ -4,14 +4,15 @@
 #include "SParamLoader.h"
 #include "CVector2D.h"
 #include "CRigidBody.h"
+#include "CCollider.h"
 
 class CEntity : public CGameObject {
 public:
     CEntity(std::shared_ptr<SParamLoader> params);
 
-    virtual void draw();
+    virtual void Draw();
 
-    virtual void update(float deltaTime);
+    virtual void Update(float deltaTime);
 
     virtual void clean();
 
@@ -28,9 +29,15 @@ protected:
 
     std::shared_ptr<CRigidBody> m_RigidBody;
 
-    SDL_Rect m_Collider;
-
     std::shared_ptr<CVector2D> m_Pos;
 
     std::shared_ptr<CVector2D> m_LastSafePos;
+
+    bool m_IsJumping;
+
+    bool m_IsGrounded;
+
+    float m_JumpTime;
+
+    CCollider m_Collider;
 };

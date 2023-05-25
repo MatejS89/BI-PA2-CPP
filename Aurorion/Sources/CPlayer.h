@@ -3,15 +3,18 @@
 #include "CEntity.h"
 #include "CRigidBody.h"
 
+#define JUMP_FORCE 8.0F
+#define JUMP_TIME 15.0F
+
 class CPlayer : public CEntity {
 public:
     CPlayer(std::shared_ptr<SParamLoader> params);
 
-    void draw() override;
+    void Draw() override;
 
-    void update(float deltaTime) override;
+    void Update(float deltaTime) override;
 
     void clean() override;
 
-    void HandleInput();
+    void HandleInput(float deltaTime);
 };
