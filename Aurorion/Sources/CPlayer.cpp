@@ -33,10 +33,11 @@ void CPlayer::HandleInput(float deltatime) {
         CEntity::m_RigidBody->ApplyForceY(2 * DOWN);
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_RIGHT)) {
         CEntity::m_RigidBody->ApplyForceX(2 * RIGHT);
+        m_Flip = SDL_FLIP_NONE;
     }
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_LEFT)) {
         CEntity::m_RigidBody->ApplyForceX(2 * LEFT);
-
+        m_Flip = SDL_FLIP_HORIZONTAL;
     }
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_UP) && m_IsGrounded) {
         CEntity::m_RigidBody->ApplyForceY(JUMP_FORCE * UP);

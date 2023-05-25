@@ -40,4 +40,6 @@ protected:
     float m_JumpTime;
 
     CCollider m_Collider;
+
+    SDL_RendererFlip m_Flip;
 };

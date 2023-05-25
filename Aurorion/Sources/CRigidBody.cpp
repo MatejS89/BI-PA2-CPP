@@ -40,7 +40,7 @@ void CRigidBody::UnsetFriction() {
     m_Friction = {0, 0};
 }
 
-void CRigidBody::Update(float dt) {
+void CRigidBody::Update(const float dt) {
     m_Acceleration.SetX(m_Force.GetX() + m_Friction.GetX() / m_Mass);
     m_Acceleration.SetY(m_Gravity + m_Force.GetY() / m_Mass);
     m_Velocity = m_Acceleration * dt;
@@ -59,11 +59,11 @@ CVector2D &CRigidBody::GetAcceleration() {
     return m_Acceleration;
 }
 
-void CRigidBody::ApplyForceY(const float force) {
+void CRigidBody::ApplyForceY(const int force) {
     m_Force.SetY(force);
 }
 
-void CRigidBody::ApplyForceX(const float force) {
+void CRigidBody::ApplyForceX(const int force) {
     m_Force.SetX(force);
 }
 

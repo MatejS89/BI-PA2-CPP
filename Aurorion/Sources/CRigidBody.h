@@ -24,9 +24,9 @@ public:
 
     void ApplyForce(const CVector2D &force);
 
-    void ApplyForceX(const float force);
+    void ApplyForceX(int force);
 
-    void ApplyForceY(const float force);
+    void ApplyForceY(int force);
 
     void UnsetForce();
 
