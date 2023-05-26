@@ -26,7 +26,7 @@ bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int he
     if (fullScreen)
         fullscreenFlag = SDL_WINDOW_FULLSCREEN;
 
-    if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
+    if (SDL_Init(SDL_INIT_VIDEO) == 0) {
         std::cout << "Initialized" << std::endl;
 
         m_window = SDL_CreateWindow(title.c_str(), xPos, yPos, width, height, fullscreenFlag);
