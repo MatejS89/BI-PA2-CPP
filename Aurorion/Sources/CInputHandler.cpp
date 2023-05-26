@@ -25,6 +25,21 @@ void CInputHandler::Listen() {
             case SDL_KEYUP:
                 KeyUp();
                 break;
+            case SDL_MOUSEBUTTONDOWN:
+                if (event.button.button == SDL_BUTTON_LEFT)
+                    std::cout << "LEFT CLICK" << std::endl;
+                if (event.button.button == SDL_BUTTON_RIGHT)
+                    std::cout << "RIGHT CLICK" << std::endl;
+            case SDL_MOUSEMOTION:
+                int x;
+                int y;
+                SDL_GetMouseState(&x, &y);
+                m_MousePos.SetX(x + TheCamera::Instance().GetTarget()->GetX());
+                m_MousePos.SetY(y + TheCamera::Instance().GetTarget()->GetY());
+                std::cout << m_MousePos.GetX() << " " << m_MousePos.GetY() << std::endl;
+                break;
+            default:
+                break;
         }
     }
 }

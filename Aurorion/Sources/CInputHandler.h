@@ -1,6 +1,8 @@
 #pragma once
 
 #include <SDL2/SDL_scancode.h>
+#include "CVector2D.h"
+#include "CCamera.h"
 
 class CInputHandler {
 public:
@@ -22,6 +24,8 @@ private:
     const Uint8 *m_KeyStates;
 
     static CInputHandler m_instance;
+
+    CVector2D m_MousePos;
 };
 
 typedef CInputHandler TheInputHandler;
