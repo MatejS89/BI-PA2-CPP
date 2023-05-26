@@ -40,13 +40,19 @@ void CEntity::Update(float deltaTime) {
     m_Pos->SetX(m_Pos->GetX() + m_RigidBody->GetPosition()->GetX());
     m_Collider.Set(m_Pos->GetX(), m_Pos->GetY(), m_W,
                    m_H);
+    if (m_Collider.GetCollider().x < 0)
+        m_Pos->SetX(m_LastSafePos->GetX());
+    if (m_Collider.GetCollider().x + m_Collider.GetCollider().w > TheGame::Instance().GetMapWidth()) {
+        std::cout << TheGame::Instance().GetMapWidth() << std::endl;
+        m_Pos->SetX(m_LastSafePos->GetX());
+    }
     if (CCollisionHandler::Instance().MapCollision(m_Collider.GetCollider())) {
         m_Pos->SetX(m_LastSafePos->GetX());
     }
     m_RigidBody->Update(deltaTime);
     m_LastSafePos->SetY(m_Pos->GetY());
     m_Pos->SetY(m_Pos->GetY() + m_RigidBody->GetPosition()->GetY());
-    m_Collider.Set(static_cast<int>(floor(this->m_Pos->GetX())), static_cast<int>(floor(this->m_Pos->GetY())), m_W,
+    m_Collider.Set(m_Pos->GetX(), m_Pos->GetY(), m_W,
                    m_H);
     if (CCollisionHandler::Instance().MapCollision(m_Collider.GetCollider())) {
         m_IsGrounded = true;
