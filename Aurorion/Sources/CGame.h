@@ -10,6 +10,7 @@
 #include "CInputHandler.h"
 #include "memory"
 #include "CMap.h"
+#include "CGameLayer.h"
 
 class CGameObject;
 
@@ -39,7 +40,7 @@ public:
 
     int GetMapWidth() const;
 
-    std::shared_ptr<CMap> GetMap();
+    CGameLayer &GetLayer(size_t index);
 
 private:
     CGame();
@@ -55,9 +56,7 @@ private:
     static SDL_Window *m_window;
     int m_currentFrame;
 
-    std::shared_ptr<CMap> m_LevelMap;
-
-    std::vector<std::shared_ptr<CGameObject>> m_gameObjects;
+    std::vector<std::shared_ptr<CGameLayer>> m_GameLayers;
 };
 
 typedef CGame TheGame;

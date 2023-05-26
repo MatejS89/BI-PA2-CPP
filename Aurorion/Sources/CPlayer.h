@@ -19,5 +19,5 @@ public:
 private:
     const int JUMP_FORCE = 10;
     const int JUMP_TIME = 15;
-    const int MOVEMENT_SPEED = 2;
+    const int MOVEMENT_SPEED = 3;
 };

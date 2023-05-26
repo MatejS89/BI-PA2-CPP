@@ -6,6 +6,8 @@
 #include "CCamera.h"
 #include <iostream>
 #include "CCollisionHandler.h"
+#include "CHudLayer.h"
+#include "CGameplayLayer.h"
 
 SDL_Window *CGame::m_window = nullptr;
 
@@ -43,27 +45,19 @@ bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int he
             return false;
 
         TheTextureManager::Instance().AddRenderer(m_renderer);
-
         m_isRunning = true;
         m_height = height;
         m_width = width;
-
         if (!TheMapParser::Instance().Load()) {
             std::cout << "FAILED LOAD" << std::endl;
         }
-
-        m_LevelMap = TheMapParser::Instance().GetMaps("MAP");
-
-        std::shared_ptr<CPlayer> player = std::make_shared<CPlayer>(
-                std::make_unique<SParamLoader>(100, 100, 64, 80, "idle"));
-
-        std::shared_ptr<CEnemy> enemy = std::make_shared<CEnemy>(
-                std::make_unique<SParamLoader>(200, 100, 48, 32, "BoarIdle"));
-
-        TheCamera::Instance().SetTarget(player->GetCentre());
-        m_gameObjects.push_back(player);
-        m_gameObjects.push_back(enemy);
-        TheCollisionHandler::Instance().LoadCollisionLayer();
+        std::shared_ptr<CGameplayLayer> gameplayLayer = std::make_shared<CGameplayLayer>();
+        gameplayLayer->Init();
+        TheCollisionHandler::Instance().LoadCollisionLayer(
+                gameplayLayer->GetMap()->GetMapLayers().front()->GetTileMap());
+        m_GameLayers.emplace_back(gameplayLayer);
+        std::shared_ptr<CHudLayer> hud = std::make_shared<CHudLayer>();
+        m_GameLayers.emplace_back(hud);
     } else {
         m_isRunning = false;
         return false;
@@ -73,19 +67,18 @@ bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int he
 
 void CGame::Update() {
     float deltaTime = TheTimer::Instance().GetDeltaTime();
-    m_LevelMap->MapUpdate();
-    for (const auto &item: m_gameObjects) {
-        item->Update(deltaTime);
+    for (const auto &item: m_GameLayers) {
+        item->UpdateLayer(deltaTime);
     }
     CCamera::Instance().Update(deltaTime);
 }
 
 void CGame::Render() {
     SDL_RenderClear(m_renderer);
-    m_LevelMap->MapRender();
-    for (const auto &item: m_gameObjects) {
-        item->Draw();
+    for (const auto &item: m_GameLayers) {
+        item->DrawLayer();
     }
+    SDL_SetRenderDrawColor(m_renderer, 135, 206, 235, 255);
     SDL_RenderPresent(m_renderer);
 }
 
@@ -117,9 +110,9 @@ int CGame::GetWindowWidth() const {
 }
 
 int CGame::GetMapWidth() const {
-    return m_LevelMap->GetMapWidth();
+    return m_GameLayers[0]->GetMap()->GetMapWidth();
 }
 
-std::shared_ptr<CMap> CGame::GetMap() {
-    return m_LevelMap;
+CGameLayer &CGame::GetLayer(const size_t index) {
+    return *m_GameLayers[index];
 }

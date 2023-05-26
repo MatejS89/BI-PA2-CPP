@@ -16,6 +16,10 @@ void CPlayer::Update(float deltaTime) {
     m_currentFrame = (((SDL_GetTicks() / 100) % 4));
     HandleInput(deltaTime);
     CEntity::Update(deltaTime);
+    if (m_RigidBody->GetVelocity().GetY() > 0 && !m_IsGrounded)
+        std::cout << "FALLING" << std::endl;
+    else
+        std::cout << "NOT FALLING" << std::endl;
 }
 
 void CPlayer::clean() {
@@ -45,7 +49,6 @@ void CPlayer::HandleInput(float deltaTime) {
         m_IsGrounded = false;
         m_IsJumping = true;
         m_JumpTime = JUMP_TIME;
-
     }
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_UP) && m_IsJumping && m_JumpTime > 0) {
         m_JumpTime -= deltaTime;
@@ -55,7 +58,6 @@ void CPlayer::HandleInput(float deltaTime) {
     }
 
     if (TheInputHandler::Instance().GetMouseState() == EMouseButtonState::LEFT_BUTTON_DOWN) {
-        std::cout << "LEFT DETECTED" << std::endl;
         CCollisionHandler::Instance().DestroyBlock();
     }
 

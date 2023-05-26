@@ -1,6 +1,5 @@
 #include "CCollisionHandler.h"
 #include "CGame.h"
-#include "CTileLayer.h"
 
 CCollisionHandler CCollisionHandler::m_Instance;
 
@@ -41,8 +40,8 @@ CCollisionHandler &CCollisionHandler::Instance() {
     return m_Instance;
 }
 
-void CCollisionHandler::LoadCollisionLayer() {
-    m_TileLayer = TheGame::Instance().GetMap()->GetMapLayers().front()->GetTileMap();
+void CCollisionHandler::LoadCollisionLayer(std::shared_ptr<TileMap> tileLayer) {
+    m_TileLayer = tileLayer;
     m_TileSize = 16;
     m_RowCount = m_TileLayer->size();
     m_ColCount = m_TileLayer->front().size();

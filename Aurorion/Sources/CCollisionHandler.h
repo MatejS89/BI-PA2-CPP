@@ -11,7 +11,7 @@ class CCollisionHandler {
 public:
     bool MapCollision(const SDL_Rect &rect);
 
-    void LoadCollisionLayer();
+    void LoadCollisionLayer(std::shared_ptr<TileMap> tileLayer);
 
     bool CheckCollision(const SDL_Rect &left, const SDL_Rect &right);
 

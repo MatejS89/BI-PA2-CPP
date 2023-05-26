@@ -43,7 +43,7 @@ void CEntity::Update(float deltaTime) {
     if (m_Collider.GetCollider().x < 0)
         m_Pos->SetX(m_LastSafePos->GetX());
     if (m_Collider.GetCollider().x + m_Collider.GetCollider().w > TheGame::Instance().GetMapWidth()) {
-        std::cout << TheGame::Instance().GetMapWidth() << std::endl;
+//        std::cout << TheGame::Instance().GetMapWidth() << std::endl;
         m_Pos->SetX(m_LastSafePos->GetX());
     }
     if (CCollisionHandler::Instance().MapCollision(m_Collider.GetCollider())) {
