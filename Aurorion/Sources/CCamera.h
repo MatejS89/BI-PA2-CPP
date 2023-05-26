@@ -19,6 +19,8 @@ public:
 
     void SetTarget(std::shared_ptr<CVector2D> target);
 
+    std::shared_ptr<CVector2D> GetTarget() const;
+
 private:
     CCamera();
 

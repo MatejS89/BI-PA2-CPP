@@ -49,3 +49,7 @@ void CCamera::Update(float deltaTime) {
 //    std::cout << "VIEW : " << m_ViewPort.x << " " << m_ViewPort.y << std::endl;
 //    std::cout << "POS: " << m_Position.GetX() << m_Position.GetY() << std::endl;
 }
+
+std::shared_ptr<CVector2D> CCamera::GetTarget() const {
+    return m_Target;
+}
