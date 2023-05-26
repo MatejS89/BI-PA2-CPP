@@ -18,14 +18,14 @@ bool CCollisionHandler::MapCollision(const SDL_Rect &rect) {
 
     if (leftTile < 0)
         leftTile = 0;
-    if (rightTile > m_ColCount)
-        rightTile = m_ColCount;
+    if (rightTile >= m_ColCount)
+        rightTile = m_ColCount - 1;
 
     if (topTile < 0)
         topTile = 0;
 
-    if (bottomTile > m_RowCount)
-        bottomTile = m_RowCount;
+    if (bottomTile >= m_RowCount)
+        bottomTile = m_RowCount - 1;
 
     for (int i = leftTile; i <= rightTile; ++i) {
         for (int j = topTile; j <= bottomTile; ++j) {
@@ -49,27 +49,30 @@ void CCollisionHandler::LoadCollisionLayer() {
 }
 
 void CCollisionHandler::DestroyBlock() {
-    int x = floor(
-            (TheInputHandler::Instance().GetMousePos().GetX() + TheCamera::Instance().GetPosition().GetX()) /
-            m_TileSize);
-    int y = floor(
-            (TheInputHandler::Instance().GetMousePos().GetY() + TheCamera::Instance().GetPosition().GetY()) /
-            m_TileSize);
-    if ((*m_TileLayer)[y][x] > 0) {
-        (*m_TileLayer)[y][x] = 0;
+    CVector2D mousePos = TranslateMouse();
+    if (mousePos.GetX() >= m_ColCount || mousePos.GetY() >= m_RowCount || mousePos.GetX() < 0 || mousePos.GetY() < 0)
+        return;
+    if ((*m_TileLayer)[mousePos.GetY()][mousePos.GetX()] > 0) {
+        (*m_TileLayer)[mousePos.GetY()][mousePos.GetX()] = 0;
     }
 }
 
 void CCollisionHandler::BuildBlock() {
-    int x = floor(
-            (TheInputHandler::Instance().GetMousePos().GetX() + TheCamera::Instance().GetPosition().GetX()) /
-            m_TileSize);
-    int y = floor(
-            (TheInputHandler::Instance().GetMousePos().GetY() + TheCamera::Instance().GetPosition().GetY()) /
-            m_TileSize);
-    if ((*m_TileLayer)[y][x] == 0) {
-        (*m_TileLayer)[y][x] = 563;
+    CVector2D mousePos = TranslateMouse();
+    if (mousePos.GetX() >= m_ColCount || mousePos.GetY() >= m_RowCount || mousePos.GetX() < 0 || mousePos.GetY() < 0)
+        return;
+    if ((*m_TileLayer)[mousePos.GetY()][mousePos.GetX()] == 0) {
+        (*m_TileLayer)[mousePos.GetY()][mousePos.GetX()] = 53;
     }
+}
+
+CVector2D CCollisionHandler::TranslateMouse() const {
+    return CVector2D(floor(
+            (TheInputHandler::Instance().GetMousePos().GetX() + TheCamera::Instance().GetPosition().GetX()) /
+            m_TileSize), floor(
+            (TheInputHandler::Instance().GetMousePos().GetY() + TheCamera::Instance().GetPosition().GetY()) /
+            m_TileSize)
+    );
 }
 
 CCollisionHandler::CCollisionHandler() = default;

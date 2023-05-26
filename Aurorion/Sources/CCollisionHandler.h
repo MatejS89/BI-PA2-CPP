@@ -24,6 +24,8 @@ public:
 private:
     CCollisionHandler();
 
+    CVector2D TranslateMouse() const;
+
     int m_ColCount;
 
     int m_RowCount;
