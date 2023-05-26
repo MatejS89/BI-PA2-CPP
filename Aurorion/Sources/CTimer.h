@@ -1,5 +1,7 @@
 #pragma once
 
+#include "SDL2/SDL.h"
+
 class CTimer {
 public:
     void Tick();
@@ -15,7 +17,7 @@ private:
     static CTimer m_Instance;
 
     float m_DeltaTime;
-    float m_LastTime;
+    Uint64 m_LastTime;
 };
 
 typedef CTimer TheTimer;

@@ -29,13 +29,13 @@ void CPlayer::HandleInput(float deltaTime) {
         return;
     }
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_DOWN))
-        CEntity::m_RigidBody->ApplyForceY(2 * DOWN);
+        CEntity::m_RigidBody->ApplyForceY(MOVEMENT_SPEED * DOWN);
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_RIGHT)) {
-        CEntity::m_RigidBody->ApplyForceX(2 * RIGHT);
+        CEntity::m_RigidBody->ApplyForceX(MOVEMENT_SPEED * RIGHT);
         m_Flip = SDL_FLIP_NONE;
     }
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_LEFT)) {
-        CEntity::m_RigidBody->ApplyForceX(2 * LEFT);
+        CEntity::m_RigidBody->ApplyForceX(MOVEMENT_SPEED * LEFT);
         m_Flip = SDL_FLIP_HORIZONTAL;
     }
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_UP) && m_IsGrounded) {
