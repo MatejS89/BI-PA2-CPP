@@ -1,5 +1,6 @@
 #include "CGame.h"
 #include "CPlayer.h"
+#include "CEnemy.h"
 #include "CMapParser.h"
 #include "CTimer.h"
 #include "CCamera.h"
@@ -47,9 +48,6 @@ bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int he
         m_height = height;
         m_width = width;
 
-        TheTextureManager::Instance().Load
-                ("assets/Character/Idle/Idle-Sheet.png", "idle");
-
         if (!TheMapParser::Instance().Load()) {
             std::cout << "FAILED LOAD" << std::endl;
         }
@@ -59,8 +57,12 @@ bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int he
         std::shared_ptr<CPlayer> player = std::make_shared<CPlayer>(
                 std::make_unique<SParamLoader>(100, 100, 64, 80, "idle"));
 
+        std::shared_ptr<CEnemy> enemy = std::make_shared<CEnemy>(
+                std::make_unique<SParamLoader>(200, 100, 48, 32, "BoarIdle"));
+
         TheCamera::Instance().SetTarget(player->GetCentre());
         m_gameObjects.push_back(player);
+        m_gameObjects.push_back(enemy);
         TheCollisionHandler::Instance().LoadCollisionLayer();
     } else {
         m_isRunning = false;

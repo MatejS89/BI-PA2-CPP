@@ -4,6 +4,8 @@
 
 CPlayer::CPlayer(std::shared_ptr<SParamLoader> params) : CEntity(params) {
     m_Collider.SetBuffer(20, 10, 40, 30);
+    TheTextureManager::Instance().Load
+            ("assets/Character/Idle/Idle-Sheet.png", "idle");
 }
 
 void CPlayer::Draw() {
