@@ -1,8 +1,6 @@
 #include "CTimer.h"
 #include "SDL2/SDL.h"
 
-const int TARGET_FPS = 60;
-const float TARGET_DELTA = 1.5F;
 
 CTimer CTimer::m_Instance;
 

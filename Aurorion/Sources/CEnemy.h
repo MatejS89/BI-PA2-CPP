@@ -4,10 +4,6 @@
 #include "CRigidBody.h"
 #include "CCamera.h"
 
-#define JUMP_FORCE 10.0F
-#define JUMP_TIME 15.0F
-#define MOVEMENT_SPEED 1.5
-#define RADIUS 200
 
 class CEnemy : public CEntity {
 public:
@@ -18,4 +14,10 @@ public:
     void Update(float deltaTime) override;
 
     void clean() override;
+
+private:
+    const int JUMP_FORCE = 10;
+    const int JUMP_TIME = 15;
+    const float MOVEMENT_SPEED = 1.5F;
+    const int RADIUS = 200;
 };
