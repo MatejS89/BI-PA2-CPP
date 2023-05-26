@@ -14,6 +14,10 @@ public:
 
     bool IsKeyDown(SDL_Scancode key);
 
+    const CVector2D &GetMousePos() const;
+
+    const EMouseButtonState &GetMouseState() const;
+
 private:
     CInputHandler();
 

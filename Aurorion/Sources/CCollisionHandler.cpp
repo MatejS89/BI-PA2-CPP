@@ -48,4 +48,28 @@ void CCollisionHandler::LoadCollisionLayer() {
     m_ColCount = m_TileLayer->front().size();
 }
 
+void CCollisionHandler::DestroyBlock() {
+    int x = floor(
+            (TheInputHandler::Instance().GetMousePos().GetX() + TheCamera::Instance().GetPosition().GetX()) /
+            m_TileSize);
+    int y = floor(
+            (TheInputHandler::Instance().GetMousePos().GetY() + TheCamera::Instance().GetPosition().GetY()) /
+            m_TileSize);
+    if ((*m_TileLayer)[y][x] > 0) {
+        (*m_TileLayer)[y][x] = 0;
+    }
+}
+
+void CCollisionHandler::BuildBlock() {
+    int x = floor(
+            (TheInputHandler::Instance().GetMousePos().GetX() + TheCamera::Instance().GetPosition().GetX()) /
+            m_TileSize);
+    int y = floor(
+            (TheInputHandler::Instance().GetMousePos().GetY() + TheCamera::Instance().GetPosition().GetY()) /
+            m_TileSize);
+    if ((*m_TileLayer)[y][x] == 0) {
+        (*m_TileLayer)[y][x] = 563;
+    }
+}
+
 CCollisionHandler::CCollisionHandler() = default;

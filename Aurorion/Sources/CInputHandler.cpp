@@ -3,7 +3,6 @@
 #include "CInputHandler.h"
 #include "CGame.h"
 
-
 CInputHandler::CInputHandler() : m_KeyStates(SDL_GetKeyboardState(nullptr)) {}
 
 CInputHandler CInputHandler::m_instance;
@@ -25,16 +24,6 @@ void CInputHandler::Listen() {
             case SDL_KEYUP:
                 KeyUp();
                 break;
-            case SDL_MOUSEBUTTONDOWN:
-                if (event.button.button == SDL_BUTTON_LEFT) {
-                    std::cout << "LEFT CLICK" << std::endl;
-                    m_MouseState.m_ButtonState = EMouseButtonState::LEFT_BUTTON_DOWN;
-                } else if (event.button.button == SDL_BUTTON_RIGHT) {
-                    std::cout << "RIGHT CLICK" << std::endl;
-                    m_MouseState.m_ButtonState = EMouseButtonState::RIGHT_BUTTON_DOWN;
-                }
-            case SDL_MOUSEBUTTONUP:
-                m_MouseState.m_ButtonState = EMouseButtonState::NONE;
             case SDL_MOUSEMOTION:
                 int x;
                 int y;
@@ -43,10 +32,21 @@ void CInputHandler::Listen() {
                 m_MouseState.m_MousePos.SetY(y);
 //                m_MousePos.SetX(x + TheCamera::Instance().GetTarget()->GetX());
 //                m_MousePos.SetY(y + TheCamera::Instance().GetTarget()->GetY());
-                std::cout << m_MouseState.m_MousePos.GetX() << " " << m_MouseState.m_MousePos.GetY()
-                          << m_MouseState.GetMouseButtonState() << std::endl;
+//                std::cout << m_MouseState.m_MousePos.GetX() << " " << m_MouseState.m_MousePos.GetY()
+//                          << m_MouseState.GetMouseButtonState() << std::endl;
+            case SDL_MOUSEBUTTONDOWN:
+                if (event.button.button == SDL_BUTTON_LEFT) {
+//                    std::cout << "LEFT CLICK" << std::endl;
+                    m_MouseState.m_ButtonState = EMouseButtonState::LEFT_BUTTON_DOWN;
+                }
+                if (event.button.button == SDL_BUTTON_RIGHT) {
+//                    std::cout << "RIGHT CLICK" << std::endl;
+                    m_MouseState.m_ButtonState = EMouseButtonState::RIGHT_BUTTON_DOWN;
+                }
                 break;
-            default:
+                
+            case SDL_MOUSEBUTTONUP:
+                m_MouseState.m_ButtonState = EMouseButtonState::NONE;
                 break;
         }
     }
@@ -62,4 +62,12 @@ void CInputHandler::KeyUp() {
 
 void CInputHandler::KeyDown() {
     m_KeyStates = SDL_GetKeyboardState(nullptr);
+}
+
+const CVector2D &CInputHandler::GetMousePos() const {
+    return m_MouseState.m_MousePos;
+}
+
+const EMouseButtonState &CInputHandler::GetMouseState() const {
+    return m_MouseState.m_ButtonState;
 }

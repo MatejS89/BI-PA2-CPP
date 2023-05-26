@@ -5,6 +5,7 @@
 #include "CTileLayer.h"
 #include "CMap.h"
 #include "CGame.h"
+#include "CInputHandler.h"
 
 class CCollisionHandler {
 public:
@@ -15,6 +16,10 @@ public:
     bool CheckCollision(const SDL_Rect &left, const SDL_Rect &right);
 
     static CCollisionHandler &Instance();
+
+    void DestroyBlock();
+
+    void BuildBlock();
 
 private:
     CCollisionHandler();

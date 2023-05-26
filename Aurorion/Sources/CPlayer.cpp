@@ -53,4 +53,13 @@ void CPlayer::HandleInput(float deltaTime) {
     } else {
         m_IsJumping = false;
     }
+
+    if (TheInputHandler::Instance().GetMouseState() == EMouseButtonState::LEFT_BUTTON_DOWN) {
+        std::cout << "LEFT DETECTED" << std::endl;
+        CCollisionHandler::Instance().DestroyBlock();
+    }
+
+    if (TheInputHandler::Instance().GetMouseState() == EMouseButtonState::RIGHT_BUTTON_DOWN) {
+        CCollisionHandler::Instance().BuildBlock();
+    }
 }
