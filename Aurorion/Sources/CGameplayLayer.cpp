@@ -1,6 +1,7 @@
 #include "CGameplayLayer.h"
 
-CGameplayLayer::CGameplayLayer() : m_LevelMap(TheMapParser::Instance().GetMaps("MAP")) {}
+CGameplayLayer::CGameplayLayer() : m_LevelMap(TheMapParser::Instance().GetMaps("MAP")),
+                                   m_gameObjects(std::make_shared<std::vector<std::shared_ptr<CGameObject>>>()) {}
 
 void CGameplayLayer::Init(std::shared_ptr<CHudLayer> hud) {
     std::shared_ptr<CPlayer> player = std::make_shared<CPlayer>(
@@ -9,22 +10,23 @@ void CGameplayLayer::Init(std::shared_ptr<CHudLayer> hud) {
     std::shared_ptr<CEnemy> enemy = std::make_shared<CEnemy>(
             std::make_unique<SParamLoader>(200, 100, 48, 32, "BoarIdle"));
     TheCamera::Instance().SetTarget(player->GetCentre());
-    m_gameObjects.push_back(player);
-    m_gameObjects.push_back(enemy);
+    m_gameObjects->push_back(player);
+    m_gameObjects->push_back(enemy);
+    TheCollisionHandler::Instance().LoadGameObjects(m_gameObjects);
 }
 
 void CGameplayLayer::DrawLayer() {
     m_LevelMap->MapRender();
-    for (const auto &item: m_gameObjects) {
+    for (const auto &item: *m_gameObjects) {
         item->Draw();
     }
 }
 
 void CGameplayLayer::UpdateLayer(float deltaTime) {
     m_LevelMap->MapUpdate();
-    for (size_t i = 0; i < m_gameObjects.size(); i++) {
-        if (!m_gameObjects[i]->Update(deltaTime))
-            m_gameObjects.erase(m_gameObjects.begin() + i);
+    for (size_t i = 0; i < m_gameObjects->size(); i++) {
+        if (!(*m_gameObjects)[i]->Update(deltaTime))
+            m_gameObjects->erase(m_gameObjects->begin() + i);
     }
 }
 

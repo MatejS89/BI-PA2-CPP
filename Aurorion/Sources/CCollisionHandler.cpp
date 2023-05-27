@@ -74,4 +74,8 @@ CVector2D CCollisionHandler::TranslateMouse() const {
     );
 }
 
+void CCollisionHandler::LoadGameObjects(std::shared_ptr<std::vector<std::shared_ptr<CGameObject>>> gameObjects) {
+    m_GameObjects = gameObjects;
+}
+
 CCollisionHandler::CCollisionHandler() = default;

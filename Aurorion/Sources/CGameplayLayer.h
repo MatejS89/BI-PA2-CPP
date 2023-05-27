@@ -7,6 +7,7 @@
 #include "CPlayer.h"
 #include "CEnemy.h"
 #include "CHudLayer.h"
+#include "CCollisionHandler.h"
 
 class CGameplayLayer : public CGameLayer {
 public:
@@ -23,5 +24,5 @@ public:
 private:
     std::shared_ptr<CMap> m_LevelMap;
 
-    std::vector<std::shared_ptr<CGameObject>> m_gameObjects;
+    std::shared_ptr<std::vector<std::shared_ptr<CGameObject>>> m_gameObjects;
 };

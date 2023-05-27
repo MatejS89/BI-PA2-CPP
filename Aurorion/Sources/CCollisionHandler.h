@@ -6,6 +6,7 @@
 #include "CMap.h"
 #include "CGame.h"
 #include "CInputHandler.h"
+#include "CGameObject.h"
 
 class CCollisionHandler {
 public:
@@ -14,6 +15,8 @@ public:
     void LoadCollisionLayer(std::shared_ptr<TileMap> tileLayer);
 
     bool CheckCollision(const SDL_Rect &left, const SDL_Rect &right);
+
+    void LoadGameObjects(std::shared_ptr<std::vector<std::shared_ptr<CGameObject>>>);
 
     static CCollisionHandler &Instance();
 
@@ -35,6 +38,8 @@ private:
     std::shared_ptr<TileMap> m_TileLayer;
 
     std::shared_ptr<CTileLayer> m_CollisionMap;
+
+    std::shared_ptr<std::vector<std::shared_ptr<CGameObject>>> m_GameObjects;
 
     static CCollisionHandler m_Instance;
 };
