@@ -69,7 +69,5 @@ void CPlayer::HandleInput(float deltaTime) {
         CCollisionHandler::Instance().BuildBlock();
     }
 
-    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_SPACE)) {
-        m_CurrHP -= 10;
-    }
+    
 }

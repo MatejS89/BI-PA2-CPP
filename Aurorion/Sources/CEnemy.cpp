@@ -25,7 +25,6 @@ bool CEnemy::Update(float deltaTime) {
     } else {
         m_RigidBody->UnsetForce();
     }
-//    std::cout << "V RANGEY" << std::endl;
     return CEntity::Update(deltaTime);
 }
 
