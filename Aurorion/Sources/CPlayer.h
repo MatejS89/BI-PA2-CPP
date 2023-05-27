@@ -10,13 +10,11 @@ public:
 
     void Draw() override;
 
-    bool Update(float deltaTime) override;
+    bool Update() override;
 
     void clean() override;
 
-    void HandleInput(float deltaTime);
-
-    bool CheckColliisonWithEntities(float deltaTime);
+    void HandleInput();
 
 private:
     const int JUMP_FORCE = 10;

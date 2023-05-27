@@ -40,11 +40,11 @@ void CRigidBody::UnsetFriction() {
     m_Friction = {0, 0};
 }
 
-void CRigidBody::Update(const float dt) {
+void CRigidBody::Update() {
     m_Acceleration.SetX(m_Force.GetX() + m_Friction.GetX() / m_Mass);
     m_Acceleration.SetY(m_Gravity + m_Force.GetY() / m_Mass);
-    m_Velocity = m_Acceleration * dt;
-    *m_Position = m_Velocity * dt;
+    m_Velocity = m_Acceleration * TheTimer::Instance().GetDeltaTime();
+    *m_Position = m_Velocity * TheTimer::Instance().GetDeltaTime();
 }
 
 std::shared_ptr<CVector2D> CRigidBody::GetPosition() {

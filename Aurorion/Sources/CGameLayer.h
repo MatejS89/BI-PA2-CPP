@@ -7,7 +7,7 @@
 class CGameLayer {
 
 public:
-    virtual void UpdateLayer(float deltaTime) = 0;
+    virtual void UpdateLayer() = 0;
 
     virtual void DrawLayer() = 0;
 

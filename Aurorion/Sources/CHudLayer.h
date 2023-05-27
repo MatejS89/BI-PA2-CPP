@@ -10,7 +10,7 @@ public:
 
     void AddTarget(std::shared_ptr<CPlayer> target);
 
-    void UpdateLayer(float deltaTime) override;
+    void UpdateLayer() override;
 
 private:
 

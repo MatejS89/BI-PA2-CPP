@@ -12,7 +12,7 @@ void CHudLayer::DrawLayer() {
     SDL_RenderFillRect(TheGame::Instance().GetRenderer(), &b);
 }
 
-void CHudLayer::UpdateLayer(float deltaTime) {
+void CHudLayer::UpdateLayer() {
 }
 
 void CHudLayer::AddTarget(std::shared_ptr<CPlayer> target) {

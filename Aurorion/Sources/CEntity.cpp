@@ -35,11 +35,11 @@ void CEntity::Draw() {
     SDL_RenderDrawRect(TheGame::Instance().GetRenderer(), &colli);
 }
 
-bool CEntity::Update(float deltaTime) {
+bool CEntity::Update() {
     if (m_CurrHP <= 0)
         return false;
 
-    m_RigidBody->Update(deltaTime);
+    m_RigidBody->Update();
     m_LastSafePos->SetX(m_Pos->GetX());
     m_Pos->SetX(m_Pos->GetX() + m_RigidBody->GetPosition()->GetX());
     m_Collider.Set(m_Pos->GetX(), m_Pos->GetY(), m_W,
@@ -54,7 +54,7 @@ bool CEntity::Update(float deltaTime) {
         CCollisionHandler::Instance().PlayerCheckCollison()) {
         m_Pos->SetX(m_LastSafePos->GetX());
     }
-    m_RigidBody->Update(deltaTime);
+    m_RigidBody->Update();
     m_LastSafePos->SetY(m_Pos->GetY());
     m_Pos->SetY(m_Pos->GetY() + m_RigidBody->GetPosition()->GetY());
     m_Collider.Set(m_Pos->GetX(), m_Pos->GetY(), m_W,

@@ -25,10 +25,10 @@ void CGameplayLayer::DrawLayer() {
     }
 }
 
-void CGameplayLayer::UpdateLayer(float deltaTime) {
+void CGameplayLayer::UpdateLayer() {
     m_LevelMap->MapUpdate();
     for (size_t i = 0; i < m_gameObjects->size(); i++) {
-        if (!(*m_gameObjects)[i]->Update(deltaTime))
+        if (!(*m_gameObjects)[i]->Update())
             m_gameObjects->erase(m_gameObjects->begin() + i);
     }
 }

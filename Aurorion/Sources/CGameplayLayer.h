@@ -19,7 +19,7 @@ public:
 
     void DrawLayer() override;
 
-    void UpdateLayer(float deltaTime) override;
+    void UpdateLayer() override;
 
 private:
     std::shared_ptr<CMap> m_LevelMap;

@@ -12,14 +12,14 @@ void CEnemy::Draw() {
     CEntity::Draw();
 }
 
-bool CEnemy::Update(float deltaTime) {
+bool CEnemy::Update() {
     m_currentFrame = (((SDL_GetTicks() / 100) % 4));
 //    std::cout << deltaTime << "     " << TheTimer::Instance().GetDeltaTime() << std::endl;
 //    std::cout << TheCamera::Instance().GetTarget()->GetX() << " " << TheCamera::Instance().GetTarget()->GetY()
 //              << std::endl;
-    RandomJump(deltaTime);
+    RandomJump();
     FollowPlayer();
-    return CEntity::Update(deltaTime);
+    return CEntity::Update();
 }
 
 void CEnemy::clean() {
@@ -33,16 +33,16 @@ float CEnemy::GenerateRandomNum() {
     return distribution(gen);
 }
 
-void CEnemy::RandomJump(float deltaTime) {
+void CEnemy::RandomJump() {
     if (m_JumpDelay <= 0 && m_IsGrounded) {
         m_JumpDelay = GenerateRandomNum();
         m_RigidBody->ApplyForceY(UP * JUMP_FORCE);
         m_IsJumping = true;
         m_JumpTimer = JUMP_TIME;
     } else if (m_IsGrounded) {
-        m_JumpDelay -= deltaTime;
+        m_JumpDelay -= TheTimer::Instance().GetDeltaTime();
     }
-    m_JumpTimer -= deltaTime;
+    m_JumpTimer -= TheTimer::Instance().GetDeltaTime();
     if (m_JumpTimer <= 0.0F)
         m_RigidBody->UnsetForce();
 }

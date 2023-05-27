@@ -12,7 +12,7 @@ public:
 
     virtual void Draw();
 
-    virtual bool Update(float deltaTime);
+    virtual bool Update();
 
     virtual void clean();
 
@@ -54,4 +54,9 @@ protected:
     SDL_RendererFlip m_Flip;
 
     bool m_IsAlive;
+
+    const int LEFT = -1;
+    const int RIGHT = 1;
+    const int UP = -1;
+    const int DOWN = 1;
 };

@@ -8,7 +8,7 @@ class CGameObject {
 public:
     virtual void Draw() = 0;
 
-    virtual bool Update(float deltaTime) = 0;
+    virtual bool Update() = 0;
 
     std::shared_ptr<CVector2D> GetCentre();
 

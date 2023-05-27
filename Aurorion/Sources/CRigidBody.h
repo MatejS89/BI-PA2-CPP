@@ -2,11 +2,7 @@
 
 #include "CVector2D.h"
 #include <memory>
-
-#define LEFT -1
-#define RIGHT 1
-#define UP -1
-#define DOWN 1
+#include "CTimer.h"
 
 class CRigidBody {
 public:
@@ -34,7 +30,7 @@ public:
 
     void UnsetFriction();
 
-    void Update(float dt);
+    void Update();
 
     void SetPosition(const CVector2D &pos);
 

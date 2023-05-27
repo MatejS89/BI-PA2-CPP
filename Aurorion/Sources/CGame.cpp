@@ -67,7 +67,7 @@ bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int he
 void CGame::Update() {
     float deltaTime = TheTimer::Instance().GetDeltaTime();
     for (const auto &item: m_GameLayers) {
-        item->UpdateLayer(deltaTime);
+        item->UpdateLayer();
     }
     CCamera::Instance().Update(deltaTime);
 }

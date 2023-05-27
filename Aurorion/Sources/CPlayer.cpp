@@ -15,10 +15,10 @@ void CPlayer::Draw() {
     CEntity::Draw();
 }
 
-bool CPlayer::Update(float deltaTime) {
+bool CPlayer::Update() {
     m_currentFrame = (((SDL_GetTicks() / 100) % 4));
-    HandleInput(deltaTime);
-    return CEntity::Update(deltaTime);
+    HandleInput();
+    return CEntity::Update();
 //    if (m_RigidBody->GetVelocity().GetY() > 0 && !m_IsGrounded)
 //        std::cout << "FALLING" << std::endl;
 //    else
@@ -28,7 +28,7 @@ bool CPlayer::Update(float deltaTime) {
 void CPlayer::clean() {
 }
 
-void CPlayer::HandleInput(float deltaTime) {
+void CPlayer::HandleInput() {
     CEntity::m_RigidBody->UnsetForce();
 //    std::cout << deltaTime << "     " << TheTimer::Instance().GetDeltaTime() << std::endl;
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_UP) &&
@@ -55,7 +55,7 @@ void CPlayer::HandleInput(float deltaTime) {
         m_JumpTime = JUMP_TIME;
     }
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_UP) && m_IsJumping && m_JumpTime > 0) {
-        m_JumpTime -= deltaTime;
+        m_JumpTime -= TheTimer::Instance().GetDeltaTime();
         m_RigidBody->ApplyForceY(UP * JUMP_FORCE);
     } else {
         m_IsJumping = false;
