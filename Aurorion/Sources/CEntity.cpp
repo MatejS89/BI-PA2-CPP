@@ -14,7 +14,7 @@ CEntity::CEntity(std::shared_ptr<SParamLoader> params) : CGameObject(params),
                                                          m_LastSafePos(std::make_shared<CVector2D>(
                                                                  params->m_X, params->m_Y)),
                                                          m_IsJumping(false),
-                                                         m_IsGrounded(true),
+                                                         m_IsGrounded(false),
                                                          m_Collider(
                                                                  params->m_X, params->m_Y, params->m_W,
                                                                  params->m_H),
