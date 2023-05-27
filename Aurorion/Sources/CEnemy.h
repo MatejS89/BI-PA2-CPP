@@ -3,6 +3,7 @@
 #include "CEntity.h"
 #include "CRigidBody.h"
 #include "CCamera.h"
+#include <random>
 
 
 class CEnemy : public CEntity {
@@ -15,10 +16,14 @@ public:
 
     void clean() override;
 
+    float GenerateRandomNum();
+
 private:
     const int JUMP_FORCE = 10;
-    const int JUMP_TIME = 15;
+    const int JUMP_TIME = 10;
     const float MOVEMENT_SPEED = 1.5F;
     const int RADIUS = 200;
     const int MAX_HP = 200;
+    float m_JumpDelay;
+    float m_JumpTimer;
 };
