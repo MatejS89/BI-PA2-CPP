@@ -1,6 +1,4 @@
 #include "CGame.h"
-#include "CPlayer.h"
-#include "CEnemy.h"
 #include "CMapParser.h"
 #include "CTimer.h"
 #include "CCamera.h"
