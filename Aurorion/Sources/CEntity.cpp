@@ -82,3 +82,7 @@ int CEntity::GetCurrHp() const {
 int CEntity::GetMaxHp() const {
     return m_MaxHP;
 }
+
+const SDL_Rect &CEntity::GetCollider() const {
+    return m_Collider.m_Box;
+}

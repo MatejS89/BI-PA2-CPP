@@ -22,6 +22,8 @@ public:
 
     int GetMaxHp() const;
 
+    const SDL_Rect &GetCollider() const override;
+
 protected:
     int m_W;
     int m_H;
