@@ -12,11 +12,15 @@ public:
 
     virtual void Draw();
 
-    virtual void Update(float deltaTime);
+    virtual bool Update(float deltaTime);
 
     virtual void clean();
 
     std::shared_ptr<CVector2D> GetPosition();
+
+    int GetCurrHp() const;
+
+    int GetMaxHp() const;
 
 protected:
     int m_W;
@@ -39,7 +43,13 @@ protected:
 
     float m_JumpTime;
 
+    int m_CurrHP;
+
+    int m_MaxHP;
+
     CCollider m_Collider;
 
     SDL_RendererFlip m_Flip;
+
+    bool m_IsAlive;
 };

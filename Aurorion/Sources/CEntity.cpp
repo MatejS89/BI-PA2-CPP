@@ -18,7 +18,8 @@ CEntity::CEntity(std::shared_ptr<SParamLoader> params) : CGameObject(params),
                                                          m_Collider(
                                                                  params->m_X, params->m_Y, params->m_W,
                                                                  params->m_H),
-                                                         m_Flip(SDL_FLIP_NONE) {
+                                                         m_Flip(SDL_FLIP_NONE),
+                                                         m_IsAlive(true) {
     m_Centre = std::make_shared<CVector2D>(params->m_X + m_W / 2, params->m_Y + m_H / 2);
     m_RigidBody->SetPosition({params->m_X, params->m_Y});
 }
@@ -34,7 +35,10 @@ void CEntity::Draw() {
     SDL_RenderDrawRect(TheGame::Instance().GetRenderer(), &colli);
 }
 
-void CEntity::Update(float deltaTime) {
+bool CEntity::Update(float deltaTime) {
+    if (m_CurrHP <= 0)
+        return false;
+
     m_RigidBody->Update(deltaTime);
     m_LastSafePos->SetX(m_Pos->GetX());
     m_Pos->SetX(m_Pos->GetX() + m_RigidBody->GetPosition()->GetX());
@@ -61,6 +65,7 @@ void CEntity::Update(float deltaTime) {
         m_IsGrounded = false;
     }
     *m_Centre = *m_Pos + CVector2D(m_W / 2, m_H / 2);
+    return true;
 }
 
 void CEntity::clean() {
@@ -68,4 +73,12 @@ void CEntity::clean() {
 
 std::shared_ptr<CVector2D> CEntity::GetPosition() {
     return m_RigidBody->GetPosition();
+}
+
+int CEntity::GetCurrHp() const {
+    return m_CurrHP;
+}
+
+int CEntity::GetMaxHp() const {
+    return m_MaxHP;
 }

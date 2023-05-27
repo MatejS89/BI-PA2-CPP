@@ -1,21 +1,24 @@
 #include "CPlayer.h"
 #include "CInputHandler.h"
 #include "CCollisionHandler.h"
+#include "CTimer.h"
 
 CPlayer::CPlayer(std::shared_ptr<SParamLoader> params) : CEntity(params) {
     m_Collider.SetBuffer(20, 10, 40, 30);
     TheTextureManager::Instance().Load
             ("assets/Character/Idle/Idle-Sheet.png", "idle");
+    m_CurrHP = MAX_HP;
+    m_MaxHP = MAX_HP;
 }
 
 void CPlayer::Draw() {
     CEntity::Draw();
 }
 
-void CPlayer::Update(float deltaTime) {
+bool CPlayer::Update(float deltaTime) {
     m_currentFrame = (((SDL_GetTicks() / 100) % 4));
     HandleInput(deltaTime);
-    CEntity::Update(deltaTime);
+    return CEntity::Update(deltaTime);
     if (m_RigidBody->GetVelocity().GetY() > 0 && !m_IsGrounded)
         std::cout << "FALLING" << std::endl;
     else
@@ -27,6 +30,7 @@ void CPlayer::clean() {
 
 void CPlayer::HandleInput(float deltaTime) {
     CEntity::m_RigidBody->UnsetForce();
+//    std::cout << deltaTime << "     " << TheTimer::Instance().GetDeltaTime() << std::endl;
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_UP) &&
         TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_DOWN))
         return;
@@ -63,5 +67,9 @@ void CPlayer::HandleInput(float deltaTime) {
 
     if (TheInputHandler::Instance().GetMouseState() == EMouseButtonState::RIGHT_BUTTON_DOWN) {
         CCollisionHandler::Instance().BuildBlock();
+    }
+
+    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_SPACE)) {
+        m_CurrHP -= 10;
     }
 }

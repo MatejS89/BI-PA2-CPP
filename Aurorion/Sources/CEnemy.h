@@ -11,7 +11,7 @@ public:
 
     void Draw() override;
 
-    void Update(float deltaTime) override;
+    bool Update(float deltaTime) override;
 
     void clean() override;
 
@@ -20,4 +20,5 @@ private:
     const int JUMP_TIME = 15;
     const float MOVEMENT_SPEED = 1.5F;
     const int RADIUS = 200;
+    const int MAX_HP = 200;
 };
