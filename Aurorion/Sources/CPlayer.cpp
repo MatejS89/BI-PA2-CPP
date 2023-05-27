@@ -62,6 +62,7 @@ void CPlayer::HandleInput() {
     }
 
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_SPACE)) {
+        m_Collider.ExtendCollider(50);
         TheCollisionHandler::Instance().PlayerAttack(10);
     }
 

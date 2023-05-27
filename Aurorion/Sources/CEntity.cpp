@@ -33,6 +33,7 @@ void CEntity::Draw() {
     SDL_Rect colli = m_Collider.GetCollider();
     colli.x -= (cam.GetX());
     colli.y -= (cam.GetY());
+    std::cout << m_Collider.GetCollider().w << std::endl;
     SDL_RenderDrawRect(TheGame::Instance().GetRenderer(), &colli);
 }
 
@@ -69,7 +70,7 @@ bool CEntity::Update() {
     }
     *m_Centre = *m_Pos + CVector2D(m_W / 2, m_H / 2);
 
-    std::cout << m_CurrHP << std::endl;
+//    std::cout << m_CurrHP << std::endl;
     return true;
 }
 
