@@ -50,7 +50,8 @@ bool CEntity::Update(float deltaTime) {
 //        std::cout << TheGame::Instance().GetMapWidth() << std::endl;
         m_Pos->SetX(m_LastSafePos->GetX());
     }
-    if (CCollisionHandler::Instance().MapCollision(m_Collider.GetCollider())) {
+    if (CCollisionHandler::Instance().MapCollision(m_Collider.GetCollider()) ||
+        CCollisionHandler::Instance().PlayerCheckCollison()) {
         m_Pos->SetX(m_LastSafePos->GetX());
     }
     m_RigidBody->Update(deltaTime);
@@ -58,7 +59,8 @@ bool CEntity::Update(float deltaTime) {
     m_Pos->SetY(m_Pos->GetY() + m_RigidBody->GetPosition()->GetY());
     m_Collider.Set(m_Pos->GetX(), m_Pos->GetY(), m_W,
                    m_H);
-    if (CCollisionHandler::Instance().MapCollision(m_Collider.GetCollider())) {
+    if (CCollisionHandler::Instance().MapCollision(m_Collider.GetCollider()) ||
+        CCollisionHandler::Instance().PlayerCheckCollison()) {
         m_IsGrounded = true;
         m_Pos->SetY(m_LastSafePos->GetY());
     } else {

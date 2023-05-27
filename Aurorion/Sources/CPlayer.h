@@ -16,6 +16,8 @@ public:
 
     void HandleInput(float deltaTime);
 
+    bool CheckColliisonWithEntities(float deltaTime);
+
 private:
     const int JUMP_FORCE = 10;
     const int JUMP_TIME = 15;

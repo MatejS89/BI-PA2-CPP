@@ -14,7 +14,7 @@ public:
 
     void LoadCollisionLayer(std::shared_ptr<TileMap> tileLayer);
 
-    bool CheckCollision(const SDL_Rect &left, const SDL_Rect &right);
+    bool CheckCollision(const SDL_Rect &left, const SDL_Rect &right) const;
 
     void LoadGameObjects(std::shared_ptr<std::vector<std::shared_ptr<CGameObject>>>);
 
@@ -23,6 +23,8 @@ public:
     void DestroyBlock();
 
     void BuildBlock();
+
+    bool PlayerCheckCollison() const;
 
 private:
     CCollisionHandler();

@@ -3,7 +3,7 @@
 
 CCollisionHandler CCollisionHandler::m_Instance;
 
-bool CCollisionHandler::CheckCollision(const SDL_Rect &left, const SDL_Rect &right) {
+bool CCollisionHandler::CheckCollision(const SDL_Rect &left, const SDL_Rect &right) const {
     bool x_overlaps = (left.x < right.x + right.w) && (left.x + left.w > right.x);
     bool y_overlaps = (left.y < right.y + right.h) && (left.y + left.h > right.y);
     return (x_overlaps && y_overlaps);
@@ -76,6 +76,16 @@ CVector2D CCollisionHandler::TranslateMouse() const {
 
 void CCollisionHandler::LoadGameObjects(std::shared_ptr<std::vector<std::shared_ptr<CGameObject>>> gameObjects) {
     m_GameObjects = gameObjects;
+}
+
+bool CCollisionHandler::PlayerCheckCollison() const {
+    const auto &player = (*m_GameObjects)[0];
+    for (size_t i = 1; i < m_GameObjects->size(); i++) {
+        const auto &enemy = (*m_GameObjects)[i];
+        if (CheckCollision(player->GetCollider(), enemy->GetCollider()))
+            return true;
+    }
+    return false;
 }
 
 CCollisionHandler::CCollisionHandler() = default;

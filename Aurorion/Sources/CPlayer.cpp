@@ -18,11 +18,13 @@ void CPlayer::Draw() {
 bool CPlayer::Update(float deltaTime) {
     m_currentFrame = (((SDL_GetTicks() / 100) % 4));
     HandleInput(deltaTime);
-    return CEntity::Update(deltaTime);
-    if (m_RigidBody->GetVelocity().GetY() > 0 && !m_IsGrounded)
-        std::cout << "FALLING" << std::endl;
-    else
-        std::cout << "NOT FALLING" << std::endl;
+    CEntity::Update(deltaTime);
+    CheckColliisonWithEntities(deltaTime);
+    return true;
+//    if (m_RigidBody->GetVelocity().GetY() > 0 && !m_IsGrounded)
+//        std::cout << "FALLING" << std::endl;
+//    else
+//        std::cout << "NOT FALLING" << std::endl;
 }
 
 void CPlayer::clean() {
@@ -68,6 +70,13 @@ void CPlayer::HandleInput(float deltaTime) {
     if (TheInputHandler::Instance().GetMouseState() == EMouseButtonState::RIGHT_BUTTON_DOWN) {
         CCollisionHandler::Instance().BuildBlock();
     }
+}
 
-    
+bool CPlayer::CheckColliisonWithEntities(float deltaTime) {
+    if (CCollisionHandler::Instance().MapCollision(m_Collider.GetCollider()) ||
+        CCollisionHandler::Instance().PlayerCheckCollison()) {
+        m_Pos->SetX(m_LastSafePos->GetX());
+        m_Pos->SetY(m_LastSafePos->GetY());
+    }
+    return false;
 }

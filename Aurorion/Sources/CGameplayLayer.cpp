@@ -9,9 +9,12 @@ void CGameplayLayer::Init(std::shared_ptr<CHudLayer> hud) {
     hud->AddTarget(player);
     std::shared_ptr<CEnemy> enemy = std::make_shared<CEnemy>(
             std::make_unique<SParamLoader>(200, 100, 48, 32, "BoarIdle"));
+    std::shared_ptr<CEnemy> enemy2 = std::make_shared<CEnemy>(
+            std::make_unique<SParamLoader>(300, 100, 48, 32, "BoarIdle"));
     TheCamera::Instance().SetTarget(player->GetCentre());
     m_gameObjects->push_back(player);
     m_gameObjects->push_back(enemy);
+    m_gameObjects->push_back(enemy2);
     TheCollisionHandler::Instance().LoadGameObjects(m_gameObjects);
 }
 
