@@ -6,12 +6,13 @@
 #include "CMapParser.h"
 #include "CPlayer.h"
 #include "CEnemy.h"
+#include "CHudLayer.h"
 
 class CGameplayLayer : public CGameLayer {
 public:
     CGameplayLayer();
 
-    void Init();
+    void Init(std::shared_ptr<CHudLayer> hud);
 
     std::shared_ptr<CMap> GetMap() override;
 

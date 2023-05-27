@@ -51,12 +51,12 @@ bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int he
         if (!TheMapParser::Instance().Load()) {
             std::cout << "FAILED LOAD" << std::endl;
         }
+        std::shared_ptr<CHudLayer> hud = std::make_shared<CHudLayer>();
         std::shared_ptr<CGameplayLayer> gameplayLayer = std::make_shared<CGameplayLayer>();
-        gameplayLayer->Init();
+        gameplayLayer->Init(hud);
         TheCollisionHandler::Instance().LoadCollisionLayer(
                 gameplayLayer->GetMap()->GetMapLayers().front()->GetTileMap());
         m_GameLayers.emplace_back(gameplayLayer);
-        std::shared_ptr<CHudLayer> hud = std::make_shared<CHudLayer>();
         m_GameLayers.emplace_back(hud);
     } else {
         m_isRunning = false;

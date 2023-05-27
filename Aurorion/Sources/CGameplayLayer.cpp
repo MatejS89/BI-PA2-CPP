@@ -2,9 +2,10 @@
 
 CGameplayLayer::CGameplayLayer() : m_LevelMap(TheMapParser::Instance().GetMaps("MAP")) {}
 
-void CGameplayLayer::Init() {
+void CGameplayLayer::Init(std::shared_ptr<CHudLayer> hud) {
     std::shared_ptr<CPlayer> player = std::make_shared<CPlayer>(
             std::make_unique<SParamLoader>(100, 100, 64, 80, "idle"));
+    hud->AddTarget(player);
     std::shared_ptr<CEnemy> enemy = std::make_shared<CEnemy>(
             std::make_unique<SParamLoader>(200, 100, 48, 32, "BoarIdle"));
     TheCamera::Instance().SetTarget(player->GetCentre());
@@ -21,8 +22,9 @@ void CGameplayLayer::DrawLayer() {
 
 void CGameplayLayer::UpdateLayer(float deltaTime) {
     m_LevelMap->MapUpdate();
-    for (const auto &item: m_gameObjects) {
-        item->Update(deltaTime);
+    for (size_t i = 0; i < m_gameObjects.size(); i++) {
+        if (!m_gameObjects[i]->Update(deltaTime))
+            m_gameObjects.erase(m_gameObjects.begin() + i);
     }
 }
 
