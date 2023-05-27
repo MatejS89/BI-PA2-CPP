@@ -28,6 +28,7 @@ void CEntity::Draw() {
     CTextureManager::Instance().DrawFrame(m_texture, m_Pos->GetX(),
                                           m_Pos->GetY(), m_W, m_H, m_currentRow,
                                           m_currentFrame, m_Flip);
+    SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), 255, 0, 0, 255);
     const CVector2D &cam = TheCamera::Instance().GetPosition();
     SDL_Rect colli = m_Collider.GetCollider();
     colli.x -= (cam.GetX());
