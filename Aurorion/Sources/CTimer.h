@@ -8,6 +8,8 @@ public:
 
     float GetDeltaTime() const;
 
+    int GetTargetFps() const;
+
     static CTimer &Instance();
 
 private:
@@ -21,7 +23,6 @@ private:
 
     const int TARGET_FPS = 60;
     const float TARGET_DELTA = 1.5F;
-
 };
 
 typedef CTimer TheTimer;

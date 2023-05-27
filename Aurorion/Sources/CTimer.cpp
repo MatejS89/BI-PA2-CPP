@@ -20,3 +20,7 @@ void CTimer::Tick() {
         m_DeltaTime = TARGET_DELTA;
     m_LastTime = SDL_GetPerformanceCounter();
 }
+
+int CTimer::GetTargetFps() const {
+    return TARGET_FPS;
+}
