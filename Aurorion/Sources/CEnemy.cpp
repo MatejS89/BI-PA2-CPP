@@ -17,27 +17,8 @@ bool CEnemy::Update(float deltaTime) {
 //    std::cout << deltaTime << "     " << TheTimer::Instance().GetDeltaTime() << std::endl;
 //    std::cout << TheCamera::Instance().GetTarget()->GetX() << " " << TheCamera::Instance().GetTarget()->GetY()
 //              << std::endl;
-
-    if (m_JumpDelay <= 0 && m_IsGrounded) {
-        m_JumpDelay = GenerateRandomNum();
-        m_RigidBody->ApplyForceY(UP * JUMP_FORCE);
-        m_IsJumping = true;
-        m_JumpTimer = JUMP_TIME;
-    } else if (m_IsGrounded) {
-        m_JumpDelay -= deltaTime;
-    }
-    m_JumpTimer -= deltaTime;
-    if (m_JumpTimer <= 0.0F)
-        m_RigidBody->UnsetForce();
-
-    if (abs(TheCamera::Instance().GetTarget()->GetX() - m_Pos->GetX()) <= RADIUS) {
-        if (TheCamera::Instance().GetTarget()->GetX() >= m_Pos->GetX() + m_W / 2)
-            m_RigidBody->ApplyForceX(MOVEMENT_SPEED * RIGHT);
-        if (TheCamera::Instance().GetTarget()->GetX() <= m_Pos->GetX() + m_W / 2)
-            m_RigidBody->ApplyForceX(MOVEMENT_SPEED * LEFT);
-    } else {
-        m_RigidBody->UnsetForce();
-    }
+    RandomJump(deltaTime);
+    FollowPlayer();
     return CEntity::Update(deltaTime);
 }
 
@@ -51,3 +32,29 @@ float CEnemy::GenerateRandomNum() {
     std::uniform_real_distribution<float> distribution(100.0F, 200.0F);
     return distribution(gen);
 }
+
+void CEnemy::RandomJump(float deltaTime) {
+    if (m_JumpDelay <= 0 && m_IsGrounded) {
+        m_JumpDelay = GenerateRandomNum();
+        m_RigidBody->ApplyForceY(UP * JUMP_FORCE);
+        m_IsJumping = true;
+        m_JumpTimer = JUMP_TIME;
+    } else if (m_IsGrounded) {
+        m_JumpDelay -= deltaTime;
+    }
+    m_JumpTimer -= deltaTime;
+    if (m_JumpTimer <= 0.0F)
+        m_RigidBody->UnsetForce();
+}
+
+void CEnemy::FollowPlayer() {
+    if (abs(TheCamera::Instance().GetTarget()->GetX() - m_Pos->GetX()) <= RADIUS) {
+        if (TheCamera::Instance().GetTarget()->GetX() >= m_Pos->GetX() + m_W / 2)
+            m_RigidBody->ApplyForceX(MOVEMENT_SPEED * RIGHT);
+        if (TheCamera::Instance().GetTarget()->GetX() <= m_Pos->GetX() + m_W / 2)
+            m_RigidBody->ApplyForceX(MOVEMENT_SPEED * LEFT);
+    } else {
+        m_RigidBody->UnsetForce();
+    }
+}
+
