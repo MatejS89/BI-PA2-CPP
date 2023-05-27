@@ -68,6 +68,8 @@ bool CEntity::Update() {
         m_IsGrounded = false;
     }
     *m_Centre = *m_Pos + CVector2D(m_W / 2, m_H / 2);
+
+    std::cout << m_CurrHP << std::endl;
     return true;
 }
 
@@ -87,5 +89,9 @@ int CEntity::GetMaxHp() const {
 }
 
 const SDL_Rect &CEntity::GetCollider() const {
-    return m_Collider.m_Box;
+    return m_Collider.GetCollider();
+}
+
+void CEntity::ReduceHp(int dmg) {
+    m_CurrHP -= dmg;
 }

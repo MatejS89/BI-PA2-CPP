@@ -61,6 +61,10 @@ void CPlayer::HandleInput() {
         m_IsJumping = false;
     }
 
+    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_SPACE)) {
+        TheCollisionHandler::Instance().PlayerAttack(10);
+    }
+
     if (TheInputHandler::Instance().GetMouseState() == EMouseButtonState::LEFT_BUTTON_DOWN) {
         CCollisionHandler::Instance().DestroyBlock();
     }

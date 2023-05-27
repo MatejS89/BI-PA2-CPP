@@ -18,6 +18,8 @@ public:
 
     void LoadGameObjects(std::shared_ptr<std::vector<std::shared_ptr<CGameObject>>>);
 
+    void PlayerAttack(int dmg);
+
     static CCollisionHandler &Instance();
 
     void DestroyBlock();

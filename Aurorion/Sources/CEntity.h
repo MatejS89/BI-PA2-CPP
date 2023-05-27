@@ -16,6 +16,8 @@ public:
 
     virtual void clean();
 
+    void ReduceHp(int dmg) override;
+
     std::shared_ptr<CVector2D> GetPosition();
 
     int GetCurrHp() const;

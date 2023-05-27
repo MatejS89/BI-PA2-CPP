@@ -10,6 +10,8 @@ public:
 
     virtual bool Update() = 0;
 
+    virtual void ReduceHp(int dmg) = 0;
+
     std::shared_ptr<CVector2D> GetCentre();
 
     virtual const SDL_Rect &GetCollider() const;

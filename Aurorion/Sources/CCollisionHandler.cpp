@@ -88,4 +88,13 @@ bool CCollisionHandler::PlayerCheckCollison() const {
     return false;
 }
 
+void CCollisionHandler::PlayerAttack(int dmg) {
+    const auto &player = (*m_GameObjects)[0];
+    for (size_t i = 1; i < m_GameObjects->size(); i++) {
+        const auto &enemy = (*m_GameObjects)[i];
+        if (CheckCollision(player->GetCollider(), enemy->GetCollider()))
+            enemy->ReduceHp(dmg);
+    }
+}
+
 CCollisionHandler::CCollisionHandler() = default;
