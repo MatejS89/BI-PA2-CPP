@@ -28,9 +28,6 @@ bool CPlayer::Update() {
 //        std::cout << "NOT FALLING" << std::endl;
 }
 
-void CPlayer::clean() {
-}
-
 void CPlayer::HandleInput() {
     CEntity::m_RigidBody->UnsetForce();
 //    std::cout << deltaTime << "     " << TheTimer::Instance().GetDeltaTime() << std::endl;
@@ -67,7 +64,7 @@ void CPlayer::HandleInput() {
         if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_SPACE)) {
             TheCollisionHandler::Instance().PlayerAttack(ATTACK_DMG, ATTACK_RANGE, m_Rotation);
             m_AttackDelay = ATTACK_DELAY;
-            std::cout << "ATTACK" << std::endl;
+//            std::cout << "ATTACK" << std::endl;
         }
     } else
         m_AttackDelay -= TheTimer::Instance().GetDeltaTime();
@@ -113,3 +110,5 @@ void CPlayer::PlayerCheckCollision() {
         m_IsGrounded = false;
     }
 }
+
+CPlayer::~CPlayer() = default;

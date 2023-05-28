@@ -11,11 +11,11 @@ class CEnemy : public CEntity {
 public:
     CEnemy(std::shared_ptr<SParamLoader> params);
 
+    ~CEnemy() override;
+
     void Draw() override;
 
     bool Update() override;
-
-    void clean() override;
 
     void RandomJump();
 

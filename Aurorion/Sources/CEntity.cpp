@@ -18,7 +18,6 @@ CEntity::CEntity(std::shared_ptr<SParamLoader> params) : CGameObject(params),
                                                                  params->m_X, params->m_Y, params->m_W,
                                                                  params->m_H),
                                                          m_Rotation(Rotation::RIGHT),
-                                                         m_IsAlive(true),
                                                          m_FallTime(0.0F),
                                                          m_ImmuneToFall(true) {
     m_Centre = std::make_shared<CVector2D>(params->m_X + m_W / 2, params->m_Y + m_H / 2);
@@ -47,9 +46,6 @@ bool CEntity::Update() {
         return false;
     *m_Centre = *m_Pos + CVector2D(m_W / 2, m_H / 2);
     return true;
-}
-
-void CEntity::clean() {
 }
 
 std::shared_ptr<CVector2D> CEntity::GetPosition() {
@@ -82,3 +78,5 @@ void CEntity::DealFallDamage() {
         m_CurrHP -= m_FallTime * m_RigidBody->GetGravity() * 0.01F;
     }
 }
+
+CEntity::~CEntity() = default;

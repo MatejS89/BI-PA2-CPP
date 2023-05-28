@@ -1,8 +1,8 @@
 #include "CEnemy.h"
 #include "CTimer.h"
 
-CEnemy::CEnemy(std::shared_ptr<SParamLoader> params) : CEntity(params), m_JumpDelay(0.0F), m_AttackTimer(0.0F),
-                                                       m_JumpTimer(JUMP_TIME) {
+CEnemy::CEnemy(std::shared_ptr<SParamLoader> params) : CEntity(params), m_JumpDelay(0.0F),
+                                                       m_JumpTimer(JUMP_TIME), m_AttackTimer(0.0F) {
     TheTextureManager::Instance().Load
             ("assets/Mob/Boar/Idle/Idle-Sheet.png", "BoarIdle");
     m_MaxHP = MAX_HP;
@@ -25,10 +25,6 @@ bool CEnemy::Update() {
     FollowPlayer();
     EnemyCheckCollision(m_Collider);
     return true;
-}
-
-void CEnemy::clean() {
-    CEntity::clean();
 }
 
 float CEnemy::GenerateRandomNum() {
@@ -103,3 +99,5 @@ void CEnemy::EnemyCheckCollision(const CCollider &collider) {
     }
     *m_Centre = *m_Pos + CVector2D(m_W / 2, m_H / 2);
 }
+
+CEnemy::~CEnemy() = default;

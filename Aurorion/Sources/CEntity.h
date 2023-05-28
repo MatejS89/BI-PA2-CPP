@@ -15,11 +15,11 @@ class CEntity : public CGameObject {
 public:
     CEntity(std::shared_ptr<SParamLoader> params);
 
+    ~CEntity() override;
+
     virtual void Draw();
 
     virtual bool Update();
-
-    virtual void clean();
 
     void ReduceHp(int dmg) override;
 
@@ -63,8 +63,6 @@ protected:
     CCollider m_Collider;
 
     Rotation m_Rotation;
-
-    bool m_IsAlive;
 
     float m_FallTime;
 

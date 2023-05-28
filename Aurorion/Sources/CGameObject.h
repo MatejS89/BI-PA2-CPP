@@ -6,6 +6,8 @@
 
 class CGameObject {
 public:
+    virtual ~CGameObject();
+
     virtual void Draw() = 0;
 
     virtual bool Update() = 0;
@@ -20,6 +22,4 @@ protected:
     CGameObject(std::shared_ptr<SParamLoader> params) {};
 
     std::shared_ptr<CVector2D> m_Centre;
-
-    virtual ~CGameObject();
 };
