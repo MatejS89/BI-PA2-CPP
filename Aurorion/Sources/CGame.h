@@ -40,6 +40,8 @@ public:
 
     int GetMapWidth() const;
 
+    int GetMapHeight() const;
+
     CGameLayer &GetLayer(size_t index);
 
 private:

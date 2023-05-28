@@ -52,7 +52,7 @@ bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int he
         std::shared_ptr<CGameplayLayer> gameplayLayer = std::make_shared<CGameplayLayer>();
         gameplayLayer->Init(hud);
         TheCollisionHandler::Instance().LoadCollisionLayer(
-                gameplayLayer->GetMap()->GetMapLayers().front()->GetTileMap());
+                gameplayLayer->GetMap()->GetMapLayers()[1]->GetTileMap());
         m_GameLayers.emplace_back(gameplayLayer);
         m_GameLayers.emplace_back(hud);
     } else {
@@ -75,7 +75,7 @@ void CGame::Render() {
     for (const auto &item: m_GameLayers) {
         item->DrawLayer();
     }
-    SDL_SetRenderDrawColor(m_renderer, 135, 206, 235, 255);
+//    SDL_SetRenderDrawColor(m_renderer, 135, 206, 235, 255);
     SDL_RenderPresent(m_renderer);
 }
 
@@ -112,4 +112,8 @@ int CGame::GetMapWidth() const {
 
 CGameLayer &CGame::GetLayer(const size_t index) {
     return *m_GameLayers[index];
+}
+
+int CGame::GetMapHeight() const {
+    return m_GameLayers[0]->GetMap()->GetMapHeight();
 }
