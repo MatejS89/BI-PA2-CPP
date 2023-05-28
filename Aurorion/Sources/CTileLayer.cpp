@@ -9,7 +9,8 @@ CTileLayer::CTileLayer(int tileSize, int rowCount, int colCount,
                        std::shared_ptr<TileMap> tileMap, TilesetList tileSets) :
         m_TileSize(tileSize), m_RowCount(rowCount),
         m_ColCount(colCount), m_TileMap(std::move(tileMap)),
-        m_TileSets(std::move(tileSets)) {
+        m_TileSets(std::move(tileSets)),
+        m_GrowDelay(0.0F) {
     for (const auto &item: m_TileSets) {
         TheTextureManager::Instance().Load(item.m_TileSetSource, item.m_TileSetName);
     }
@@ -48,9 +49,31 @@ void CTileLayer::LayerRender() {
 }
 
 void CTileLayer::LayerUpdate() {
+    if (m_GrowDelay <= 0) {
+        m_GrowDelay = GROW_TIME;
+        int xCoord = floor(GenerateRandomCoordX() / 16);
+        for (int i = floor(TheGame::Instance().GetMapHeight() / 16) - 1; i >= 0; i--) {
+            if ((*m_TileMap)[i][xCoord] == 601 || (*m_TileMap)[i][xCoord] == 480)
+                break;
+            if ((*m_TileMap)[i][xCoord] == 0) {
+                (*m_TileMap)[i][xCoord] = 416;
+                break;
+            }
+        }
+    } else
+        m_GrowDelay -= TheTimer::Instance().GetDeltaTime();
     LayerRender();
 }
 
 std::shared_ptr<TileMap> CTileLayer::GetTileMap() {
     return m_TileMap;
+}
+
+int CTileLayer::GenerateRandomCoordX() const {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> distribution(0, TheGame::Instance().GetMapWidth());
+
+
+    return distribution(gen);
 }
