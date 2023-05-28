@@ -6,6 +6,11 @@
 #include "CRigidBody.h"
 #include "CCollider.h"
 
+enum class Rotation {
+    RIGHT,
+    LEFT
+};
+
 class CEntity : public CGameObject {
 public:
     CEntity(std::shared_ptr<SParamLoader> params);
@@ -53,7 +58,7 @@ protected:
 
     CCollider m_Collider;
 
-    SDL_RendererFlip m_Flip;
+    Rotation m_Rotation;
 
     bool m_IsAlive;
 

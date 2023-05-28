@@ -6,6 +6,7 @@ CEnemy::CEnemy(std::shared_ptr<SParamLoader> params) : CEntity(params), m_JumpDe
             ("assets/Mob/Boar/Idle/Idle-Sheet.png", "BoarIdle");
     m_MaxHP = MAX_HP;
     m_CurrHP = MAX_HP;
+//    SDL_TimerID id = TheTimer::Instance().StartTimer(3000, RandomJump, nullptr);
 }
 
 void CEnemy::Draw() {
@@ -49,12 +50,20 @@ void CEnemy::RandomJump() {
 
 void CEnemy::FollowPlayer() {
     if (abs(TheCamera::Instance().GetTarget()->GetX() - m_Pos->GetX()) <= RADIUS) {
-        if (TheCamera::Instance().GetTarget()->GetX() >= m_Pos->GetX() + m_W / 2)
+        if (TheCamera::Instance().GetTarget()->GetX() >= m_Pos->GetX() + m_W / 2) {
             m_RigidBody->ApplyForceX(MOVEMENT_SPEED * RIGHT);
-        if (TheCamera::Instance().GetTarget()->GetX() <= m_Pos->GetX() + m_W / 2)
+            m_Rotation = Rotation::LEFT;
+        }
+        if (TheCamera::Instance().GetTarget()->GetX() <= m_Pos->GetX() + m_W / 2) {
             m_RigidBody->ApplyForceX(MOVEMENT_SPEED * LEFT);
+            m_Rotation = Rotation::RIGHT;
+        }
     } else {
         m_RigidBody->UnsetForce();
     }
 }
 
+Uint32 CEnemy::serus(Uint32 interval, void *data) {
+    std::cout << "SERUUUUS" << std::endl;
+    return interval;
+}

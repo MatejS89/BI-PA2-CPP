@@ -42,11 +42,11 @@ void CPlayer::HandleInput() {
         CEntity::m_RigidBody->ApplyForceY(MOVEMENT_SPEED * DOWN);
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_RIGHT)) {
         CEntity::m_RigidBody->ApplyForceX(MOVEMENT_SPEED * RIGHT);
-        m_Flip = SDL_FLIP_NONE;
+        m_Rotation = Rotation::RIGHT;
     }
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_LEFT)) {
         CEntity::m_RigidBody->ApplyForceX(MOVEMENT_SPEED * LEFT);
-        m_Flip = SDL_FLIP_HORIZONTAL;
+        m_Rotation = Rotation::LEFT;
     }
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_UP) && m_IsGrounded) {
         CEntity::m_RigidBody->ApplyForceY(JUMP_FORCE * UP);

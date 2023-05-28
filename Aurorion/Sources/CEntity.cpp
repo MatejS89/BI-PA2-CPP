@@ -18,7 +18,7 @@ CEntity::CEntity(std::shared_ptr<SParamLoader> params) : CGameObject(params),
                                                          m_Collider(
                                                                  params->m_X, params->m_Y, params->m_W,
                                                                  params->m_H),
-                                                         m_Flip(SDL_FLIP_NONE),
+                                                         m_Rotation(Rotation::RIGHT),
                                                          m_IsAlive(true) {
     m_Centre = std::make_shared<CVector2D>(params->m_X + m_W / 2, params->m_Y + m_H / 2);
     m_RigidBody->SetPosition({params->m_X, params->m_Y});
@@ -27,13 +27,14 @@ CEntity::CEntity(std::shared_ptr<SParamLoader> params) : CGameObject(params),
 void CEntity::Draw() {
     CTextureManager::Instance().DrawFrame(m_texture, m_Pos->GetX(),
                                           m_Pos->GetY(), m_W, m_H, m_currentRow,
-                                          m_currentFrame, m_Flip);
+                                          m_currentFrame,
+                                          m_Rotation == Rotation::RIGHT ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
     SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), 255, 0, 0, 255);
     const CVector2D &cam = TheCamera::Instance().GetPosition();
     SDL_Rect colli = m_Collider.GetCollider();
     colli.x -= (cam.GetX());
     colli.y -= (cam.GetY());
-    std::cout << m_Collider.GetCollider().w << std::endl;
+//    std::cout << m_Collider.GetCollider().w << std::endl;
     SDL_RenderDrawRect(TheGame::Instance().GetRenderer(), &colli);
 }
 
