@@ -9,7 +9,7 @@ bool CCollisionHandler::CheckCollision(const SDL_Rect &left, const SDL_Rect &rig
     return (x_overlaps && y_overlaps);
 }
 
-bool CCollisionHandler::MapCollision(const SDL_Rect &rect) {
+bool CCollisionHandler::MapCollision(const SDL_Rect &rect, int &hp) {
     int leftTile = rect.x / m_TileSize;
     int rightTile = (rect.x + rect.w) / m_TileSize;
     int topTile = rect.y / m_TileSize;
@@ -28,7 +28,9 @@ bool CCollisionHandler::MapCollision(const SDL_Rect &rect) {
 
     for (int i = leftTile; i <= rightTile; ++i) {
         for (int j = topTile; j <= bottomTile; ++j) {
-            if ((*m_TileLayer)[j][i] > 0 && (*m_TileLayer)[j][i] != 480) {
+            if ((*m_TileLayer)[j][i] == 601)
+                hp -= 1;
+            if ((*m_TileLayer)[j][i] > 0 && (*m_TileLayer)[j][i] != 480 && (*m_TileLayer)[j][i] != 601) {
                 return true;
             }
         }

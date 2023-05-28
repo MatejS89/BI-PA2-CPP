@@ -52,7 +52,7 @@ bool CEntity::Update() {
     if (m_Collider.GetCollider().x + m_Collider.GetCollider().w > TheGame::Instance().GetMapWidth()) {
         m_Pos->SetX(m_LastSafePos->GetX());
     }
-    if (CCollisionHandler::Instance().MapCollision(m_Collider.GetCollider()) ||
+    if (CCollisionHandler::Instance().MapCollision(m_Collider.GetCollider(), m_CurrHP) ||
         CCollisionHandler::Instance().PlayerCheckCollison()) {
         m_Pos->SetX(m_LastSafePos->GetX());
     }
@@ -61,7 +61,7 @@ bool CEntity::Update() {
     m_Pos->SetY(m_Pos->GetY() + m_RigidBody->GetPosition()->GetY());
     m_Collider.Set(m_Pos->GetX(), m_Pos->GetY(), m_W,
                    m_H);
-    if (CCollisionHandler::Instance().MapCollision(m_Collider.GetCollider()) ||
+    if (CCollisionHandler::Instance().MapCollision(m_Collider.GetCollider(), m_CurrHP) ||
         CCollisionHandler::Instance().PlayerCheckCollison()) {
         m_IsGrounded = true;
         m_Pos->SetY(m_LastSafePos->GetY());
