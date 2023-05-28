@@ -14,8 +14,6 @@ class CMapBackgroundLayer : public CMapLayer {
 public:
     CMapBackgroundLayer();
 
-    void LayerRender() override;
-
     void LayerUpdate() override;
 
     void NextState();

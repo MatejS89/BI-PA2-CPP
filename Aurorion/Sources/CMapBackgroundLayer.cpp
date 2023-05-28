@@ -28,9 +28,6 @@ void CMapBackgroundLayer::LayerUpdate() {
     }
 }
 
-void CMapBackgroundLayer::LayerRender() {
-}
-
 CMapBackgroundLayer::CMapBackgroundLayer() : m_BackgroundState(BackgroundState::DAY), m_StateTimer(0) {
     SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), TARGET_COLOR.r, TARGET_COLOR.g, TARGET_COLOR.b,
                            TARGET_COLOR.a);
