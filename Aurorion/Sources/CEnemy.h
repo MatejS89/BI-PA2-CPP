@@ -32,7 +32,7 @@ private:
     const int RADIUS = 300;
     const int MAX_HP = 200;
     const int ATTACK_DMG = 10;
-    const int ATTACK_RANGE = 10;
+    const int ATTACK_RANGE = 30;
     const float ATTACKDELAY = 200.0F;
     float m_JumpDelay;
     float m_JumpTimer;

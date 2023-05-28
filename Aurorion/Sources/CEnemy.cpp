@@ -1,7 +1,8 @@
 #include "CEnemy.h"
 #include "CTimer.h"
 
-CEnemy::CEnemy(std::shared_ptr<SParamLoader> params) : CEntity(params), m_JumpDelay(0.0F), m_AttackTimer(0.0F) {
+CEnemy::CEnemy(std::shared_ptr<SParamLoader> params) : CEntity(params), m_JumpDelay(0.0F), m_AttackTimer(0.0F),
+                                                       m_JumpTimer(JUMP_TIME) {
     TheTextureManager::Instance().Load
             ("assets/Mob/Boar/Idle/Idle-Sheet.png", "BoarIdle");
     m_MaxHP = MAX_HP;
