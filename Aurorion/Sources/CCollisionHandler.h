@@ -10,6 +10,14 @@
 #include "CEntity.h"
 #include "CEnemy.h"
 
+enum BlockType {
+    EMPTY = 0,
+    LAVA = 601,
+    WATER = 480,
+    MUSHROOM = 416,
+    DIRT = 53,
+};
+
 class CCollisionHandler {
 public:
     bool MapCollision(const SDL_Rect &rect, int &hp);
@@ -46,8 +54,6 @@ private:
     int m_TileSize;
 
     std::shared_ptr<TileMap> m_TileLayer;
-
-    std::shared_ptr<CTileLayer> m_CollisionMap;
 
     std::shared_ptr<std::vector<std::shared_ptr<CGameObject>>> m_GameObjects;
 

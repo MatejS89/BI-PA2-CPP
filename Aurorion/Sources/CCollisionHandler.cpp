@@ -46,16 +46,17 @@ CCollisionHandler &CCollisionHandler::Instance() {
 void CCollisionHandler::LoadCollisionLayer(std::shared_ptr<TileMap> tileLayer) {
     m_TileLayer = tileLayer;
     m_TileSize = 16;
-    m_RowCount = m_TileLayer->size();
-    m_ColCount = m_TileLayer->front().size();
+    m_RowCount = tileLayer->size();
+    m_ColCount = tileLayer->front().size();
 }
 
 void CCollisionHandler::DestroyBlock() {
     CVector2D mousePos = TranslateMouse();
     if (mousePos.GetX() >= m_ColCount || mousePos.GetY() >= m_RowCount || mousePos.GetX() < 0 || mousePos.GetY() < 0)
         return;
-    if ((*m_TileLayer)[mousePos.GetY()][mousePos.GetX()] > 0) {
-        (*m_TileLayer)[mousePos.GetY()][mousePos.GetX()] = 0;
+    auto &selectedBlock = (*m_TileLayer)[mousePos.GetY()][mousePos.GetX()];
+    if (selectedBlock != LAVA && selectedBlock != WATER) {
+        selectedBlock = EMPTY;
     }
 }
 
@@ -63,8 +64,12 @@ void CCollisionHandler::BuildBlock() {
     CVector2D mousePos = TranslateMouse();
     if (mousePos.GetX() >= m_ColCount || mousePos.GetY() >= m_RowCount || mousePos.GetX() < 0 || mousePos.GetY() < 0)
         return;
-    if ((*m_TileLayer)[mousePos.GetY()][mousePos.GetX()] == 0) {
-        (*m_TileLayer)[mousePos.GetY()][mousePos.GetX()] = 53;
+    auto &selectedBlock = (*m_TileLayer)[mousePos.GetY()][mousePos.GetX()];
+    if (selectedBlock == EMPTY ||
+        selectedBlock == WATER ||
+        selectedBlock == LAVA ||
+        selectedBlock == MUSHROOM) {
+        selectedBlock = DIRT;
     }
 }
 
