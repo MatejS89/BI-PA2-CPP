@@ -50,7 +50,6 @@ bool CEntity::Update() {
     if (m_Collider.GetCollider().x < 0)
         m_Pos->SetX(m_LastSafePos->GetX());
     if (m_Collider.GetCollider().x + m_Collider.GetCollider().w > TheGame::Instance().GetMapWidth()) {
-//        std::cout << TheGame::Instance().GetMapWidth() << std::endl;
         m_Pos->SetX(m_LastSafePos->GetX());
     }
     if (CCollisionHandler::Instance().MapCollision(m_Collider.GetCollider()) ||
@@ -70,8 +69,6 @@ bool CEntity::Update() {
         m_IsGrounded = false;
     }
     *m_Centre = *m_Pos + CVector2D(m_W / 2, m_H / 2);
-
-//    std::cout << m_CurrHP << std::endl;
     return true;
 }
 
