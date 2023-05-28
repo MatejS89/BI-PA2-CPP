@@ -22,7 +22,7 @@ bool CEnemy::Update() {
 
     RandomJump();
     FollowPlayer();
-    CheckCollisionWithPlayer(m_Collider);
+    EnemyCheckCollision(m_Collider);
     return true;
 }
 
@@ -73,7 +73,7 @@ void CEnemy::FollowPlayer() {
     }
 }
 
-void CEnemy::CheckCollisionWithPlayer(const CCollider &collider) {
+void CEnemy::EnemyCheckCollision(const CCollider &collider) {
     m_RigidBody->Update();
     m_LastSafePos->SetX(m_Pos->GetX());
     m_Pos->SetX(m_Pos->GetX() + m_RigidBody->GetPosition()->GetX());
@@ -85,7 +85,7 @@ void CEnemy::CheckCollisionWithPlayer(const CCollider &collider) {
         m_Pos->SetX(m_LastSafePos->GetX());
     }
     if (CCollisionHandler::Instance().MapCollision(m_Collider.GetCollider(), m_CurrHP) ||
-        CCollisionHandler::Instance().EnemyCheckCollision(m_Collider)) {
+        CCollisionHandler::Instance().CheckCollisionWithPlayer(m_Collider)) {
         m_Pos->SetX(m_LastSafePos->GetX());
     }
     m_RigidBody->Update();
@@ -94,7 +94,7 @@ void CEnemy::CheckCollisionWithPlayer(const CCollider &collider) {
     m_Collider.Set(m_Pos->GetX(), m_Pos->GetY(), m_W,
                    m_H);
     if (CCollisionHandler::Instance().MapCollision(m_Collider.GetCollider(), m_CurrHP) ||
-        CCollisionHandler::Instance().EnemyCheckCollision(m_Collider)) {
+        CCollisionHandler::Instance().CheckCollisionWithPlayer(m_Collider)) {
         m_IsGrounded = true;
         m_Pos->SetY(m_LastSafePos->GetY());
     } else {

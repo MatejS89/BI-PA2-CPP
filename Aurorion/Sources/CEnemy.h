@@ -21,7 +21,7 @@ public:
 
     float GenerateRandomNum();
 
-    void CheckCollisionWithPlayer(const CCollider &collider);
+    void EnemyCheckCollision(const CCollider &collider);
 
     void FollowPlayer();
 
