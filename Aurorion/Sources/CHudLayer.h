@@ -13,6 +13,5 @@ public:
     void UpdateLayer() override;
 
 private:
-
     std::shared_ptr<CPlayer> m_Target;
 };
