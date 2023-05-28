@@ -11,6 +11,13 @@ enum class Rotation {
     LEFT
 };
 
+enum Direction {
+    LEFT = -1,
+    RIGHT = 1,
+    UP = -1,
+    DOWN = 1,
+};
+
 class CEntity : public CGameObject {
 public:
     CEntity(std::shared_ptr<SParamLoader> params);
@@ -67,8 +74,4 @@ protected:
     float m_FallTime;
 
     bool m_ImmuneToFall;
-    const int LEFT = -1;
-    const int RIGHT = 1;
-    const int UP = -1;
-    const int DOWN = 1;
 };
