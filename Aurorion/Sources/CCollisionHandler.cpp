@@ -28,7 +28,7 @@ bool CCollisionHandler::MapCollision(const SDL_Rect &rect) {
 
     for (int i = leftTile; i <= rightTile; ++i) {
         for (int j = topTile; j <= bottomTile; ++j) {
-            if ((*m_TileLayer)[j][i] > 0) {
+            if ((*m_TileLayer)[j][i] > 0 && (*m_TileLayer)[j][i] != 480) {
                 return true;
             }
         }
@@ -88,6 +88,7 @@ bool CCollisionHandler::PlayerCheckCollison() const {
     return false;
 }
 
+
 void CCollisionHandler::PlayerAttack(int dmg, int range, const Rotation &rotation) {
     const auto &player = (*m_GameObjects)[0];
     CCollider tmp(player->GetCollider().x, player->GetCollider().y, player->GetCollider().w +
@@ -103,8 +104,23 @@ void CCollisionHandler::PlayerAttack(int dmg, int range, const Rotation &rotatio
     }
 }
 
-void CCollisionHandler::EnemyAttack(int dmg) {
+void CCollisionHandler::EnemyAttack(int dmg, int range, const Rotation &rotation, const CCollider &enemy) {
+    const auto &player = (*m_GameObjects)[0];
+    CCollider tmp(enemy.GetCollider().x, enemy.GetCollider().y, enemy.GetCollider().w +
+                                                                range, enemy.GetCollider().h);
+    if (rotation == Rotation::RIGHT) {
+        tmp.Set(tmp.GetCollider().x - range, tmp.GetCollider().y, tmp.GetCollider().w,
+                tmp.GetCollider().h);
+    }
+    if (CheckCollision(tmp.GetCollider(), player->GetCollider()))
+        player->ReduceHp(dmg);
+}
 
+bool CCollisionHandler::EnemyCheckCollision(const CCollider &collider) const {
+    const auto &player = (*m_GameObjects)[0];
+    if (CheckCollision(collider.GetCollider(), player->GetCollider()))
+        return true;
+    return false;
 }
 
 CCollisionHandler::CCollisionHandler() = default;

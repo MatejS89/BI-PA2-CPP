@@ -8,6 +8,7 @@
 #include "CInputHandler.h"
 #include "CGameObject.h"
 #include "CEntity.h"
+#include "CEnemy.h"
 
 class CCollisionHandler {
 public:
@@ -21,7 +22,7 @@ public:
 
     void PlayerAttack(int dmg, int range, const Rotation &rotation);
 
-    void EnemyAttack(int dmg);
+    void EnemyAttack(int dmg, int range, const Rotation &rotation, const CCollider &col);
 
     static CCollisionHandler &Instance();
 
@@ -30,6 +31,8 @@ public:
     void BuildBlock();
 
     bool PlayerCheckCollison() const;
+
+    bool EnemyCheckCollision(const CCollider &collider) const;
 
 private:
     CCollisionHandler();
