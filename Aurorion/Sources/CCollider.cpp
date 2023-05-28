@@ -19,32 +19,3 @@ void CCollider::Set(int x, int y, int w, int h) {
             h - m_Buffer.h
     };
 }
-
-void CCollider::ExtendBuffer(int x) {
-    if (x > 0) {
-        m_Buffer = {m_Buffer.x,
-                    m_Buffer.y,
-                    m_Buffer.w + x,
-                    m_Buffer.h};
-    }
-    UpdateBox();
-}
-
-void CCollider::UpdateBox() {
-    m_Box = {
-            m_Box.x + m_Buffer.x,
-            m_Box.y + m_Buffer.y,
-            m_Box.w - m_Buffer.w,
-            m_Box.h - m_Buffer.h
-    };
-}
-
-void CCollider::ExtendCollider(int x) {
-    m_Box =
-            {m_Box.x,
-             m_Box.y,
-             m_Box.w + x,
-             m_Box.h
-            };
-    UpdateBox();
-}

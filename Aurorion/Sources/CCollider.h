@@ -13,12 +13,6 @@ public:
 
     void Set(int x, int y, int w, int h);
 
-    void ExtendBuffer(int x);
-
-    void ExtendCollider(int x);
-
-    void UpdateBox();
-
 private:
     SDL_Rect m_Box;
     SDL_Rect m_Buffer;
