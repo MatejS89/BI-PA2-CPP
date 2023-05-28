@@ -16,10 +16,14 @@ public:
 
     int GetMapWidth() const;
 
+    int GetMapHeight() const;
+
 private:
     std::vector<std::shared_ptr<CMapLayer>> m_MapLayers;
 
     int m_MapWidth;
+
+    int m_MapHeight;
 
     friend class CMapParser;
 };
