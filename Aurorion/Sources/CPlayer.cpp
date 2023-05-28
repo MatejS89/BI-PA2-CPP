@@ -16,21 +16,15 @@ void CPlayer::Draw() {
 }
 
 bool CPlayer::Update() {
-    m_currentFrame = (((SDL_GetTicks() / 100) % 4));
+    m_currentFrame = (SDL_GetTicks() / 100) % 4;
     HandleInput();
     PlayerCheckCollision();
     IncreaseFallCounter();
     return CEntity::Update();
-
-//    if (m_RigidBody->GetVelocity().GetY() > 0 && !m_IsGrounded)
-//        std::cout << "FALLING" << std::endl;
-//    else
-//        std::cout << "NOT FALLING" << std::endl;
 }
 
 void CPlayer::HandleInput() {
     CEntity::m_RigidBody->UnsetForce();
-//    std::cout << deltaTime << "     " << TheTimer::Instance().GetDeltaTime() << std::endl;
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_UP) &&
         TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_DOWN))
         return;
@@ -64,7 +58,6 @@ void CPlayer::HandleInput() {
         if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_SPACE)) {
             TheCollisionHandler::Instance().PlayerAttack(ATTACK_DMG, ATTACK_RANGE, m_Rotation);
             m_AttackDelay = ATTACK_DELAY;
-//            std::cout << "ATTACK" << std::endl;
         }
     } else
         m_AttackDelay -= TheTimer::Instance().GetDeltaTime();
@@ -79,25 +72,36 @@ void CPlayer::HandleInput() {
 }
 
 void CPlayer::PlayerCheckCollision() {
+    UpdateHorizontalMovement();
+    UpdateVerticalMovement();
+}
+
+void CPlayer::UpdateHorizontalMovement() {
     m_RigidBody->Update();
     m_LastSafePos->SetX(m_Pos->GetX());
     m_Pos->SetX(m_Pos->GetX() + m_RigidBody->GetPosition()->GetX());
-    m_Collider.Set(m_Pos->GetX(), m_Pos->GetY(), m_W,
-                   m_H);
-    if (m_Collider.GetCollider().x < 0)
-        m_Pos->SetX(m_LastSafePos->GetX());
-    if (m_Collider.GetCollider().x + m_Collider.GetCollider().w > TheGame::Instance().GetMapWidth()) {
-        m_Pos->SetX(m_LastSafePos->GetX());
-    }
-    if (CCollisionHandler::Instance().MapCollision(m_Collider.GetCollider(), m_CurrHP) ||
-        CCollisionHandler::Instance().CheckCollisionWithEnemies()) {
-        m_Pos->SetX(m_LastSafePos->GetX());
-    }
+    UpdateCollider();
+    HandleHorizontalCollisions();
+}
+
+void CPlayer::UpdateVerticalMovement() {
     m_RigidBody->Update();
     m_LastSafePos->SetY(m_Pos->GetY());
     m_Pos->SetY(m_Pos->GetY() + m_RigidBody->GetPosition()->GetY());
-    m_Collider.Set(m_Pos->GetX(), m_Pos->GetY(), m_W,
-                   m_H);
+    UpdateCollider();
+    HandleVerticalCollisions();
+}
+
+void CPlayer::HandleHorizontalCollisions() {
+    if (m_Collider.GetCollider().x < 0 ||
+        m_Collider.GetCollider().x + m_Collider.GetCollider().w > TheGame::Instance().GetMapWidth() ||
+        CCollisionHandler::Instance().MapCollision(m_Collider.GetCollider(), m_CurrHP) ||
+        CCollisionHandler::Instance().CheckCollisionWithEnemies()) {
+        m_Pos->SetX(m_LastSafePos->GetX());
+    }
+}
+
+void CPlayer::HandleVerticalCollisions() {
     if (CCollisionHandler::Instance().MapCollision(m_Collider.GetCollider(), m_CurrHP) ||
         CCollisionHandler::Instance().CheckCollisionWithEnemies()) {
         m_IsGrounded = true;

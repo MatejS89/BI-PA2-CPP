@@ -14,10 +14,6 @@ public:
 
     bool Update() override;
 
-    void HandleInput();
-
-    void PlayerCheckCollision();
-
 private:
     const int JUMP_FORCE = 10;
     const int JUMP_TIME = 15;
@@ -27,4 +23,16 @@ private:
     const int ATTACK_RANGE = 30;
     const float ATTACK_DELAY = 100.0F;
     float m_AttackDelay;
+
+    void HandleInput();
+
+    void PlayerCheckCollision();
+
+    void UpdateHorizontalMovement();
+
+    void UpdateVerticalMovement();
+
+    void HandleVerticalCollisions();
+
+    void HandleHorizontalCollisions();
 };
