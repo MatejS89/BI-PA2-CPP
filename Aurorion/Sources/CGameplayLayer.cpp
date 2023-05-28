@@ -16,6 +16,7 @@ void CGameplayLayer::Init(std::shared_ptr<CHudLayer> hud) {
     m_gameObjects->push_back(enemy);
     m_gameObjects->push_back(enemy2);
     TheCollisionHandler::Instance().LoadGameObjects(m_gameObjects);
+    TheCollisionHandler::Instance().LoadCollisionLayer(m_LevelMap->GetMapLayers().back()->GetTileMap());
 }
 
 void CGameplayLayer::DrawLayer() {

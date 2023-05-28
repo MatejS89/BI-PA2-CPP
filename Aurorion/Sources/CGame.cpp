@@ -51,10 +51,8 @@ bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int he
         std::shared_ptr<CHudLayer> hud = std::make_shared<CHudLayer>();
         std::shared_ptr<CGameplayLayer> gameplayLayer = std::make_shared<CGameplayLayer>();
         gameplayLayer->Init(hud);
-        TheCollisionHandler::Instance().LoadCollisionLayer(
-                gameplayLayer->GetMap()->GetMapLayers()[1]->GetTileMap());
-        m_GameLayers.emplace_back(gameplayLayer);
-        m_GameLayers.emplace_back(hud);
+        m_GameLayers.push_back(gameplayLayer);
+        m_GameLayers.push_back(hud);
     } else {
         m_isRunning = false;
         return false;
@@ -63,11 +61,10 @@ bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int he
 }
 
 void CGame::Update() {
-    float deltaTime = TheTimer::Instance().GetDeltaTime();
     for (const auto &item: m_GameLayers) {
         item->UpdateLayer();
     }
-    CCamera::Instance().Update(deltaTime);
+    CCamera::Instance().Update();
 }
 
 void CGame::Render() {
@@ -75,7 +72,6 @@ void CGame::Render() {
     for (const auto &item: m_GameLayers) {
         item->DrawLayer();
     }
-//    SDL_SetRenderDrawColor(m_renderer, 135, 206, 235, 255);
     SDL_RenderPresent(m_renderer);
 }
 
@@ -107,11 +103,7 @@ int CGame::GetWindowWidth() const {
 }
 
 int CGame::GetMapWidth() const {
-    return m_GameLayers[0]->GetMap()->GetMapWidth();
-}
-
-CGameLayer &CGame::GetLayer(const size_t index) {
-    return *m_GameLayers[index];
+    return m_GameLayers.front()->GetMap()->GetMapWidth();
 }
 
 int CGame::GetMapHeight() const {
