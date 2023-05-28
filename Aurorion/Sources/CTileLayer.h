@@ -6,6 +6,7 @@
 #include "STileSet.h"
 #include <random>
 #include <vector>
+#include "EBlockType.h"
 
 using TilesetList = std::vector<STileSet>;
 

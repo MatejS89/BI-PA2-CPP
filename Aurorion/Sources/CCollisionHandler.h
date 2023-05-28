@@ -9,14 +9,7 @@
 #include "CGameObject.h"
 #include "CEntity.h"
 #include "CEnemy.h"
-
-enum BlockType {
-    EMPTY = 0,
-    LAVA = 601,
-    WATER = 480,
-    MUSHROOM = 416,
-    DIRT = 53,
-};
+#include "EBlockType.h"
 
 class CCollisionHandler {
 public:

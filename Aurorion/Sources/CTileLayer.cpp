@@ -51,18 +51,18 @@ void CTileLayer::LayerRender() {
 void CTileLayer::LayerUpdate() {
     if (m_GrowDelay <= 0) {
         m_GrowDelay = GROW_TIME;
-        int xCoord = floor(GenerateRandomCoordX() / 16);
-        for (int i = floor(TheGame::Instance().GetMapHeight() / 16) - 1; i >= 0; i--) {
-            if ((*m_TileMap)[i][xCoord] == 601 || (*m_TileMap)[i][xCoord] == 480)
+        int xCoord = floor(GenerateRandomCoordX() / m_TileSize);
+        for (int i = floor(TheGame::Instance().GetMapHeight() / m_TileSize) - 1; i >= 0; i--) {
+            auto &currentTile = (*m_TileMap)[i][xCoord];
+            if (currentTile == LAVA || currentTile == WATER)
                 break;
-            if ((*m_TileMap)[i][xCoord] == 0) {
-                (*m_TileMap)[i][xCoord] = 416;
+            if (currentTile == EMPTY) {
+                currentTile = 416;
                 break;
             }
         }
     } else
         m_GrowDelay -= TheTimer::Instance().GetDeltaTime();
-    LayerRender();
 }
 
 std::shared_ptr<TileMap> CTileLayer::GetTileMap() {
@@ -73,7 +73,5 @@ int CTileLayer::GenerateRandomCoordX() const {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<int> distribution(0, TheGame::Instance().GetMapWidth());
-
-
     return distribution(gen);
 }
