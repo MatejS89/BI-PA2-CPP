@@ -3,7 +3,7 @@
 #include "CCollisionHandler.h"
 #include "CTimer.h"
 
-CPlayer::CPlayer(std::shared_ptr<SParamLoader> params) : CEntity(params) {
+CPlayer::CPlayer(std::shared_ptr<SParamLoader> params) : CEntity(params), m_AttackDelay(0.0F) {
     m_Collider.SetBuffer(20, 10, 40, 30);
     TheTextureManager::Instance().Load
             ("assets/Character/Idle/Idle-Sheet.png", "idle");
@@ -60,10 +60,14 @@ void CPlayer::HandleInput() {
     } else {
         m_IsJumping = false;
     }
-
-    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_SPACE)) {
-        TheCollisionHandler::Instance().PlayerAttack(ATTACK_DMG, ATTACK_RANGE, m_Rotation);
-    }
+    if (m_AttackDelay <= 0) {
+        if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_SPACE)) {
+            TheCollisionHandler::Instance().PlayerAttack(ATTACK_DMG, ATTACK_RANGE, m_Rotation);
+            m_AttackDelay = ATTACK_DELAY;
+            std::cout << "ATTACK" << std::endl;
+        }
+    } else
+        m_AttackDelay -= TheTimer::Instance().GetDeltaTime();
 
     if (TheInputHandler::Instance().GetMouseState() == EMouseButtonState::LEFT_BUTTON_DOWN) {
         CCollisionHandler::Instance().DestroyBlock();

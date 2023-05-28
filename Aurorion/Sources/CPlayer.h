@@ -23,4 +23,6 @@ private:
     const int MAX_HP = 100;
     const int ATTACK_DMG = 10;
     const int ATTACK_RANGE = 30;
+    const float ATTACK_DELAY = 100.0F;
+    float m_AttackDelay;
 };
