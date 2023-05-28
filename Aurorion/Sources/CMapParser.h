@@ -12,6 +12,8 @@
 #include "CTileLayer.h"
 #include <sstream>
 #include <iostream>
+#include "CMapBackgroundLayer.h"
+#include "CCollisionHandler.h"
 
 class CMapParser {
 public:
