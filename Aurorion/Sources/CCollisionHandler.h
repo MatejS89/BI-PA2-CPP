@@ -30,9 +30,9 @@ public:
 
     void BuildBlock();
 
-    bool PlayerCheckCollison() const;
+    bool CheckCollisionWithEnemies() const;
 
-    bool EnemyCheckCollision(const CCollider &collider) const;
+    bool CheckCollisionWithPlayer(const CCollider &collider) const;
 
 private:
     CCollisionHandler();

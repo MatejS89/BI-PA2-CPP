@@ -30,7 +30,8 @@ bool CCollisionHandler::MapCollision(const SDL_Rect &rect, int &hp) {
         for (int j = topTile; j <= bottomTile; ++j) {
             if ((*m_TileLayer)[j][i] == 601)
                 hp -= 1;
-            if ((*m_TileLayer)[j][i] > 0 && (*m_TileLayer)[j][i] != 480 && (*m_TileLayer)[j][i] != 601) {
+            if ((*m_TileLayer)[j][i] > 0 && (*m_TileLayer)[j][i] != 480 && (*m_TileLayer)[j][i] != 601 &&
+                (*m_TileLayer)[j][i] != 602) {
                 return true;
             }
         }
@@ -80,7 +81,7 @@ void CCollisionHandler::LoadGameObjects(std::shared_ptr<std::vector<std::shared_
     m_GameObjects = gameObjects;
 }
 
-bool CCollisionHandler::PlayerCheckCollison() const {
+bool CCollisionHandler::CheckCollisionWithEnemies() const {
     const auto &player = (*m_GameObjects)[0];
     for (size_t i = 1; i < m_GameObjects->size(); i++) {
         const auto &enemy = (*m_GameObjects)[i];
@@ -118,7 +119,7 @@ void CCollisionHandler::EnemyAttack(int dmg, int range, const Rotation &rotation
         player->ReduceHp(dmg);
 }
 
-bool CCollisionHandler::EnemyCheckCollision(const CCollider &collider) const {
+bool CCollisionHandler::CheckCollisionWithPlayer(const CCollider &collider) const {
     const auto &player = (*m_GameObjects)[0];
     if (CheckCollision(collider.GetCollider(), player->GetCollider()))
         return true;
