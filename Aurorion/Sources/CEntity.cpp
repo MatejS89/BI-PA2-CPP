@@ -1,6 +1,5 @@
 #include "CEntity.h"
 #include "CGame.h"
-#include "CCollisionHandler.h"
 
 CEntity::CEntity(std::shared_ptr<SParamLoader> params) : CGameObject(params),
                                                          m_W(params->m_W),
@@ -31,6 +30,8 @@ void CEntity::Draw() {
                                           m_Pos->GetY(), m_W, m_H, m_currentRow,
                                           m_currentFrame,
                                           m_Rotation == Rotation::RIGHT ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
+    SDL_Color tmp;
+    SDL_GetRenderDrawColor(TheGame::Instance().GetRenderer(), &tmp.r, &tmp.g, &tmp.b, &tmp.a);
     SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), 255, 0, 0, 255);
     const CVector2D &cam = TheCamera::Instance().GetPosition();
     SDL_Rect colli = m_Collider.GetCollider();
@@ -38,6 +39,7 @@ void CEntity::Draw() {
     colli.y -= (cam.GetY());
 //    std::cout << m_Collider.GetCollider().w << std::endl;
     SDL_RenderDrawRect(TheGame::Instance().GetRenderer(), &colli);
+    SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), tmp.r, tmp.g, tmp.b, tmp.a);
 }
 
 bool CEntity::Update() {
