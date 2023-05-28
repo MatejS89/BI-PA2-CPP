@@ -43,6 +43,9 @@ public:
     CVector2D &GetAcceleration();
 
 private:
+
+    const float CONST_MASS = 1.0F;
+    const float CONST_GRAVITY = 4.0F;
     float m_Mass;
     float m_Gravity;
     CVector2D m_Force;

@@ -1,9 +1,6 @@
 #include "CRigidBody.h"
 #include <iostream>
 
-#define CONST_MASS 1.0F
-#define CONST_GRAVITY 4.0F
-
 
 CRigidBody::CRigidBody() : m_Mass(CONST_MASS), m_Gravity(CONST_GRAVITY),
                            m_Position(std::make_shared<CVector2D>(0, 0)) {}
