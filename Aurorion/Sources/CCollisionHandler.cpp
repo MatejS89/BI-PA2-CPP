@@ -31,7 +31,7 @@ bool CCollisionHandler::MapCollision(const SDL_Rect &rect, int &hp) {
             if ((*m_TileLayer)[j][i] == 601)
                 hp -= 1;
             if ((*m_TileLayer)[j][i] > 0 && (*m_TileLayer)[j][i] != 480 && (*m_TileLayer)[j][i] != 601 &&
-                (*m_TileLayer)[j][i] != 602) {
+                ((*m_TileLayer)[j][i] != 416)) {
                 return true;
             }
         }
