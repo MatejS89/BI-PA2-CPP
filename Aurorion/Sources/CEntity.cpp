@@ -19,7 +19,9 @@ CEntity::CEntity(std::shared_ptr<SParamLoader> params) : CGameObject(params),
                                                                  params->m_X, params->m_Y, params->m_W,
                                                                  params->m_H),
                                                          m_Rotation(Rotation::RIGHT),
-                                                         m_IsAlive(true) {
+                                                         m_IsAlive(true),
+                                                         m_FallTime(0.0F),
+                                                         m_ImmuneToFall(true) {
     m_Centre = std::make_shared<CVector2D>(params->m_X + m_W / 2, params->m_Y + m_H / 2);
     m_RigidBody->SetPosition({params->m_X, params->m_Y});
 }
@@ -41,33 +43,6 @@ void CEntity::Draw() {
 bool CEntity::Update() {
     if (m_CurrHP <= 0)
         return false;
-
-    m_RigidBody->Update();
-    m_LastSafePos->SetX(m_Pos->GetX());
-    m_Pos->SetX(m_Pos->GetX() + m_RigidBody->GetPosition()->GetX());
-    m_Collider.Set(m_Pos->GetX(), m_Pos->GetY(), m_W,
-                   m_H);
-    if (m_Collider.GetCollider().x < 0)
-        m_Pos->SetX(m_LastSafePos->GetX());
-    if (m_Collider.GetCollider().x + m_Collider.GetCollider().w > TheGame::Instance().GetMapWidth()) {
-        m_Pos->SetX(m_LastSafePos->GetX());
-    }
-    if (CCollisionHandler::Instance().MapCollision(m_Collider.GetCollider(), m_CurrHP) ||
-        CCollisionHandler::Instance().PlayerCheckCollison()) {
-        m_Pos->SetX(m_LastSafePos->GetX());
-    }
-    m_RigidBody->Update();
-    m_LastSafePos->SetY(m_Pos->GetY());
-    m_Pos->SetY(m_Pos->GetY() + m_RigidBody->GetPosition()->GetY());
-    m_Collider.Set(m_Pos->GetX(), m_Pos->GetY(), m_W,
-                   m_H);
-    if (CCollisionHandler::Instance().MapCollision(m_Collider.GetCollider(), m_CurrHP) ||
-        CCollisionHandler::Instance().PlayerCheckCollison()) {
-        m_IsGrounded = true;
-        m_Pos->SetY(m_LastSafePos->GetY());
-    } else {
-        m_IsGrounded = false;
-    }
     *m_Centre = *m_Pos + CVector2D(m_W / 2, m_H / 2);
     return true;
 }
@@ -93,4 +68,15 @@ const SDL_Rect &CEntity::GetCollider() const {
 
 void CEntity::ReduceHp(int dmg) {
     m_CurrHP -= dmg;
+}
+
+void CEntity::IncreaseFallCounter() {
+    if (m_RigidBody->GetVelocity().GetY() > 0 && !m_IsGrounded)
+        m_FallTime += TheTimer::Instance().GetDeltaTime();
+}
+
+void CEntity::DealFallDamage() {
+    if (m_FallTime >= 70.0F && !m_ImmuneToFall) {
+        m_CurrHP -= m_FallTime * m_RigidBody->GetGravity() * 0.01F;
+    }
 }

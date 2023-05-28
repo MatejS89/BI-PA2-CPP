@@ -31,6 +31,10 @@ public:
 
     const SDL_Rect &GetCollider() const override;
 
+    void IncreaseFallCounter();
+
+    void DealFallDamage();
+
 protected:
     int m_W;
     int m_H;
@@ -62,6 +66,9 @@ protected:
 
     bool m_IsAlive;
 
+    float m_FallTime;
+
+    bool m_ImmuneToFall;
     const int LEFT = -1;
     const int RIGHT = 1;
     const int UP = -1;

@@ -18,7 +18,10 @@ void CPlayer::Draw() {
 bool CPlayer::Update() {
     m_currentFrame = (((SDL_GetTicks() / 100) % 4));
     HandleInput();
+    PlayerCheckCollision();
+    IncreaseFallCounter();
     return CEntity::Update();
+
 //    if (m_RigidBody->GetVelocity().GetY() > 0 && !m_IsGrounded)
 //        std::cout << "FALLING" << std::endl;
 //    else
@@ -75,5 +78,38 @@ void CPlayer::HandleInput() {
 
     if (TheInputHandler::Instance().GetMouseState() == EMouseButtonState::RIGHT_BUTTON_DOWN) {
         CCollisionHandler::Instance().BuildBlock();
+    }
+}
+
+void CPlayer::PlayerCheckCollision() {
+    m_RigidBody->Update();
+    m_LastSafePos->SetX(m_Pos->GetX());
+    m_Pos->SetX(m_Pos->GetX() + m_RigidBody->GetPosition()->GetX());
+    m_Collider.Set(m_Pos->GetX(), m_Pos->GetY(), m_W,
+                   m_H);
+    if (m_Collider.GetCollider().x < 0)
+        m_Pos->SetX(m_LastSafePos->GetX());
+    if (m_Collider.GetCollider().x + m_Collider.GetCollider().w > TheGame::Instance().GetMapWidth()) {
+        m_Pos->SetX(m_LastSafePos->GetX());
+    }
+    if (CCollisionHandler::Instance().MapCollision(m_Collider.GetCollider(), m_CurrHP) ||
+        CCollisionHandler::Instance().CheckCollisionWithEnemies()) {
+        m_Pos->SetX(m_LastSafePos->GetX());
+    }
+    m_RigidBody->Update();
+    m_LastSafePos->SetY(m_Pos->GetY());
+    m_Pos->SetY(m_Pos->GetY() + m_RigidBody->GetPosition()->GetY());
+    m_Collider.Set(m_Pos->GetX(), m_Pos->GetY(), m_W,
+                   m_H);
+    if (CCollisionHandler::Instance().MapCollision(m_Collider.GetCollider(), m_CurrHP) ||
+        CCollisionHandler::Instance().CheckCollisionWithEnemies()) {
+        m_IsGrounded = true;
+        DealFallDamage();
+        m_ImmuneToFall = false;
+        m_FallTime = 0.0F;
+        m_Pos->SetY(m_LastSafePos->GetY());
+    } else {
+        IncreaseFallCounter();
+        m_IsGrounded = false;
     }
 }
