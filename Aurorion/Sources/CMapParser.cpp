@@ -1,7 +1,5 @@
 #include "CMapParser.h"
 
-#include <utility>
-
 CMapParser CMapParser::m_Instance;
 
 CMapParser &CMapParser::Instance() {
@@ -19,6 +17,7 @@ bool CMapParser::Parse(const char *name, const char *source) {
         return false;
     }
 
+
     xmlNodePtr root = xmlDocGetRootElement(doc);
     int colCount = stoi(GetAttributeContent(root, "width"));
     int rowCount = stoi(GetAttributeContent(root, "height"));
@@ -32,6 +31,8 @@ bool CMapParser::Parse(const char *name, const char *source) {
     }
 
     CMap gameMap;
+    CMapBackgroundLayer backgroundLayer;
+    gameMap.m_MapLayers.push_back(std::make_shared<CMapBackgroundLayer>(backgroundLayer));
     for (xmlNodePtr elem = xmlFirstElementChild(root); elem != nullptr; elem = xmlNextElementSibling(elem)) {
         if (xmlStrcmp(elem->name, reinterpret_cast<const xmlChar *> ("layer")) == 0) {
             CTileLayer layer = ParseTileLayer(elem, tileSets, tileWidth,
@@ -39,8 +40,8 @@ bool CMapParser::Parse(const char *name, const char *source) {
             gameMap.m_MapLayers.push_back(std::make_shared<CTileLayer>(layer));
         }
     }
-
     gameMap.m_MapWidth = colCount * tileWidth;
+    gameMap.m_MapHeight = rowCount * tileWidth;
     m_Maps[name] = std::make_shared<CMap>(gameMap);
     xmlFreeDoc(doc);
     xmlCleanupParser();
