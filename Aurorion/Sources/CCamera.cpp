@@ -22,7 +22,7 @@ void CCamera::SetTarget(std::shared_ptr<CVector2D> target) {
     m_Target = target;
 }
 
-void CCamera::Update(float deltaTime) {
+void CCamera::Update() {
     if (m_Target == nullptr)
         return;
 

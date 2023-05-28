@@ -11,7 +11,7 @@ public:
 
     CCamera(const CCamera &other) = delete;
 
-    void Update(float deltaTime);
+    void Update();
 
     SDL_Rect &GetViewPort();
 
