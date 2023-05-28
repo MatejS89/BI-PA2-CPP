@@ -6,7 +6,6 @@
 #include "CCollisionHandler.h"
 #include <random>
 
-
 class CEnemy : public CEntity {
 public:
     CEnemy(std::shared_ptr<SParamLoader> params);
@@ -17,15 +16,26 @@ public:
 
     bool Update() override;
 
-    void RandomJump();
+private:
 
     float GenerateRandomNum();
 
-    void EnemyCheckCollision(const CCollider &collider);
+    void RandomJump();
 
-    void FollowPlayer();
+    void PerformJump();
 
-private:
+    void ResetJump();
+
+    void EnemyCheckCollision();
+
+    void UpdateHorizontalMovement();
+
+    void UpdateVerticalMovement();
+
+    void HandleHorizontalCollisions();
+
+    void HandleVerticalCollisions();
+
     const int JUMP_FORCE = 20;
     const int JUMP_TIME = 10;
     const float MOVEMENT_SPEED = 1.5F;
@@ -33,8 +43,14 @@ private:
     const int MAX_HP = 200;
     const int ATTACK_DMG = 10;
     const int ATTACK_RANGE = 30;
-    const float ATTACKDELAY = 200.0F;
+    const float ATTACK_DELAY = 200.0F;
     float m_JumpDelay;
     float m_JumpTimer;
     float m_AttackTimer;
+
+    bool IsPlayerInRange();
+
+    void PerformAttack();
+
+    void MoveTowardsPlayer();
 };
