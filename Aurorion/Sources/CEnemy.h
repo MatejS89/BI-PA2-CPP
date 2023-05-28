@@ -34,7 +34,7 @@ private:
     const int ATTACK_DMG = 10;
     const int ATTACK_RANGE = 10;
     const float ATTACKDELAY = 200.0F;
-    float m_AttackTimer;
     float m_JumpDelay;
     float m_JumpTimer;
+    float m_AttackTimer;
 };
