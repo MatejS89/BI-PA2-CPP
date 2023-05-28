@@ -36,7 +36,6 @@ void CEntity::Draw() {
     SDL_Rect colli = m_Collider.GetCollider();
     colli.x -= (cam.GetX());
     colli.y -= (cam.GetY());
-//    std::cout << m_Collider.GetCollider().w << std::endl;
     SDL_RenderDrawRect(TheGame::Instance().GetRenderer(), &colli);
     SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), tmp.r, tmp.g, tmp.b, tmp.a);
 }
@@ -77,6 +76,10 @@ void CEntity::DealFallDamage() {
     if (m_FallTime >= 70.0F && !m_ImmuneToFall) {
         m_CurrHP -= m_FallTime * m_RigidBody->GetGravity() * 0.01F;
     }
+}
+
+void CEntity::UpdateCollider() {
+    m_Collider.Set(m_Pos->GetX(), m_Pos->GetY(), m_W, m_H);
 }
 
 CEntity::~CEntity() = default;

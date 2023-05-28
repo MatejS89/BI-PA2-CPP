@@ -42,6 +42,8 @@ public:
 
     void DealFallDamage();
 
+    void UpdateCollider();
+
 protected:
     int m_W;
     int m_H;
