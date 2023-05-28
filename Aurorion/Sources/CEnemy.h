@@ -3,6 +3,7 @@
 #include "CEntity.h"
 #include "CRigidBody.h"
 #include "CCamera.h"
+#include "CCollisionHandler.h"
 #include <random>
 
 
@@ -20,6 +21,8 @@ public:
 
     float GenerateRandomNum();
 
+    void CheckCollisionWithPlayer(const CCollider &collider);
+
     void FollowPlayer();
 
 private:
@@ -28,6 +31,10 @@ private:
     const float MOVEMENT_SPEED = 1.5F;
     const int RADIUS = 300;
     const int MAX_HP = 200;
+    const int ATTACK_DMG = 10;
+    const int ATTACK_RANGE = 10;
+    const float ATTACKDELAY = 200.0F;
+    float m_AttackTimer;
     float m_JumpDelay;
     float m_JumpTimer;
 };
