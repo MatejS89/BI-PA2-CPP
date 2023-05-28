@@ -21,4 +21,6 @@ private:
     const int JUMP_TIME = 15;
     const int MOVEMENT_SPEED = 3;
     const int MAX_HP = 100;
+    const int ATTACK_DMG = 10;
+    const int ATTACK_RANGE = 30;
 };

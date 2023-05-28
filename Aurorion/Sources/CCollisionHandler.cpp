@@ -88,13 +88,23 @@ bool CCollisionHandler::PlayerCheckCollison() const {
     return false;
 }
 
-void CCollisionHandler::PlayerAttack(int dmg) {
+void CCollisionHandler::PlayerAttack(int dmg, int range, const Rotation &rotation) {
     const auto &player = (*m_GameObjects)[0];
+    CCollider tmp(player->GetCollider().x, player->GetCollider().y, player->GetCollider().w +
+                                                                    range, player->GetCollider().h);
+    if (rotation == Rotation::LEFT) {
+        tmp.Set(tmp.GetCollider().x - range, tmp.GetCollider().y, tmp.GetCollider().w,
+                tmp.GetCollider().h);
+    }
     for (size_t i = 1; i < m_GameObjects->size(); i++) {
         const auto &enemy = (*m_GameObjects)[i];
-        if (CheckCollision(player->GetCollider(), enemy->GetCollider()))
+        if (CheckCollision(tmp.GetCollider(), enemy->GetCollider()))
             enemy->ReduceHp(dmg);
     }
+}
+
+void CCollisionHandler::EnemyAttack(int dmg) {
+
 }
 
 CCollisionHandler::CCollisionHandler() = default;

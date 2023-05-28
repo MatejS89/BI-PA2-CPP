@@ -62,8 +62,7 @@ void CPlayer::HandleInput() {
     }
 
     if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_SPACE)) {
-        m_Collider.ExtendCollider(50);
-        TheCollisionHandler::Instance().PlayerAttack(10);
+        TheCollisionHandler::Instance().PlayerAttack(ATTACK_DMG, ATTACK_RANGE, m_Rotation);
     }
 
     if (TheInputHandler::Instance().GetMouseState() == EMouseButtonState::LEFT_BUTTON_DOWN) {

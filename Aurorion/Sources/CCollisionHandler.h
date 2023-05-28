@@ -7,6 +7,7 @@
 #include "CGame.h"
 #include "CInputHandler.h"
 #include "CGameObject.h"
+#include "CEntity.h"
 
 class CCollisionHandler {
 public:
@@ -18,7 +19,9 @@ public:
 
     void LoadGameObjects(std::shared_ptr<std::vector<std::shared_ptr<CGameObject>>>);
 
-    void PlayerAttack(int dmg);
+    void PlayerAttack(int dmg, int range, const Rotation &rotation);
+
+    void EnemyAttack(int dmg);
 
     static CCollisionHandler &Instance();
 
