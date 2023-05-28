@@ -8,20 +8,15 @@ void CMapBackgroundLayer::LayerUpdate() {
     if (m_StateTimer <= 0) {
         SDL_Color tmp;
         SDL_GetRenderDrawColor(TheGame::Instance().GetRenderer(), &tmp.r, &tmp.g, &tmp.b, &tmp.a);
-        std::cout << static_cast<int>(tmp.r) << " " << static_cast<int>(tmp.g) << " " << static_cast<int>(tmp.b)
-                  << std::endl;
         if (IsDay(tmp)) {
-            std::cout << "SWITCH" << std::endl;
             NextState();
         } else if (IsNight(tmp))
             NextState();
         switch (m_BackgroundState) {
             case BackgroundState::NIGHT:
-                std::cout << "TONIGHT" << std::endl;
                 ChangeIntoDay(tmp);
                 break;
             case BackgroundState::DAY:
-                std::cout << "TODAY" << std::endl;
                 ChangeIntoNight(tmp);
                 break;
             default:
