@@ -14,7 +14,7 @@ public:
 
     std::shared_ptr<CVector2D> GetCentre();
 
-    virtual const SDL_Rect &GetCollider() const;
+    virtual const SDL_Rect &GetCollider() const = 0;
 
 protected:
     CGameObject(std::shared_ptr<SParamLoader> params) {};
