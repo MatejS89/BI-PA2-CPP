@@ -11,25 +11,23 @@ bool CMapParser::Load() {
 }
 
 bool CMapParser::Parse(const char *name, const char *source) {
+    m_Source = source;
     xmlDocPtr doc = xmlReadFile(source, "UTF-8", 0);
     if (doc == nullptr) {
         std::cout << "FILE NOT READ" << std::endl;
         return false;
     }
 
-
     xmlNodePtr root = xmlDocGetRootElement(doc);
     int colCount = stoi(GetAttributeContent(root, "width"));
     int rowCount = stoi(GetAttributeContent(root, "height"));
     int tileWidth = stoi(GetAttributeContent(root, "tilewidth"));
-
-    TilesetList tileSets;
+    std::shared_ptr<TilesetList> tileSets = std::make_shared<TilesetList>();
     for (xmlNodePtr elem = xmlFirstElementChild(root); elem != nullptr; elem = xmlNextElementSibling(elem)) {
         if (xmlStrcmp(elem->name, reinterpret_cast<const xmlChar *> ("tileset")) == 0) {
-            tileSets.push_back(ParseTileSet(elem));
+            tileSets->push_back(ParseTileSet(elem));
         }
     }
-
     CMap gameMap;
     CMapBackgroundLayer backgroundLayer;
     gameMap.m_MapLayers.push_back(std::make_shared<CMapBackgroundLayer>(backgroundLayer));
@@ -44,7 +42,6 @@ bool CMapParser::Parse(const char *name, const char *source) {
     gameMap.m_MapHeight = rowCount * tileWidth;
     m_Maps[name] = std::make_shared<CMap>(gameMap);
     xmlFreeDoc(doc);
-    xmlCleanupParser();
     return true;
 }
 
@@ -71,16 +68,17 @@ std::string CMapParser::GetAttributeContent(xmlNodePtr ptr, const char *needle) 
     return contentStr;
 }
 
-CTileLayer CMapParser::ParseTileLayer(xmlNodePtr ptr, const TilesetList &tileSets,
+CTileLayer CMapParser::ParseTileLayer(xmlNodePtr ptr, std::shared_ptr<TilesetList> tileSets,
                                       int tileSize, int rowCount, int colCount) {
-    xmlNodePtr data;
+    xmlNodePtr data = nullptr;
     for (xmlNodePtr elem = xmlFirstElementChild(ptr); elem != nullptr; elem = xmlNextElementSibling(elem)) {
         if (xmlStrcmp(elem->name, reinterpret_cast<const xmlChar *> ("data")) == 0) {
             data = elem;
             break;
         }
     }
-
+    if (data == nullptr)
+        throw std::logic_error("CHYBA");
     xmlChar *content = xmlNodeGetContent(data);
 
     std::shared_ptr<TileMap> tileMap = std::make_shared<TileMap>();
@@ -107,6 +105,10 @@ CTileLayer CMapParser::ParseTileLayer(xmlNodePtr ptr, const TilesetList &tileSet
 
 std::shared_ptr<CMap> CMapParser::GetMaps(const std::string &id) {
     return m_Maps[id];
+}
+
+CMapParser::~CMapParser() {
+    xmlCleanupParser();
 }
 
 
