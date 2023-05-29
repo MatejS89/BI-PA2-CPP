@@ -11,5 +11,7 @@ public:
 
     virtual void LayerUpdate() = 0;
 
+    virtual void SaveMapLayer();
+
     virtual std::shared_ptr<TileMap> GetTileMap();
 };
