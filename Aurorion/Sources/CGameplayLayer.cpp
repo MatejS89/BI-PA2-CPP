@@ -37,3 +37,7 @@ void CGameplayLayer::UpdateLayer() {
 std::shared_ptr<CMap> CGameplayLayer::GetMap() {
     return m_LevelMap;
 }
+
+void CGameplayLayer::SaveLayer() {
+    m_LevelMap->SaveMap();
+}

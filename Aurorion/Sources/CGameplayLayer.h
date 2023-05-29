@@ -21,6 +21,8 @@ public:
 
     void UpdateLayer() override;
 
+    void SaveLayer() override;
+
 private:
     std::shared_ptr<CMap> m_LevelMap;
 
