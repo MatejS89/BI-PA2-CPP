@@ -35,5 +35,5 @@ private:
     const int TRANSFORM = 50;
     const float STATE_TIME = 50.0F;
     float m_StateTimer;
-    const SDL_Color TARGET_COLOR = {102, 153, 255, 255};
+    const SDL_Color TARGET_COLOR = {153, 204, 255, 255};
 };
