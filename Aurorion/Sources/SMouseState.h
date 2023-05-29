@@ -10,8 +10,6 @@ enum class EMouseButtonState {
 };
 
 struct SMouseState {
-    std::string GetMouseButtonState();
-
     CVector2D m_MousePos;
     EMouseButtonState m_ButtonState;
 };
