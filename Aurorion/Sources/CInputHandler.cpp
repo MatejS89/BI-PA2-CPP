@@ -16,6 +16,7 @@ void CInputHandler::Listen() {
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
             case SDL_QUIT:
+                TheGame::Instance().Save();
                 TheGame::Instance().Quit();
                 break;
             case SDL_KEYDOWN:
@@ -44,7 +45,7 @@ void CInputHandler::Listen() {
                     m_MouseState.m_ButtonState = EMouseButtonState::RIGHT_BUTTON_DOWN;
                 }
                 break;
-                
+
             case SDL_MOUSEBUTTONUP:
                 m_MouseState.m_ButtonState = EMouseButtonState::NONE;
                 break;
