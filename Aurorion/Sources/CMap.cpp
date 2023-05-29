@@ -26,3 +26,9 @@ int CMap::GetMapWidth() const {
 int CMap::GetMapHeight() const {
     return m_MapHeight;
 }
+
+void CMap::SaveMap() {
+    for (const auto &item: m_MapLayers) {
+        item->SaveMapLayer();
+    }
+}

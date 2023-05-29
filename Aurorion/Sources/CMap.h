@@ -18,6 +18,8 @@ public:
 
     int GetMapHeight() const;
 
+    void SaveMap();
+
 private:
     std::vector<std::shared_ptr<CMapLayer>> m_MapLayers;
 
