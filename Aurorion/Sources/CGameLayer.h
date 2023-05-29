@@ -12,4 +12,6 @@ public:
     virtual void DrawLayer() = 0;
 
     virtual std::shared_ptr<CMap> GetMap();
+
+    virtual void SaveLayer();
 };
