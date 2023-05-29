@@ -6,4 +6,6 @@ enum BlockType {
     WATER = 480,
     MUSHROOM = 416,
     DIRT = 53,
+    GRASS = 28,
+    BEDROCK = 603
 };

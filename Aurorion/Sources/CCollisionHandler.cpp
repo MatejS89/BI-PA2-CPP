@@ -28,10 +28,11 @@ bool CCollisionHandler::MapCollision(const SDL_Rect &rect, int &hp) {
 
     for (int i = leftTile; i <= rightTile; ++i) {
         for (int j = topTile; j <= bottomTile; ++j) {
-            if ((*m_TileLayer)[j][i] == 601)
+            auto &currentTile = (*m_TileLayer)[j][i];
+            if (currentTile == 601)
                 hp -= 1;
-            if ((*m_TileLayer)[j][i] > 0 && (*m_TileLayer)[j][i] != 480 && (*m_TileLayer)[j][i] != 601 &&
-                ((*m_TileLayer)[j][i] != 416)) {
+            if (currentTile > 0 && currentTile != 480 && currentTile != 601 &&
+                currentTile != 416) {
                 return true;
             }
         }
@@ -55,7 +56,7 @@ void CCollisionHandler::DestroyBlock() {
     if (mousePos.GetX() >= m_ColCount || mousePos.GetY() >= m_RowCount || mousePos.GetX() < 0 || mousePos.GetY() < 0)
         return;
     auto &selectedBlock = (*m_TileLayer)[mousePos.GetY()][mousePos.GetX()];
-    if (selectedBlock != LAVA && selectedBlock != WATER) {
+    if (selectedBlock != LAVA && selectedBlock != WATER && selectedBlock != BEDROCK) {
         selectedBlock = EMPTY;
     }
 }
