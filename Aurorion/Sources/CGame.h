@@ -30,6 +30,8 @@ public:
 
     bool Running();
 
+    void Save();
+
     SDL_Renderer *GetRenderer();
 
     void Quit();

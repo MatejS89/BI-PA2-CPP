@@ -109,3 +109,9 @@ int CGame::GetMapWidth() const {
 int CGame::GetMapHeight() const {
     return m_GameLayers[0]->GetMap()->GetMapHeight();
 }
+
+void CGame::Save() {
+    for (const auto &item: m_GameLayers) {
+        item->SaveLayer();
+    }
+}
