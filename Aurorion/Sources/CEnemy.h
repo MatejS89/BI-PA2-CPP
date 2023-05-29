@@ -17,7 +17,6 @@ public:
     bool Update() override;
 
 private:
-
     float GenerateRandomNum();
 
     void RandomJump();
@@ -41,7 +40,7 @@ private:
     const float MOVEMENT_SPEED = 1.5F;
     const int RADIUS = 300;
     const int MAX_HP = 200;
-    const int ATTACK_DMG = 10;
+    const int ATTACK_DMG = 1;
     const int ATTACK_RANGE = 30;
     const float ATTACK_DELAY = 200.0F;
     float m_JumpDelay;

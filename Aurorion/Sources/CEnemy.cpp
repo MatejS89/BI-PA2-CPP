@@ -3,6 +3,7 @@
 
 CEnemy::CEnemy(std::shared_ptr<SParamLoader> params) : CEntity(params), m_JumpDelay(0.0F),
                                                        m_JumpTimer(JUMP_TIME), m_AttackTimer(0.0F) {
+    m_Collider.SetBuffer(0, 0, 7, 2);
     TheTextureManager::Instance().Load
             ("assets/Mob/Boar/Idle/Idle-Sheet.png", "BoarIdle");
     m_MaxHP = MAX_HP;
@@ -39,12 +40,10 @@ void CEnemy::RandomJump() {
     } else if (m_IsGrounded) {
         m_JumpDelay -= TheTimer::Instance().GetDeltaTime();
     }
-    if (m_IsJumping) {
+    if (m_IsJumping && m_JumpTimer > 0.0F)
         m_JumpTimer -= TheTimer::Instance().GetDeltaTime();
-        if (m_JumpTimer <= 0.0F) {
-            ResetJump();
-        }
-    }
+    else if (m_JumpTimer <= 0.0F)
+        ResetJump();
 }
 
 bool CEnemy::IsPlayerInRange() {
@@ -53,11 +52,10 @@ bool CEnemy::IsPlayerInRange() {
 }
 
 void CEnemy::MoveTowardsPlayer() {
-    if (TheCamera::Instance().GetTarget()->GetX() > m_Pos->GetX() + m_W / 2) {
+    if (TheCamera::Instance().GetTarget()->GetX() > m_Centre->GetX()) {
         m_RigidBody->ApplyForceX(MOVEMENT_SPEED * RIGHT);
         m_Rotation = Rotation::LEFT;
-    }
-    if (TheCamera::Instance().GetTarget()->GetX() < m_Pos->GetX() + m_W / 2) {
+    } else if (TheCamera::Instance().GetTarget()->GetX() < m_Centre->GetX()) {
         m_RigidBody->ApplyForceX(MOVEMENT_SPEED * LEFT);
         m_Rotation = Rotation::RIGHT;
     }
