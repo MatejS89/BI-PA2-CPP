@@ -8,10 +8,10 @@ class CHudLayer : public CGameLayer {
 public:
     void DrawLayer() override;
 
-    void AddTarget(std::shared_ptr<CPlayer> target);
+    void AddTarget(std::shared_ptr<CGameObject> target);
 
     void UpdateLayer() override;
 
 private:
-    std::shared_ptr<CPlayer> m_Target;
+    std::shared_ptr<CGameObject> m_Target;
 };
