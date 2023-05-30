@@ -7,7 +7,7 @@ CMapParser &CMapParser::Instance() {
 }
 
 bool CMapParser::Load() {
-    return Parse("MAP", "examples/map2.tmx");
+    return Parse("MAP", "examples/NewGame/map2.tmx");
 }
 
 bool CMapParser::Parse(const char *name, const char *source) {
