@@ -21,14 +21,14 @@ CGame &CGame::Instance() {
     return m_instance;
 }
 
-bool CGame::Init(const std::string &title, int xPos, int yPos, int width, int height, bool fullScreen) {
+bool CGame::Init(const char *title, int xPos, int yPos, int width, int height, bool fullScreen) {
     int fullscreenFlag = 0;
     if (fullScreen)
         fullscreenFlag = SDL_WINDOW_FULLSCREEN;
 
     if (SDL_Init(SDL_INIT_VIDEO) == 0) {
         std::cout << "Initialized" << std::endl;
-        m_window = SDL_CreateWindow(title.c_str(), xPos, yPos, width, height, fullscreenFlag);
+        m_window = SDL_CreateWindow(title, xPos, yPos, width, height, fullscreenFlag);
         if (m_window)
             std::cout << "Window created." << std::endl;
         else

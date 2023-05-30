@@ -12,15 +12,13 @@
 #include "CMap.h"
 #include "CGameLayer.h"
 
-class CGameObject;
-
 class CGame {
 public:
     static CGame &Instance();
 
     CGame(const CGame &other) = delete;
 
-    bool Init(const std::string &title, int xPos, int yPos, int width, int height, bool fullScreen);
+    bool Init(const char *title, int xPos, int yPos, int width, int height, bool fullScreen);
 
     void Update();
 
