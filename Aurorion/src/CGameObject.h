@@ -3,6 +3,9 @@
 #include "CGame.h"
 
 #include "SParamLoader.h"
+#include "json.hpp"
+
+using json = nlohmann::json;
 
 class CGameObject {
 public:
@@ -18,14 +21,16 @@ public:
 
     virtual int GetMaxHp() const = 0;
 
-    virtual void Save() const = 0;
+    virtual json Save() const = 0;
+
+    virtual void Load(const json &jsonData) = 0;
 
     std::shared_ptr<CVector2D> GetCentre();
 
     virtual const SDL_Rect &GetCollider() const = 0;
 
 protected:
-    CGameObject() {};
+    CGameObject();
 
     std::shared_ptr<CVector2D> m_Centre;
 };
