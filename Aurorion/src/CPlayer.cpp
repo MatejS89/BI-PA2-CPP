@@ -3,18 +3,6 @@
 #include "CCollisionHandler.h"
 #include "CTimer.h"
 
-CPlayer::CPlayer(const SParamLoader &params) : CEntity(params), m_AttackDelay(0.0F) {
-    m_Collider.SetBuffer(20, 10, 40, 30);
-    TheTextureManager::Instance().Load
-            ("assets/Character/Idle/Idle-Sheet.png", "idle");
-    m_CurrHP = MAX_HP;
-    m_MaxHP = MAX_HP;
-}
-
-void CPlayer::Draw() {
-    CEntity::Draw();
-}
-
 bool CPlayer::Update() {
     m_currentFrame = (SDL_GetTicks() / 100) % 4;
     HandleInput();
@@ -115,35 +103,74 @@ void CPlayer::HandleVerticalCollisions() {
     }
 }
 
-std::shared_ptr<CGameObject> CPlayer::Create(const SParamLoader &params) {
-    return std::make_shared<CPlayer>(params);
+std::shared_ptr<CGameObject> CPlayer::Create() {
+    return std::make_shared<CPlayer>();
 }
 
-void CPlayer::Save() const {
-    WriteToJson(ConvertToJson(), "player.json");
+json CPlayer::Save() const {
+    return ConvertToJson();
 }
 
 json CPlayer::ConvertToJson() const {
     json jsonData;
+    jsonData["WIDTH"] = m_W;
+    jsonData["HEIGHT"] = m_H;
+    jsonData["CURRENT_ROW"] = m_currentRow;
+    jsonData["CURRENT_FRAME"] = m_currentFrame;
+    jsonData["TEXTURE"] = m_texture;
+    jsonData["POS_X"] = m_Pos->GetX();
+    jsonData["POS_Y"] = m_Pos->GetY();
+    jsonData["LAST_SAFE_POSX"] = m_LastSafePos->GetX();
+    jsonData["LAST_SAFE_POSY"] = m_LastSafePos->GetY();
+    m_RigidBody->SetPosition(*m_Pos);
+    jsonData["IS_JUMPING"] = m_IsJumping;
+    jsonData["IS_GROUNDED"] = m_IsGrounded;
+    jsonData["FALL_TIME"] = m_FallTime;
+    jsonData["IMMUNE_TO_FALL"] = m_ImmuneToFall;
+    jsonData["ROTATION"] = m_Rotation;
     jsonData["JUMP_FORCE"] = JUMP_FORCE;
     jsonData["JUMP_TIME"] = JUMP_TIME;
     jsonData["MOVEMENT_SPEED"] = MOVEMENT_SPEED;
+    jsonData["CURR_HP"] = m_CurrHP;
     jsonData["MAX_HP"] = MAX_HP;
     jsonData["ATTACK_DMG"] = ATTACK_DMG;
     jsonData["ATTACK_RANGE"] = ATTACK_RANGE;
     jsonData["ATTACK_DELAY"] = ATTACK_DELAY;
+    m_Centre->SetX(m_Pos->GetX() + m_W / 2);
+    m_Centre->SetY(m_Pos->GetY() + m_H / 2);
     return jsonData;
 }
 
-void CPlayer::WriteToJson(const json &jsonData, const std::string &filePath) const {
-    std::ofstream file(filePath);
-    if (file.is_open()) {
-        file << jsonData.dump(4);  // Indentation of 4 spaces
-        file.close();
-        std::cout << "JSON data saved to " << filePath << std::endl;
-    } else {
-        std::cout << "Failed to open file: " << filePath << std::endl;
-    }
+void CPlayer::Load(const json &jsonData) {
+    m_W = jsonData["WIDTH"];
+    m_H = jsonData["HEIGHT"];
+    m_currentRow = jsonData["CURRENT_ROW"];
+    m_currentFrame = jsonData["CURRENT_FRAME"];
+    m_texture = jsonData["TEXTURE"];
+    m_Pos->SetX(jsonData["POS_X"]);
+    m_Pos->SetY(jsonData["POS_Y"]);
+    m_LastSafePos->SetX(jsonData["LAST_SAFE_POSX"]);
+    m_LastSafePos->SetY(jsonData["LAST_SAFE_POSY"]);
+    m_IsJumping = jsonData["IS_JUMPING"];
+    m_IsGrounded = jsonData["IS_GROUNDED"];
+    m_FallTime = jsonData["FALL_TIME"];
+    m_ImmuneToFall = jsonData["IMMUNE_TO_FALL"];
+    m_Rotation = jsonData["ROTATION"];
+    JUMP_FORCE = jsonData["JUMP_FORCE"];
+    JUMP_TIME = jsonData["JUMP_TIME"];
+    MOVEMENT_SPEED = jsonData["MOVEMENT_SPEED"];
+    m_CurrHP = jsonData["CURR_HP"];
+    m_MaxHP = jsonData["MAX_HP"];
+    ATTACK_DMG = jsonData["ATTACK_DMG"];
+    ATTACK_RANGE = jsonData["ATTACK_RANGE"];
+    ATTACK_DELAY = jsonData["ATTACK_DELAY"];
+    m_Collider.Set(m_Pos->GetX(), m_Pos->GetY(), m_W, m_H);
+    m_Collider.SetBuffer(20, 10, 40, 30);
+}
+
+CPlayer::CPlayer() : CEntity() {
+    TheTextureManager::Instance().Load
+            ("assets/Character/Idle/Idle-Sheet.png", "idle");
 }
 
 CPlayer::~CPlayer() = default;

@@ -10,26 +10,26 @@ using json = nlohmann::json;
 
 class CPlayer : public CEntity {
 public:
-    CPlayer(const SParamLoader &params);
+    CPlayer();
 
     ~CPlayer() override;
 
-    void Draw() override;
-
     bool Update() override;
 
-    void Save() const override;
+    void Load(const json &jsonData) override;
 
-    static std::shared_ptr<CGameObject> Create(const SParamLoader &params);
+    json Save() const override;
+
+    static std::shared_ptr<CGameObject> Create();
 
 private:
-    const int JUMP_FORCE = 10;
-    const int JUMP_TIME = 15;
-    const int MOVEMENT_SPEED = 3;
+    int JUMP_FORCE = 10;
+    int JUMP_TIME = 15;
+    int MOVEMENT_SPEED = 3;
     const int MAX_HP = 100;
-    const int ATTACK_DMG = 200;
-    const int ATTACK_RANGE = 30;
-    const float ATTACK_DELAY = 100.0F;
+    int ATTACK_DMG = 200;
+    int ATTACK_RANGE = 30;
+    float ATTACK_DELAY = 100.0F;
     float m_AttackDelay;
 
     void HandleInput();
@@ -43,8 +43,6 @@ private:
     void HandleVerticalCollisions();
 
     json ConvertToJson() const;
-
-    void WriteToJson(const json &jsonData, const std::string &filePath) const;
 
     void HandleHorizontalCollisions();
 };
