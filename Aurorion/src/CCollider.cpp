@@ -19,3 +19,5 @@ void CCollider::Set(int x, int y, int w, int h) {
             h - m_Buffer.h
     };
 }
+
+CCollider::CCollider() = default;

@@ -4,6 +4,7 @@
 
 class CCollider {
 public:
+    CCollider();
 
     CCollider(int x, int y, int w, int h);
 
