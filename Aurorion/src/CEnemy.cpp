@@ -1,8 +1,8 @@
 #include "CEnemy.h"
 #include "CTimer.h"
 
-CEnemy::CEnemy(const SParamLoader &params) : CEntity(params), m_JumpDelay(0.0F),
-                                             m_JumpTimer(JUMP_TIME), m_AttackTimer(0.0F) {
+CEnemy::CEnemy() : CEntity(), m_JumpDelay(0.0F),
+                   m_JumpTimer(JUMP_TIME), m_AttackTimer(0.0F) {
     m_Collider.SetBuffer(0, 0, 7, 2);
     TheTextureManager::Instance().Load
             ("assets/Mob/Boar/Idle/Idle-Sheet.png", "BoarIdle");
@@ -122,8 +122,12 @@ void CEnemy::HandleVerticalCollisions() {
     }
 }
 
-void CEnemy::Save() const {
+json CEnemy::Save() const {
+    //TODO
+}
 
+void CEnemy::Load(const json &jsonData) {
+    //TODO
 }
 
 CEnemy::~CEnemy() = default;

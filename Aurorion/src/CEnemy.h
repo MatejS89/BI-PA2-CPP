@@ -4,11 +4,12 @@
 #include "CRigidBody.h"
 #include "CCamera.h"
 #include "CCollisionHandler.h"
+#include "CPlayer.h"
 #include <random>
 
 class CEnemy : public CEntity {
 public:
-    CEnemy(const SParamLoader &params);
+    CEnemy();
 
     ~CEnemy() override;
 
@@ -16,9 +17,12 @@ public:
 
     bool Update() override;
 
-    void Save() const override;
+    json Save() const override;
+
+    void Load(const json &jsonData) override;
 
 private:
+
     float GenerateRandomNum();
 
     void RandomJump();
