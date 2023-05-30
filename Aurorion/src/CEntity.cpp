@@ -1,29 +1,6 @@
 #include "CEntity.h"
 #include "CGame.h"
 
-CEntity::CEntity(const SParamLoader &params) : CGameObject(),
-                                               m_W(params.m_W),
-                                               m_H(params.m_H),
-                                               m_currentRow(1),
-                                               m_currentFrame(1),
-                                               m_texture(params.m_texture),
-                                               m_RigidBody(std::make_shared<CRigidBody>()),
-                                               m_Pos(std::make_shared<CVector2D>(params.m_X,
-                                                                                 params.m_Y)),
-                                               m_LastSafePos(std::make_shared<CVector2D>(
-                                                       params.m_X, params.m_Y)),
-                                               m_IsJumping(false),
-                                               m_IsGrounded(false),
-                                               m_Collider(
-                                                       params.m_X, params.m_Y, params.m_W,
-                                                       params.m_H),
-                                               m_Rotation(Rotation::RIGHT),
-                                               m_FallTime(0.0F),
-                                               m_ImmuneToFall(true) {
-    m_Centre = std::make_shared<CVector2D>(params.m_X + m_W / 2, params.m_Y + m_H / 2);
-    m_RigidBody->SetPosition({params.m_X, params.m_Y});
-}
-
 void CEntity::Draw() {
     CTextureManager::Instance().DrawFrame(m_texture, m_Pos->GetX(),
                                           m_Pos->GetY(), m_W, m_H, m_currentRow,
@@ -80,6 +57,13 @@ void CEntity::DealFallDamage() {
 
 void CEntity::UpdateCollider() {
     m_Collider.Set(m_Pos->GetX(), m_Pos->GetY(), m_W, m_H);
+}
+
+CEntity::CEntity() : CGameObject(), m_RigidBody(std::make_shared<CRigidBody>()), m_Pos(std::make_shared<CVector2D>()),
+                     m_LastSafePos(std::make_shared<CVector2D>()) {}
+
+void CEntity::Load(const json &jsonData) {
+
 }
 
 CEntity::~CEntity() = default;

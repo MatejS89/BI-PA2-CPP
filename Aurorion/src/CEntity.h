@@ -5,6 +5,9 @@
 #include "CVector2D.h"
 #include "CRigidBody.h"
 #include "CCollider.h"
+#include "json.hpp"
+
+using json = nlohmann::json;
 
 enum class Rotation {
     RIGHT,
@@ -20,7 +23,7 @@ enum Direction {
 
 class CEntity : public CGameObject {
 public:
-    CEntity(const SParamLoader &params);
+    CEntity();
 
     ~CEntity() override;
 
@@ -44,7 +47,9 @@ public:
 
     void UpdateCollider();
 
-    virtual void Save() const = 0;
+    virtual json Save() const = 0;
+
+    virtual void Load(const json &jsonData);
 
 protected:
     int m_W;
