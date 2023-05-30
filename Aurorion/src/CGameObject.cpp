@@ -6,3 +6,4 @@ std::shared_ptr<CVector2D> CGameObject::GetCentre() {
     return m_Centre;
 }
 
+CGameObject::CGameObject() : m_Centre(std::make_shared<CVector2D>(0, 0)) {}
