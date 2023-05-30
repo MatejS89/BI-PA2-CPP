@@ -6,8 +6,6 @@
 #include "CMap.h"
 #include "CGame.h"
 #include "CInputHandler.h"
-#include "CGameObject.h"
-#include "CEntity.h"
 #include "CEnemy.h"
 #include "EBlockType.h"
 
