@@ -8,13 +8,15 @@
 
 class CEnemy : public CEntity {
 public:
-    CEnemy(std::shared_ptr<SParamLoader> params);
+    CEnemy(const SParamLoader &params);
 
     ~CEnemy() override;
 
     void Draw() override;
 
     bool Update() override;
+
+    void Save() const override;
 
 private:
     float GenerateRandomNum();

@@ -2,17 +2,25 @@
 
 #include "CEntity.h"
 #include "CRigidBody.h"
+#include "json.hpp"
+#include <fstream>
+#include <string>
 
+using json = nlohmann::json;
 
 class CPlayer : public CEntity {
 public:
-    CPlayer(std::shared_ptr<SParamLoader> params);
+    CPlayer(const SParamLoader &params);
 
     ~CPlayer() override;
 
     void Draw() override;
 
     bool Update() override;
+
+    void Save() const override;
+
+    static std::shared_ptr<CGameObject> Create(const SParamLoader &params);
 
 private:
     const int JUMP_FORCE = 10;
@@ -33,6 +41,10 @@ private:
     void UpdateVerticalMovement();
 
     void HandleVerticalCollisions();
+
+    json ConvertToJson() const;
+
+    void WriteToJson(const json &jsonData, const std::string &filePath) const;
 
     void HandleHorizontalCollisions();
 };

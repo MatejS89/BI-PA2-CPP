@@ -5,12 +5,12 @@ CGameplayLayer::CGameplayLayer() : m_LevelMap(TheMapParser::Instance().GetMaps("
 
 void CGameplayLayer::Init(std::shared_ptr<CHudLayer> hud) {
     std::shared_ptr<CPlayer> player = std::make_shared<CPlayer>(
-            std::make_unique<SParamLoader>(100, 100, 64, 80, "idle"));
-    hud->AddTarget(player);
+            SParamLoader(100, 100, 64, 80, "idle"));
     std::shared_ptr<CEnemy> enemy = std::make_shared<CEnemy>(
-            std::make_unique<SParamLoader>(200, 100, 48, 32, "BoarIdle"));
+            SParamLoader(200, 100, 48, 32, "BoarIdle"));
     std::shared_ptr<CEnemy> enemy2 = std::make_shared<CEnemy>(
-            std::make_unique<SParamLoader>(300, 100, 48, 32, "BoarIdle"));
+            SParamLoader(300, 100, 48, 32, "BoarIdle"));
+    hud->AddTarget(player);
     TheCamera::Instance().SetTarget(player->GetCentre());
     m_gameObjects->push_back(player);
     m_gameObjects->push_back(enemy);
@@ -39,5 +39,8 @@ std::shared_ptr<CMap> CGameplayLayer::GetMap() {
 }
 
 void CGameplayLayer::SaveLayer() {
+    for (const auto &item: *m_gameObjects) {
+        item->Save();
+    }
     m_LevelMap->SaveMap();
 }

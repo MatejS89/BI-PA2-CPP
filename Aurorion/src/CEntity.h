@@ -20,7 +20,7 @@ enum Direction {
 
 class CEntity : public CGameObject {
 public:
-    CEntity(std::shared_ptr<SParamLoader> params);
+    CEntity(const SParamLoader &params);
 
     ~CEntity() override;
 
@@ -32,9 +32,9 @@ public:
 
     std::shared_ptr<CVector2D> GetPosition();
 
-    int GetCurrHp() const;
+    int GetCurrHp() const override;
 
-    int GetMaxHp() const;
+    int GetMaxHp() const override;
 
     const SDL_Rect &GetCollider() const override;
 
@@ -43,6 +43,8 @@ public:
     void DealFallDamage();
 
     void UpdateCollider();
+
+    virtual void Save() const = 0;
 
 protected:
     int m_W;

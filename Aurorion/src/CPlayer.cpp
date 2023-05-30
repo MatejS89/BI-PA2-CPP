@@ -3,7 +3,7 @@
 #include "CCollisionHandler.h"
 #include "CTimer.h"
 
-CPlayer::CPlayer(std::shared_ptr<SParamLoader> params) : CEntity(params), m_AttackDelay(0.0F) {
+CPlayer::CPlayer(const SParamLoader &params) : CEntity(params), m_AttackDelay(0.0F) {
     m_Collider.SetBuffer(20, 10, 40, 30);
     TheTextureManager::Instance().Load
             ("assets/Character/Idle/Idle-Sheet.png", "idle");
@@ -112,6 +112,37 @@ void CPlayer::HandleVerticalCollisions() {
     } else {
         IncreaseFallCounter();
         m_IsGrounded = false;
+    }
+}
+
+std::shared_ptr<CGameObject> CPlayer::Create(const SParamLoader &params) {
+    return std::make_shared<CPlayer>(params);
+}
+
+void CPlayer::Save() const {
+    WriteToJson(ConvertToJson(), "player.json");
+}
+
+json CPlayer::ConvertToJson() const {
+    json jsonData;
+    jsonData["JUMP_FORCE"] = JUMP_FORCE;
+    jsonData["JUMP_TIME"] = JUMP_TIME;
+    jsonData["MOVEMENT_SPEED"] = MOVEMENT_SPEED;
+    jsonData["MAX_HP"] = MAX_HP;
+    jsonData["ATTACK_DMG"] = ATTACK_DMG;
+    jsonData["ATTACK_RANGE"] = ATTACK_RANGE;
+    jsonData["ATTACK_DELAY"] = ATTACK_DELAY;
+    return jsonData;
+}
+
+void CPlayer::WriteToJson(const json &jsonData, const std::string &filePath) const {
+    std::ofstream file(filePath);
+    if (file.is_open()) {
+        file << jsonData.dump(4);  // Indentation of 4 spaces
+        file.close();
+        std::cout << "JSON data saved to " << filePath << std::endl;
+    } else {
+        std::cout << "Failed to open file: " << filePath << std::endl;
     }
 }
 
