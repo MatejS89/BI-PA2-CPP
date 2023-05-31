@@ -27,12 +27,10 @@ public:
 
     static CTextureManager &Instance();
 
-    void AddRenderer(SDL_Renderer *renderer);
+    void Clean();
 
 private:
     CTextureManager();
-
-    SDL_Renderer *m_Renderer;
 
     static CTextureManager m_instance;
 
