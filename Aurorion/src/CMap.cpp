@@ -16,8 +16,7 @@ std::vector<std::shared_ptr<CMapLayer>> CMap::GetMapLayers() {
     return m_MapLayers;
 }
 
-CMap::CMap() {
-}
+CMap::CMap() = default;
 
 int CMap::GetMapWidth() const {
     return m_MapWidth;
