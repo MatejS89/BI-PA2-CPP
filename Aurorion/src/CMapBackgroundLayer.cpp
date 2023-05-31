@@ -8,9 +8,7 @@ void CMapBackgroundLayer::LayerUpdate() {
     if (m_StateTimer <= 0) {
         SDL_Color tmp;
         SDL_GetRenderDrawColor(TheGame::Instance().GetRenderer(), &tmp.r, &tmp.g, &tmp.b, &tmp.a);
-        if (IsDay(tmp)) {
-            NextState();
-        } else if (IsNight(tmp))
+        if (IsDay(tmp) || IsNight(tmp))
             NextState();
         switch (m_BackgroundState) {
             case BackgroundState::NIGHT:
@@ -47,17 +45,17 @@ void CMapBackgroundLayer::NextState() {
 }
 
 void CMapBackgroundLayer::ChangeIntoDay(SDL_Color &tmp) {
-    int stepR = floor(tmp.r / TRANSFORM);
-    int stepG = floor(tmp.g / TRANSFORM);
-    int stepB = floor(tmp.b / TRANSFORM);
+    int stepR = floor(tmp.r / GRADIENT);
+    int stepG = floor(tmp.g / GRADIENT);
+    int stepB = floor(tmp.b / GRADIENT);
     GraduallyDecrease(tmp);
     SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), tmp.r - stepR, tmp.g - stepG, tmp.b - stepB, tmp.a);
 }
 
 void CMapBackgroundLayer::ChangeIntoNight(SDL_Color &tmp) {
-    int stepR = floor(TARGET_COLOR.r / TRANSFORM);
-    int stepG = floor(TARGET_COLOR.g / TRANSFORM);
-    int stepB = floor(TARGET_COLOR.b / TRANSFORM);
+    int stepR = floor(TARGET_COLOR.r / GRADIENT);
+    int stepG = floor(TARGET_COLOR.g / GRADIENT);
+    int stepB = floor(TARGET_COLOR.b / GRADIENT);
     SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), tmp.r + stepR, tmp.g + stepG, tmp.b + stepB, tmp.a);
 }
 
@@ -78,4 +76,21 @@ void CMapBackgroundLayer::GraduallyDecrease(SDL_Color &tmp) {
         tmp.g -= 1;
         tmp.b -= 1;
     }
+}
+
+void CMapBackgroundLayer::SaveMapLayer() {
+    json jsonData;
+    jsonData["GRADIENT"] = GRADIENT;
+    jsonData["STATE_TIME"] = STATE_TIME;
+    jsonData["STATE_TIMER"] = m_StateTimer;
+    jsonData["TARGET_COLOR.R"] = TARGET_COLOR.r;
+    jsonData["TARGET_COLOR.G"] = TARGET_COLOR.g;
+    jsonData["TARGET_COLOR.B"] = TARGET_COLOR.g;
+    jsonData["TARGET_COLOR.A"] = TARGET_COLOR.a;
+    std::ofstream file("examples/NewGame/BackGroundLayer.json");
+    if (file.is_open()) {
+        file << jsonData.dump(4);
+        file.close();
+    } else
+        throw std::logic_error("Failed to save GameObjects");
 }

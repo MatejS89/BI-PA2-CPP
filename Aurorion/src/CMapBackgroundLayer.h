@@ -4,6 +4,10 @@
 #include "SDL2/SDL.h"
 #include "CGame.h"
 #include "CTimer.h"
+#include "json.hpp"
+#include <fstream>
+
+using json = nlohmann::json;
 
 enum class BackgroundState {
     DAY,
@@ -16,9 +20,13 @@ public:
 
     void LayerUpdate() override;
 
-    void NextState();
-
     std::shared_ptr<TileMap> GetTileMap() override;
+
+    void SaveMapLayer() override;
+
+private:
+
+    void NextState();
 
     void ChangeIntoDay(SDL_Color &tmp);
 
@@ -30,9 +38,8 @@ public:
 
     void GraduallyDecrease(SDL_Color &tmp);
 
-private:
     BackgroundState m_BackgroundState;
-    const int TRANSFORM = 50;
+    const int GRADIENT = 50;
     const float STATE_TIME = 50.0F;
     float m_StateTimer;
     const SDL_Color TARGET_COLOR = {153, 204, 255, 255};
