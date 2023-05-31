@@ -1,13 +1,9 @@
 #include "CEnemy.h"
 #include "CTimer.h"
 
-CEnemy::CEnemy() : CEntity(), m_JumpDelay(0.0F),
-                   m_JumpTimer(JUMP_TIME), m_AttackTimer(0.0F) {
-    m_Collider.SetBuffer(0, 0, 7, 2);
+CEnemy::CEnemy() : CEntity() {
     TheTextureManager::Instance().Load
             ("assets/Mob/Boar/Idle/Idle-Sheet.png", "BoarIdle");
-    m_MaxHP = MAX_HP;
-    m_CurrHP = MAX_HP;
 }
 
 void CEnemy::Draw() {
@@ -123,11 +119,72 @@ void CEnemy::HandleVerticalCollisions() {
 }
 
 json CEnemy::Save() const {
-    //TODO
+    json jsonData;
+    jsonData["WIDTH"] = m_W;
+    jsonData["HEIGHT"] = m_H;
+    jsonData["CURRENT_ROW"] = m_currentRow;
+    jsonData["CURRENT_FRAME"] = m_currentFrame;
+    jsonData["TEXTURE"] = m_texture;
+    jsonData["POS_X"] = m_Pos->GetX();
+    jsonData["POS_Y"] = m_Pos->GetY();
+    jsonData["LAST_SAFE_POSX"] = m_LastSafePos->GetX();
+    jsonData["LAST_SAFE_POSY"] = m_LastSafePos->GetY();
+    m_RigidBody->SetPosition(*m_Pos);
+    jsonData["IS_JUMPING"] = m_IsJumping;
+    jsonData["IS_GROUNDED"] = m_IsGrounded;
+    jsonData["FALL_TIME"] = m_FallTime;
+    jsonData["IMMUNE_TO_FALL"] = m_ImmuneToFall;
+    jsonData["ROTATION"] = m_Rotation;
+    jsonData["JUMP_FORCE"] = JUMP_FORCE;
+    jsonData["JUMP_TIME"] = JUMP_TIME;
+    jsonData["MOVEMENT_SPEED"] = MOVEMENT_SPEED;
+    jsonData["CURR_HP"] = m_CurrHP;
+    jsonData["MAX_HP"] = m_MaxHP;
+    jsonData["ATTACK_DMG"] = ATTACK_DMG;
+    jsonData["ATTACK_RANGE"] = ATTACK_RANGE;
+    jsonData["ATTACK_DELAY"] = ATTACK_DELAY;
+    jsonData["ATTACK_TIMER"] = m_AttackTimer;
+    jsonData["JUMP_DELAY"] = m_JumpDelay;
+    jsonData["RADIUS"] = RADIUS;
+    jsonData["JUMP_TIMER"] = m_JumpTimer;
+    m_Centre->SetX(m_Pos->GetX() + m_W / 2);
+    m_Centre->SetY(m_Pos->GetY() + m_H / 2);
+    return jsonData;
 }
 
 void CEnemy::Load(const json &jsonData) {
-    //TODO
+    m_W = jsonData["WIDTH"];
+    m_H = jsonData["HEIGHT"];
+    m_currentRow = jsonData["CURRENT_ROW"];
+    m_currentFrame = jsonData["CURRENT_FRAME"];
+    m_texture = jsonData["TEXTURE"];
+    m_Pos->SetX(jsonData["POS_X"]);
+    m_Pos->SetY(jsonData["POS_Y"]);
+    m_LastSafePos->SetX(jsonData["LAST_SAFE_POSX"]);
+    m_LastSafePos->SetY(jsonData["LAST_SAFE_POSY"]);
+    m_IsJumping = jsonData["IS_JUMPING"];
+    m_IsGrounded = jsonData["IS_GROUNDED"];
+    m_FallTime = jsonData["FALL_TIME"];
+    m_ImmuneToFall = jsonData["IMMUNE_TO_FALL"];
+    m_Rotation = jsonData["ROTATION"];
+    JUMP_FORCE = jsonData["JUMP_FORCE"];
+    JUMP_TIME = jsonData["JUMP_TIME"];
+    MOVEMENT_SPEED = jsonData["MOVEMENT_SPEED"];
+    m_CurrHP = jsonData["CURR_HP"];
+    m_MaxHP = jsonData["MAX_HP"];
+    RADIUS = jsonData["RADIUS"];
+    ATTACK_DMG = jsonData["ATTACK_DMG"];
+    ATTACK_RANGE = jsonData["ATTACK_RANGE"];
+    ATTACK_DELAY = jsonData["ATTACK_DELAY"];
+    m_AttackTimer = jsonData["ATTACK_TIMER"];
+    m_JumpDelay = jsonData["JUMP_DELAY"];
+    m_JumpTimer = jsonData["JUMP_TIMER"];
+    m_Collider.SetBuffer(0, 0, 7, 2);
+    m_Collider.Set(m_Pos->GetX(), m_Pos->GetY(), m_W, m_H);
+}
+
+std::shared_ptr<CGameObject> CEnemy::Create() {
+    return std::make_shared<CEnemy>();
 }
 
 CEnemy::~CEnemy() = default;

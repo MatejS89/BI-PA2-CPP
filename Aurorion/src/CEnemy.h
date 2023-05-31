@@ -21,6 +21,8 @@ public:
 
     void Load(const json &jsonData) override;
 
+    static std::shared_ptr<CGameObject> Create();
+
 private:
 
     float GenerateRandomNum();
@@ -41,14 +43,13 @@ private:
 
     void HandleVerticalCollisions();
 
-    const int JUMP_FORCE = 20;
-    const int JUMP_TIME = 10;
-    const float MOVEMENT_SPEED = 1.5F;
-    const int RADIUS = 300;
-    const int MAX_HP = 200;
-    const int ATTACK_DMG = 1;
-    const int ATTACK_RANGE = 30;
-    const float ATTACK_DELAY = 200.0F;
+    int JUMP_FORCE;
+    int JUMP_TIME;
+    float MOVEMENT_SPEED;
+    int RADIUS;
+    int ATTACK_DMG;
+    int ATTACK_RANGE;
+    float ATTACK_DELAY;
     float m_JumpDelay;
     float m_JumpTimer;
     float m_AttackTimer;
