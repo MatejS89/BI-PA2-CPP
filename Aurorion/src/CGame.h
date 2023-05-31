@@ -11,6 +11,7 @@
 #include "memory"
 #include "CMap.h"
 #include "CGameLayer.h"
+#include <filesystem>
 
 class CGame {
 public:
@@ -42,21 +43,34 @@ public:
 
     int GetMapHeight() const;
 
+    void LoadGame();
+
     CGameLayer &GetLayer(size_t index);
 
+    std::string GetSource() const;
+
+    std::string GetNextSaveDir() const;
+
 private:
+
+    int getNextSaveNumber() const;
+
     CGame();
 
     ~CGame();
 
     static SDL_Renderer *m_renderer;
-
     static CGame m_instance;
     int m_height;
     int m_width;
     bool m_isRunning;
     static SDL_Window *m_window;
+
     int m_currentFrame;
+
+    std::string m_SourceSave;
+
+    std::string m_NextSaveDir;
 
     std::vector<std::shared_ptr<CGameLayer>> m_GameLayers;
 };
