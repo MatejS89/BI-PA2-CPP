@@ -2,8 +2,12 @@
 
 #include "vector"
 #include "memory"
+#include "json.hpp"
+#include <fstream>
 
 using TileMap = std::vector<std::vector<int>>;
+
+using json = nlohmann::json;
 
 class CMapLayer {
 public:
