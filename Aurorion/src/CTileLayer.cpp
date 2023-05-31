@@ -77,7 +77,7 @@ int CTileLayer::GenerateRandomCoordX() const {
 
 void CTileLayer::SaveMapLayer() {
     std::string inputFile = "assets/map/tmp.tmx";
-    std::string outputFile = "assets/map/tmp3.tmx";
+    std::string outputFile = TheGame::Instance().GetNextSaveDir() + "map.tmx";
 
     std::ifstream inFile(inputFile);
     std::ofstream outFile(outputFile);
@@ -91,7 +91,6 @@ void CTileLayer::SaveMapLayer() {
                 for (const auto &row: *m_TileMap) {
                     for (const auto &num: row) {
                         outFile << num;
-//                        if (row != m_TileMap->back() && num != row.back())
                         outFile << ",";
                     }
                     outFile << '\n';
