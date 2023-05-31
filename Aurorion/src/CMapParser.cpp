@@ -7,12 +7,11 @@ CMapParser &CMapParser::Instance() {
 }
 
 bool CMapParser::Load() {
-    return Parse("MAP", "examples/NewGame/map2.tmx");
+    return Parse("MAP", TheGame::Instance().GetSource() + "map.tmx");
 }
 
-bool CMapParser::Parse(const char *name, const char *source) {
-    m_Source = source;
-    xmlDocPtr doc = xmlReadFile(source, "UTF-8", 0);
+bool CMapParser::Parse(const char *name, const std::string &source) {
+    xmlDocPtr doc = xmlReadFile(source.c_str(), "UTF-8", 0);
     if (doc == nullptr) {
         std::cout << "FILE NOT READ" << std::endl;
         return false;

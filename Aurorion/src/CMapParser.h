@@ -19,8 +19,6 @@ class CMapParser {
 public:
     bool Load();
 
-    void Clean();
-
     std::shared_ptr<CMap> GetMaps(const std::string &id);
 
     CMapParser(CMapParser &other) = delete;
@@ -28,7 +26,7 @@ public:
     static CMapParser &Instance();
 
 private:
-    bool Parse(const char *name, const char *source);
+    bool Parse(const char *name, const std::string &source);
 
     STileSet ParseTileSet(xmlNodePtr tileset);
 
@@ -42,8 +40,6 @@ private:
     ~CMapParser();
 
     std::map<std::string, std::shared_ptr<CMap>> m_Maps;
-
-    const char *m_Source;
 
     static CMapParser m_Instance;
 };
