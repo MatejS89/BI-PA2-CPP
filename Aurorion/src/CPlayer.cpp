@@ -42,13 +42,13 @@ void CPlayer::HandleInput() {
     } else {
         m_IsJumping = false;
     }
-    if (m_AttackDelay <= 0) {
+    if (m_AttackTimer <= 0) {
         if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_SPACE)) {
             TheCollisionHandler::Instance().PlayerAttack(ATTACK_DMG, ATTACK_RANGE, m_Rotation);
-            m_AttackDelay = ATTACK_DELAY;
+            m_AttackTimer = ATTACK_DELAY;
         }
     } else
-        m_AttackDelay -= TheTimer::Instance().GetDeltaTime();
+        m_AttackTimer -= TheTimer::Instance().GetDeltaTime();
 
     if (TheInputHandler::Instance().GetMouseState() == EMouseButtonState::LEFT_BUTTON_DOWN) {
         CCollisionHandler::Instance().DestroyBlock();
@@ -108,10 +108,6 @@ std::shared_ptr<CGameObject> CPlayer::Create() {
 }
 
 json CPlayer::Save() const {
-    return ConvertToJson();
-}
-
-json CPlayer::ConvertToJson() const {
     json jsonData;
     jsonData["WIDTH"] = m_W;
     jsonData["HEIGHT"] = m_H;
@@ -132,10 +128,11 @@ json CPlayer::ConvertToJson() const {
     jsonData["JUMP_TIME"] = JUMP_TIME;
     jsonData["MOVEMENT_SPEED"] = MOVEMENT_SPEED;
     jsonData["CURR_HP"] = m_CurrHP;
-    jsonData["MAX_HP"] = MAX_HP;
+    jsonData["MAX_HP"] = m_MaxHP;
     jsonData["ATTACK_DMG"] = ATTACK_DMG;
     jsonData["ATTACK_RANGE"] = ATTACK_RANGE;
     jsonData["ATTACK_DELAY"] = ATTACK_DELAY;
+    jsonData["ATTACK_TIMER"] = m_AttackTimer;
     m_Centre->SetX(m_Pos->GetX() + m_W / 2);
     m_Centre->SetY(m_Pos->GetY() + m_H / 2);
     return jsonData;
@@ -164,8 +161,9 @@ void CPlayer::Load(const json &jsonData) {
     ATTACK_DMG = jsonData["ATTACK_DMG"];
     ATTACK_RANGE = jsonData["ATTACK_RANGE"];
     ATTACK_DELAY = jsonData["ATTACK_DELAY"];
-    m_Collider.Set(m_Pos->GetX(), m_Pos->GetY(), m_W, m_H);
+    m_AttackTimer = jsonData["ATTACK_TIMER"];
     m_Collider.SetBuffer(20, 10, 40, 30);
+    m_Collider.Set(m_Pos->GetX(), m_Pos->GetY(), m_W, m_H);
 }
 
 CPlayer::CPlayer() : CEntity() {

@@ -26,11 +26,10 @@ private:
     int JUMP_FORCE = 10;
     int JUMP_TIME = 15;
     int MOVEMENT_SPEED = 3;
-    const int MAX_HP = 100;
     int ATTACK_DMG = 200;
     int ATTACK_RANGE = 30;
     float ATTACK_DELAY = 100.0F;
-    float m_AttackDelay;
+    float m_AttackTimer;
 
     void HandleInput();
 
@@ -41,8 +40,6 @@ private:
     void UpdateVerticalMovement();
 
     void HandleVerticalCollisions();
-
-    json ConvertToJson() const;
 
     void HandleHorizontalCollisions();
 };
