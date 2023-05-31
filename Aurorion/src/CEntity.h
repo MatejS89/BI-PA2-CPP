@@ -6,20 +6,10 @@
 #include "CRigidBody.h"
 #include "CCollider.h"
 #include "json.hpp"
+#include "EDirection.h"
+#include "ERotation.h"
 
 using json = nlohmann::json;
-
-enum class Rotation {
-    RIGHT,
-    LEFT
-};
-
-enum Direction {
-    LEFT = -1,
-    RIGHT = 1,
-    UP = -1,
-    DOWN = 1,
-};
 
 class CEntity : public CGameObject {
 public:
