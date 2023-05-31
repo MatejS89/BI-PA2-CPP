@@ -5,17 +5,18 @@ std::shared_ptr<TileMap> CMapBackgroundLayer::GetTileMap() {
 }
 
 void CMapBackgroundLayer::LayerUpdate() {
+
     if (m_StateTimer <= 0) {
-        SDL_Color tmp;
-        SDL_GetRenderDrawColor(TheGame::Instance().GetRenderer(), &tmp.r, &tmp.g, &tmp.b, &tmp.a);
-        if (IsDay(tmp) || IsNight(tmp))
+//        SDL_Color m_CurrColor;
+//        SDL_GetRenderDrawColor(TheGame::Instance().GetRenderer(), &m_CurrColor.r, &m_CurrColor.g, &m_CurrColor.b, &m_CurrColor.a);
+        if (IsDay(m_CurrColor) || IsNight(m_CurrColor))
             NextState();
         switch (m_BackgroundState) {
-            case BackgroundState::NIGHT:
-                ChangeIntoDay(tmp);
-                break;
             case BackgroundState::DAY:
-                ChangeIntoNight(tmp);
+                ChangeIntoDay(m_CurrColor);
+                break;
+            case BackgroundState::NIGHT:
+                ChangeIntoNight(m_CurrColor);
                 break;
             default:
                 break;
@@ -26,10 +27,11 @@ void CMapBackgroundLayer::LayerUpdate() {
     }
 }
 
-CMapBackgroundLayer::CMapBackgroundLayer() : m_BackgroundState(BackgroundState::DAY), m_StateTimer(0) {
-    SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), TARGET_COLOR.r, TARGET_COLOR.g, TARGET_COLOR.b,
-                           TARGET_COLOR.a);
-}
+CMapBackgroundLayer::CMapBackgroundLayer()
+//m_BackgroundState(BackgroundState::DAY), m_StateTimer(0) {
+//    SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), TARGET_COLOR.r, TARGET_COLOR.g, TARGET_COLOR.b,
+//                           TARGET_COLOR.a);
+{}
 
 void CMapBackgroundLayer::NextState() {
     switch (m_BackgroundState) {
@@ -45,36 +47,40 @@ void CMapBackgroundLayer::NextState() {
 }
 
 void CMapBackgroundLayer::ChangeIntoDay(SDL_Color &tmp) {
-    int stepR = floor(tmp.r / GRADIENT);
-    int stepG = floor(tmp.g / GRADIENT);
-    int stepB = floor(tmp.b / GRADIENT);
-    GraduallyDecrease(tmp);
-    SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), tmp.r - stepR, tmp.g - stepG, tmp.b - stepB, tmp.a);
+    Uint8 currR = m_CurrColor.r - floor(m_CurrColor.r / GRADIENT);
+    Uint8 currG = m_CurrColor.g - floor(m_CurrColor.g / GRADIENT);
+    Uint8 currB = m_CurrColor.b - floor(m_CurrColor.b / GRADIENT);
+    m_CurrColor = {currR, currG, currB, m_CurrColor.a};
+    GraduallyDecrease(m_CurrColor);
+    SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), m_CurrColor.r, m_CurrColor.g, m_CurrColor.b,
+                           m_CurrColor.a);
 }
 
 void CMapBackgroundLayer::ChangeIntoNight(SDL_Color &tmp) {
-    int stepR = floor(TARGET_COLOR.r / GRADIENT);
-    int stepG = floor(TARGET_COLOR.g / GRADIENT);
-    int stepB = floor(TARGET_COLOR.b / GRADIENT);
-    SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), tmp.r + stepR, tmp.g + stepG, tmp.b + stepB, tmp.a);
+    Uint8 currR = m_CurrColor.r + floor(TARGET_COLOR.r / GRADIENT);
+    Uint8 currG = m_CurrColor.g + floor(TARGET_COLOR.g / GRADIENT);
+    Uint8 currB = m_CurrColor.b + floor(TARGET_COLOR.b / GRADIENT);
+    m_CurrColor = {currR, currG, currB, m_CurrColor.a};
+    SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), m_CurrColor.r, m_CurrColor.g, m_CurrColor.b,
+                           m_CurrColor.a);
 }
 
 bool CMapBackgroundLayer::IsNight(const SDL_Color &tmp) {
-    return (tmp.r == 0 && tmp.b == 0 &&
-            tmp.g == 0);
+    return (m_CurrColor.r <= 30 && m_CurrColor.b <= 30 &&
+            m_CurrColor.g <= 30);
 }
 
 bool CMapBackgroundLayer::IsDay(const SDL_Color &tmp) {
-    return (tmp.r == TARGET_COLOR.r &&
-            tmp.g == TARGET_COLOR.g &&
-            tmp.b == TARGET_COLOR.b);
+    return (m_CurrColor.r >= TARGET_COLOR.r &&
+            m_CurrColor.g >= TARGET_COLOR.g &&
+            m_CurrColor.b >= TARGET_COLOR.b);
 }
 
 void CMapBackgroundLayer::GraduallyDecrease(SDL_Color &tmp) {
-    if (tmp.r == tmp.g && tmp.g == tmp.b) {
-        tmp.r -= 1;
-        tmp.g -= 1;
-        tmp.b -= 1;
+    if (m_CurrColor.r < GRADIENT && m_CurrColor.g < GRADIENT && m_CurrColor.b < GRADIENT) {
+        m_CurrColor.r -= 1;
+        m_CurrColor.g -= 1;
+        m_CurrColor.b -= 1;
     }
 }
 
@@ -87,10 +93,43 @@ void CMapBackgroundLayer::SaveMapLayer() {
     jsonData["TARGET_COLOR.G"] = TARGET_COLOR.g;
     jsonData["TARGET_COLOR.B"] = TARGET_COLOR.g;
     jsonData["TARGET_COLOR.A"] = TARGET_COLOR.a;
-    std::ofstream file("examples/NewGame/BackGroundLayer.json");
+//    jsonData["BACKGROUND_STATE"] = m_BackgroundState;
+    jsonData["CURR_COLOR.R"] = m_CurrColor.r;
+    jsonData["CURR_COLOR.G"] = m_CurrColor.g;
+    jsonData["CURR_COLOR.B"] = m_CurrColor.b;
+    std::ofstream file(TheGame::Instance().GetNextSaveDir() + "BackGroundLayer.json");
     if (file.is_open()) {
         file << jsonData.dump(4);
         file.close();
     } else
         throw std::logic_error("Failed to save GameObjects");
+}
+
+void CMapBackgroundLayer::Init() {
+    json jsonData = LoadJsonFromFile(TheGame::Instance().GetSource() + "BackGroundLayer.json");
+    GRADIENT = jsonData["GRADIENT"];
+    STATE_TIME = jsonData["STATE_TIME"];
+    m_StateTimer = jsonData["STATE_TIMER"];
+    TARGET_COLOR = {jsonData["TARGET_COLOR.R"], jsonData["TARGET_COLOR.G"], jsonData["TARGET_COLOR.B"],
+                    jsonData["TARGET_COLOR.A"]};
+    m_CurrColor = {jsonData["CURR_COLOR.R"],
+                   jsonData["CURR_COLOR.G"],
+                   jsonData["CURR_COLOR.B"]};
+    if (m_CurrColor.r != 0 && m_CurrColor.g != 0 && m_CurrColor.b != 0)
+        m_BackgroundState = BackgroundState::DAY;
+    else
+        m_BackgroundState = BackgroundState::NIGHT;
+    SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), m_CurrColor.r, m_CurrColor.g, m_CurrColor.b,
+                           m_CurrColor.a);
+}
+
+json CMapBackgroundLayer::LoadJsonFromFile(const std::string &filePath) const {
+    std::ifstream file(filePath);
+    if (!file.is_open()) {
+        throw std::runtime_error("Failed to open file: " + filePath);
+    }
+    json jsonData;
+    file >> jsonData;
+    file.close();
+    return jsonData;
 }
