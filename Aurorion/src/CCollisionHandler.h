@@ -1,12 +1,10 @@
 #pragma once
 
-#include "SDL2/SDL.h"
 #include <vector>
 #include "CTileLayer.h"
-#include "CMap.h"
 #include "CGame.h"
 #include "CInputHandler.h"
-#include "CEnemy.h"
+#include "CEntity.h"
 #include "EBlockType.h"
 
 class CCollisionHandler {

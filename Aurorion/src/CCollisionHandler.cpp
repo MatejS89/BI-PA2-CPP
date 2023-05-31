@@ -1,5 +1,4 @@
 #include "CCollisionHandler.h"
-#include "CGame.h"
 
 CCollisionHandler CCollisionHandler::m_Instance;
 
