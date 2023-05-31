@@ -4,7 +4,7 @@ CGameplayLayer::CGameplayLayer() : m_LevelMap(TheMapParser::Instance().GetMaps("
                                    m_gameObjects(std::make_shared<std::vector<std::shared_ptr<CGameObject>>>()) {}
 
 void CGameplayLayer::Init(std::shared_ptr<CHudLayer> hud) {
-    json jsonData = LoadJsonFromFile(TheGame::Instance().GetSource() + "game_data.json");
+    json jsonData = LoadJsonFromFile(TheGame::Instance().GetSource() + "GameObjectData.json");
     if (jsonData.contains("Player")) {
         std::shared_ptr<CGameObject> plr = TheObjectFactory::Instance().CreateGameObject("Player");
         hud->AddTarget(plr);
