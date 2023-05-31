@@ -43,15 +43,14 @@ public:
 
     int GetMapHeight() const;
 
-    void LoadGame();
-
-    CGameLayer &GetLayer(size_t index);
+    void LoadGame(const std::string &source);
 
     std::string GetSource() const;
 
     std::string GetNextSaveDir() const;
 
 private:
+    std::string parseArgs(const std::string &args);
 
     int getNextSaveNumber() const;
 

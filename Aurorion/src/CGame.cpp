@@ -41,7 +41,6 @@ bool CGame::Init(const char *title, int xPos, int yPos, int width, int height, b
         m_isRunning = true;
         m_height = height;
         m_width = width;
-        LoadGame();
     } else {
         m_isRunning = false;
         return false;
@@ -101,8 +100,6 @@ int CGame::GetMapHeight() const {
 }
 
 void CGame::Save() {
-    m_NextSaveDir = "examples/SaveGame" + std::to_string(getNextSaveNumber()) + "/";
-    std::cout << m_NextSaveDir << std::endl;
     if (std::filesystem::create_directory(m_NextSaveDir)) {
         std::cout << "Save Folder Created" << std::endl;
     } else
@@ -112,7 +109,8 @@ void CGame::Save() {
     }
 }
 
-void CGame::LoadGame() {
+void CGame::LoadGame(const std::string &args) {
+    m_SourceSave = parseArgs(args);
     if (!TheMapParser::Instance().Load()) {
         std::cout << "FAILED LOAD" << std::endl;
     }
@@ -146,4 +144,25 @@ int CGame::getNextSaveNumber() const {
 
 std::string CGame::GetNextSaveDir() const {
     return m_NextSaveDir;
+}
+
+std::string CGame::parseArgs(const std::string &args) {
+    if (args.length() == 3 && args == "new") {
+        m_NextSaveDir = "examples/SaveGame" + std::to_string(getNextSaveNumber()) + "/";
+        return "examples/NewGame/";
+    }
+    if (args.length() == 6 && args.substr(0, 4) == "load") {
+        std::stringstream ss(args);
+        std::vector<std::string> parsed;
+        std::string part;
+        while (getline(ss, part, '-')) {
+            parsed.push_back(part);
+        }
+        if (parsed.size() != 2) {
+            return "ZLE";
+        }
+        m_NextSaveDir = "examples/SaveGame" + parsed.back() + "/";
+        std::cout << m_NextSaveDir << std::endl;
+        return "examples/SaveGame" + parsed.back() + "/";
+    }
 }
