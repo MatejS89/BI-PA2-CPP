@@ -18,7 +18,8 @@ std::shared_ptr<CGameObject> CGameObjectFactory::CreateGameObject(const std::str
 }
 
 void CGameObjectFactory::RegisterObjects() {
-    RegisterObject("CPlayer", CPlayer::Create);
+    RegisterObject("Player", CPlayer::Create);
+    RegisterObject("Enemy", CEnemy::Create);
 }
 
 CGameObjectFactory::CGameObjectFactory() = default;
