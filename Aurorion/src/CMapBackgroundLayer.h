@@ -22,9 +22,13 @@ public:
 
     std::shared_ptr<TileMap> GetTileMap() override;
 
+    void Init();
+
     void SaveMapLayer() override;
 
 private:
+
+    json LoadJsonFromFile(const std::string &filePath) const;
 
     void NextState();
 
@@ -39,8 +43,9 @@ private:
     void GraduallyDecrease(SDL_Color &tmp);
 
     BackgroundState m_BackgroundState;
-    const int GRADIENT = 50;
-    const float STATE_TIME = 50.0F;
+    Uint8 GRADIENT = 100;
+    float STATE_TIME = 50.0F;
     float m_StateTimer;
-    const SDL_Color TARGET_COLOR = {153, 204, 255, 255};
+    SDL_Color m_CurrColor;
+    SDL_Color TARGET_COLOR = {153, 204, 255, 255};
 };
