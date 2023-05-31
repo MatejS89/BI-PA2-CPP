@@ -1,10 +1,12 @@
 #pragma once
 
 #include "CEntity.h"
-#include "CRigidBody.h"
 #include "json.hpp"
 #include <fstream>
 #include <string>
+#include "CInputHandler.h"
+#include "CCollisionHandler.h"
+#include "CTimer.h"
 
 using json = nlohmann::json;
 

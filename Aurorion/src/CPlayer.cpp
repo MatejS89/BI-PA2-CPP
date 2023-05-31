@@ -1,7 +1,4 @@
 #include "CPlayer.h"
-#include "CInputHandler.h"
-#include "CCollisionHandler.h"
-#include "CTimer.h"
 
 bool CPlayer::Update() {
     m_currentFrame = (SDL_GetTicks() / 100) % 4;
