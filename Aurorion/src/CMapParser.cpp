@@ -30,6 +30,7 @@ bool CMapParser::Parse(const char *name, const char *source) {
     }
     CMap gameMap;
     CMapBackgroundLayer backgroundLayer;
+    backgroundLayer.Init();
     gameMap.m_MapLayers.push_back(std::make_shared<CMapBackgroundLayer>(backgroundLayer));
     for (xmlNodePtr elem = xmlFirstElementChild(root); elem != nullptr; elem = xmlNextElementSibling(elem)) {
         if (xmlStrcmp(elem->name, reinterpret_cast<const xmlChar *> ("layer")) == 0) {
