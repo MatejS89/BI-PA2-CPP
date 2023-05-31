@@ -2,8 +2,6 @@
 #include "CMapParser.h"
 #include "CTimer.h"
 #include "CCamera.h"
-#include <iostream>
-#include "CCollisionHandler.h"
 #include "CHudLayer.h"
 #include "CGameplayLayer.h"
 
@@ -36,23 +34,14 @@ bool CGame::Init(const char *title, int xPos, int yPos, int width, int height, b
 
         m_renderer = SDL_CreateRenderer(m_window, -1, 0);
         if (m_renderer) {
-            SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
             std::cout << "Renderer created." << std::endl;
         } else
             return false;
-
-        TheTextureManager::Instance().AddRenderer(m_renderer);
+        m_SourceSave = "examples/NewGame/";
         m_isRunning = true;
         m_height = height;
         m_width = width;
-        if (!TheMapParser::Instance().Load()) {
-            std::cout << "FAILED LOAD" << std::endl;
-        }
-        std::shared_ptr<CHudLayer> hud = std::make_shared<CHudLayer>();
-        std::shared_ptr<CGameplayLayer> gameplayLayer = std::make_shared<CGameplayLayer>();
-        gameplayLayer->Init(hud);
-        m_GameLayers.push_back(gameplayLayer);
-        m_GameLayers.push_back(hud);
+        LoadGame();
     } else {
         m_isRunning = false;
         return false;
@@ -76,6 +65,7 @@ void CGame::Render() {
 }
 
 void CGame::Clean() {
+    TheTextureManager::Instance().Clean();
     SDL_DestroyRenderer(m_renderer);
     SDL_DestroyWindow(m_window);
     SDL_Quit();
@@ -111,7 +101,49 @@ int CGame::GetMapHeight() const {
 }
 
 void CGame::Save() {
+    m_NextSaveDir = "examples/SaveGame" + std::to_string(getNextSaveNumber()) + "/";
+    std::cout << m_NextSaveDir << std::endl;
+    if (std::filesystem::create_directory(m_NextSaveDir)) {
+        std::cout << "Save Folder Created" << std::endl;
+    } else
+        std::cout << "Save Folder Failed" << std::endl;
     for (const auto &item: m_GameLayers) {
         item->SaveLayer();
     }
+}
+
+void CGame::LoadGame() {
+    if (!TheMapParser::Instance().Load()) {
+        std::cout << "FAILED LOAD" << std::endl;
+    }
+    TheObjectFactory::Instance().RegisterObjects();
+    std::shared_ptr<CHudLayer> hud = std::make_shared<CHudLayer>();
+    std::shared_ptr<CGameplayLayer> gameplayLayer = std::make_shared<CGameplayLayer>();
+    gameplayLayer->Init(hud);
+    m_GameLayers.push_back(gameplayLayer);
+    m_GameLayers.push_back(hud);
+}
+
+std::string CGame::GetSource() const {
+    return m_SourceSave;
+}
+
+int CGame::getNextSaveNumber() const {
+    int nextSaveNum = 1;
+    for (const auto &saveGame: std::filesystem::directory_iterator("examples")) {
+        if (saveGame.is_directory()) {
+            std::string folderName = saveGame.path().filename().string();
+            if (folderName.find("SaveGame") == 0) {
+                std::string numString = folderName.substr(8);
+                int saveNumber = std::stoi(numString);
+                if (saveNumber >= nextSaveNum)
+                    nextSaveNum = saveNumber + 1;
+            }
+        }
+    }
+    return nextSaveNum;
+}
+
+std::string CGame::GetNextSaveDir() const {
+    return m_NextSaveDir;
 }
