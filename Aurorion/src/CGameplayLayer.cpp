@@ -5,19 +5,17 @@ CGameplayLayer::CGameplayLayer() : m_LevelMap(TheMapParser::Instance().GetMaps("
 
 void CGameplayLayer::Init(std::shared_ptr<CHudLayer> hud) {
     TheObjectFactory::Instance().RegisterObjects();
-//    std::shared_ptr<CPlayer> player = std::make_shared<CPlayer>(
-//            SParamLoader(100, 100, 64, 80, "idle"));
-//    std::shared_ptr<CEnemy> enemy = std::make_shared<CEnemy>(
-//            SParamLoader(200, 100, 48, 32, "BoarIdle"));
-//    std::shared_ptr<CEnemy> enemy2 = std::make_shared<CEnemy>(
-//            SParamLoader(300, 100, 48, 32, "BoarIdle"));
-    std::shared_ptr<CGameObject> plr = TheObjectFactory::Instance().CreateGameObject("CPlayer");
+    std::shared_ptr<CGameObject> plr = TheObjectFactory::Instance().CreateGameObject("Player");
     hud->AddTarget(plr);
     plr->Load(LoadJsonFromFile("examples/NewGame/player2.json"));
     TheCamera::Instance().SetTarget(plr->GetCentre());
     m_gameObjects->push_back(plr);
-//    m_gameObjects->push_back(enemy);
-//    m_gameObjects->push_back(enemy2);
+    std::shared_ptr<CGameObject> enemy = TheObjectFactory::Instance().CreateGameObject("Enemy");
+    std::shared_ptr<CGameObject> enemy2 = TheObjectFactory::Instance().CreateGameObject("Enemy");
+    enemy->Load(LoadJsonFromFile("examples/NewGame/enemy.json"));
+    enemy2->Load(LoadJsonFromFile("examples/NewGame/enemy.json"));
+    m_gameObjects->push_back(enemy);
+    m_gameObjects->push_back(enemy2);
     TheCollisionHandler::Instance().LoadGameObjects(m_gameObjects);
     TheCollisionHandler::Instance().LoadCollisionLayer(m_LevelMap->GetMapLayers().back()->GetTileMap());
 }
@@ -43,12 +41,17 @@ std::shared_ptr<CMap> CGameplayLayer::GetMap() {
 
 void CGameplayLayer::SaveLayer() {
     json gameObjectData;
+    json enemyData = json::array();
     for (const auto &item: *m_gameObjects) {
         json gameObject = item->Save();
-        if (item == *m_gameObjects->begin())
+        if (item == *m_gameObjects->begin()) {
             gameObjectData["Player"] = gameObject;
+        } else {
+            enemyData.push_back(gameObject);
+        }
     }
-    std::ofstream file("examples/NewGame/game_data.json");
+    gameObjectData["Enemies"] = enemyData;
+    std::ofstream file("examples/NewGame/Save.json");
     if (file.is_open()) {
         file << gameObjectData.dump(4);
         file.close();
