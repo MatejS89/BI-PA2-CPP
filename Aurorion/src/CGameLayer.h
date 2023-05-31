@@ -14,4 +14,7 @@ public:
     virtual std::shared_ptr<CMap> GetMap();
 
     virtual void SaveLayer();
+
+protected:
+    json LoadJsonFromFile(const std::string &filePath) const;
 };
