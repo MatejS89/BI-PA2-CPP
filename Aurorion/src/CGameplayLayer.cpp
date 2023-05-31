@@ -4,18 +4,21 @@ CGameplayLayer::CGameplayLayer() : m_LevelMap(TheMapParser::Instance().GetMaps("
                                    m_gameObjects(std::make_shared<std::vector<std::shared_ptr<CGameObject>>>()) {}
 
 void CGameplayLayer::Init(std::shared_ptr<CHudLayer> hud) {
-    TheObjectFactory::Instance().RegisterObjects();
-    std::shared_ptr<CGameObject> plr = TheObjectFactory::Instance().CreateGameObject("Player");
-    hud->AddTarget(plr);
-    plr->Load(LoadJsonFromFile("examples/NewGame/player2.json"));
-    TheCamera::Instance().SetTarget(plr->GetCentre());
-    m_gameObjects->push_back(plr);
-    std::shared_ptr<CGameObject> enemy = TheObjectFactory::Instance().CreateGameObject("Enemy");
-    std::shared_ptr<CGameObject> enemy2 = TheObjectFactory::Instance().CreateGameObject("Enemy");
-    enemy->Load(LoadJsonFromFile("examples/NewGame/enemy.json"));
-    enemy2->Load(LoadJsonFromFile("examples/NewGame/enemy.json"));
-    m_gameObjects->push_back(enemy);
-    m_gameObjects->push_back(enemy2);
+    json jsonData = LoadJsonFromFile(TheGame::Instance().GetSource() + "game_data.json");
+    if (jsonData.contains("Player")) {
+        std::shared_ptr<CGameObject> plr = TheObjectFactory::Instance().CreateGameObject("Player");
+        hud->AddTarget(plr);
+        plr->Load(jsonData["Player"]);
+        TheCamera::Instance().SetTarget(plr->GetCentre());
+        m_gameObjects->insert(m_gameObjects->begin(), plr);
+    }
+    if (jsonData.contains("Enemies") && jsonData["Enemies"].is_array()) {
+        for (const auto &enemyData: jsonData["Enemies"]) {
+            std::shared_ptr<CGameObject> enemy = TheObjectFactory::Instance().CreateGameObject("Enemy");
+            enemy->Load(enemyData);
+            m_gameObjects->push_back(enemy);
+        }
+    }
     TheCollisionHandler::Instance().LoadGameObjects(m_gameObjects);
     TheCollisionHandler::Instance().LoadCollisionLayer(m_LevelMap->GetMapLayers().back()->GetTileMap());
 }
@@ -30,8 +33,12 @@ void CGameplayLayer::DrawLayer() {
 void CGameplayLayer::UpdateLayer() {
     m_LevelMap->MapUpdate();
     for (size_t i = 0; i < m_gameObjects->size(); i++) {
-        if (!(*m_gameObjects)[i]->Update())
+        if (!(*m_gameObjects)[i]->Update()) {
             m_gameObjects->erase(m_gameObjects->begin() + i);
+            if (i == 0)
+                TheGame::Instance().Quit();
+        }
+
     }
 }
 
@@ -51,7 +58,7 @@ void CGameplayLayer::SaveLayer() {
         }
     }
     gameObjectData["Enemies"] = enemyData;
-    std::ofstream file("examples/NewGame/Save.json");
+    std::ofstream file(TheGame::Instance().GetNextSaveDir() + "GameObjectData.json");
     if (file.is_open()) {
         file << gameObjectData.dump(4);
         file.close();
