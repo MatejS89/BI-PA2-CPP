@@ -5,18 +5,18 @@
 #include "CHudLayer.h"
 #include "CGameplayLayer.h"
 
-SDL_Window *CGame::m_window = nullptr;
+SDL_Window *CGame::m_Window = nullptr;
 
-SDL_Renderer *CGame::m_renderer = nullptr;
+SDL_Renderer *CGame::m_Renderer = nullptr;
 
 CGame::CGame() {}
 
 CGame::~CGame() {}
 
-CGame CGame::m_instance;
+CGame CGame::m_Instance;
 
 CGame &CGame::Instance() {
-    return m_instance;
+    return m_Instance;
 }
 
 bool CGame::Init(const char *title, int xPos, int yPos, int width, int height, bool fullScreen) {
@@ -26,23 +26,23 @@ bool CGame::Init(const char *title, int xPos, int yPos, int width, int height, b
 
     if (SDL_Init(SDL_INIT_VIDEO) == 0) {
         std::cout << "Initialized" << std::endl;
-        m_window = SDL_CreateWindow(title, xPos, yPos, width, height, fullscreenFlag);
-        if (m_window)
+        m_Window = SDL_CreateWindow(title, xPos, yPos, width, height, fullscreenFlag);
+        if (m_Window)
             std::cout << "Window created." << std::endl;
         else
             return false;
 
-        m_renderer = SDL_CreateRenderer(m_window, -1, 0);
-        if (m_renderer) {
+        m_Renderer = SDL_CreateRenderer(m_Window, -1, 0);
+        if (m_Renderer) {
             std::cout << "Renderer created." << std::endl;
         } else
             return false;
         m_SourceSave = "examples/NewGame/";
-        m_isRunning = true;
-        m_height = height;
-        m_width = width;
+        m_IsRunning = true;
+        m_Height = height;
+        m_Width = width;
     } else {
-        m_isRunning = false;
+        m_IsRunning = false;
         return false;
     }
     return true;
@@ -56,39 +56,39 @@ void CGame::Update() {
 }
 
 void CGame::Render() {
-    SDL_RenderClear(m_renderer);
+    SDL_RenderClear(m_Renderer);
     for (const auto &item: m_GameLayers) {
         item->DrawLayer();
     }
-    SDL_RenderPresent(m_renderer);
+    SDL_RenderPresent(m_Renderer);
 }
 
 void CGame::Clean() {
     TheTextureManager::Instance().Clean();
-    SDL_DestroyRenderer(m_renderer);
-    SDL_DestroyWindow(m_window);
+    SDL_DestroyRenderer(m_Renderer);
+    SDL_DestroyWindow(m_Window);
     SDL_Quit();
     std::cout << "Game quit and cleaned" << std::endl;
 }
 
 bool CGame::IsRunning() {
-    return m_isRunning;
+    return m_IsRunning;
 }
 
 SDL_Renderer *CGame::GetRenderer() {
-    return m_renderer;
+    return m_Renderer;
 }
 
 void CGame::Quit() {
-    m_isRunning = false;
+    m_IsRunning = false;
 }
 
 int CGame::GetWindowHeight() const {
-    return m_height;
+    return m_Height;
 }
 
 int CGame::GetWindowWidth() const {
-    return m_width;
+    return m_Width;
 }
 
 int CGame::GetMapWidth() const {
@@ -102,15 +102,14 @@ int CGame::GetMapHeight() const {
 void CGame::Save() {
     if (std::filesystem::create_directory(m_NextSaveDir)) {
         std::cout << "Save Folder Created" << std::endl;
-    } else
-        std::cout << "Save Folder Failed" << std::endl;
+    }
     for (const auto &gameLayer: m_GameLayers) {
         gameLayer->SaveLayer();
     }
 }
 
-void CGame::LoadGame(const std::string &args) {
-    m_SourceSave = parseArgs(args);
+void CGame::LoadGame(char *args[], const int argc) {
+    ParseArgs(args, argc);
     if (!TheMapParser::Instance().Load()) {
         std::cout << "FAILED LOAD" << std::endl;
     }
@@ -126,7 +125,7 @@ std::string CGame::GetSource() const {
     return m_SourceSave;
 }
 
-int CGame::getNextSaveNumber() const {
+int CGame::GetNextSaveNumber() const {
     int nextSaveNum = 1;
     for (const auto &saveGame: std::filesystem::directory_iterator("examples")) {
         if (saveGame.is_directory()) {
@@ -146,23 +145,52 @@ std::string CGame::GetNextSaveDir() const {
     return m_NextSaveDir;
 }
 
-std::string CGame::parseArgs(const std::string &args) {
-    if (args.length() == 3 && args == "new") {
-        m_NextSaveDir = "examples/SaveGame" + std::to_string(getNextSaveNumber()) + "/";
-        return "examples/NewGame/";
+void CGame::ParseArgs(char *args[], const int argc) {
+    if (argc == 1) {
+        NewGame();
+        return;
     }
-    if (args.length() == 6 && args.substr(0, 4) == "load") {
-        std::stringstream ss(args);
+    std::string arg;
+    if (argc == 2)
+        arg = args[1];
+    else
+        throw std::logic_error("Invalid arguments.");
+
+    if (arg == "new") {
+        NewGame();
+        return;
+    }
+    if (arg.length() >= 6 && arg.substr(0, 4) == "load") {
+        std::stringstream ss(arg);
         std::vector<std::string> parsed;
         std::string part;
         while (getline(ss, part, '-')) {
             parsed.push_back(part);
         }
         if (parsed.size() != 2) {
-            return "ZLE";
+            throw std::logic_error("Invalid arguments.");
         }
         m_NextSaveDir = "examples/SaveGame" + parsed.back() + "/";
-        std::cout << m_NextSaveDir << std::endl;
-        return "examples/SaveGame" + parsed.back() + "/";
+        m_SourceSave = "examples/SaveGame" + parsed.back() + "/";
+        CheckSourceSave();
+        std::cout << "SaveFile loaded: " << m_SourceSave << std::endl;
+        return;
     }
+}
+
+void CGame::NewGame() {
+    m_SourceSave = "examples/NewGame/";
+    m_NextSaveDir = "examples/SaveGame" + std::to_string(GetNextSaveNumber()) + "/";
+}
+
+void CGame::CheckSourceSave() {
+    if (!(std::filesystem::exists(m_SourceSave) && std::filesystem::is_directory(m_SourceSave)))
+        throw std::logic_error("Save directory doesnt exists!");
+    if (!(std::filesystem::exists(m_SourceSave + "GameObjectData.json") &&
+          std::filesystem::is_regular_file(m_SourceSave + "GameObjectData.json") &&
+          std::filesystem::exists(m_SourceSave + "BackGroundLayer.json") &&
+          std::filesystem::is_regular_file(m_SourceSave + "BackGroundLayer.json") &&
+          std::filesystem::exists(m_SourceSave + "map.tmx") &&
+          std::filesystem::is_regular_file(m_SourceSave + "map.tmx")))
+        throw std::logic_error("Save directory corrupted");
 }

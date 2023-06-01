@@ -83,16 +83,13 @@ public:
      * @brief Loads the game from a source.
      * @param source Load directory name.
      */
-    void LoadGame(const std::string &source);
+    void LoadGame(char *args[], const int argc);
 
     std::string GetSource() const;
 
     std::string GetNextSaveDir() const;
 
 private:
-    /**
-     * @brief Private constructor to enforce singleton pattern.
-     */
     CGame();
 
     ~CGame();
@@ -102,27 +99,31 @@ private:
      * @param args The arguments to parse.
      * @return Load directory name.
      */
-    std::string parseArgs(const std::string &args);
+    void ParseArgs(char *args[], int argc);
 
-    int getNextSaveNumber() const;
+    void NewGame();
 
-    static SDL_Renderer *m_renderer;
+    int GetNextSaveNumber() const;
 
-    static CGame m_instance;
+    static SDL_Renderer *m_Renderer;
 
-    int m_height;
+    static CGame m_Instance;
 
-    int m_width;
+    int m_Height;
 
-    bool m_isRunning;
+    int m_Width;
 
-    static SDL_Window *m_window;
+    bool m_IsRunning;
+
+    static SDL_Window *m_Window;
 
     std::string m_SourceSave;
 
     std::string m_NextSaveDir;
 
     std::vector<std::shared_ptr<CGameLayer>> m_GameLayers;
+
+    void CheckSourceSave();
 };
 
 typedef CGame TheGame;
