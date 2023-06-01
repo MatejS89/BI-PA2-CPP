@@ -5,7 +5,6 @@
 #include "CGame.h"
 #include "CInputHandler.h"
 #include "CEntity.h"
-#include "EBlockType.h"
 
 class CCollisionHandler {
 public:

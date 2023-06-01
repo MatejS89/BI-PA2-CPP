@@ -28,10 +28,10 @@ bool CCollisionHandler::MapCollision(const SDL_Rect &rect, int &hp) {
     for (int i = leftTile; i <= rightTile; ++i) {
         for (int j = topTile; j <= bottomTile; ++j) {
             auto &currentTile = (*m_TileLayer)[j][i];
-            if (currentTile == 601)
+            if (currentTile == LAVA)
                 hp -= 1;
-            if (currentTile > 0 && currentTile != 480 && currentTile != 601 &&
-                currentTile != 416) {
+            if (currentTile > EMPTY && currentTile != WATER && currentTile != LAVA &&
+                currentTile != MUSHROOM) {
                 return true;
             }
         }
