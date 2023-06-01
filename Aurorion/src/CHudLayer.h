@@ -2,7 +2,7 @@
 
 #include "CGameLayer.h"
 #include "CGame.h"
-#include "CPlayer.h"
+#include "CGameObject.h"
 
 class CHudLayer : public CGameLayer {
 public:
