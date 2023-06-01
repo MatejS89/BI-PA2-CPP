@@ -30,5 +30,5 @@ public:
 private:
     std::shared_ptr<CMap> m_LevelMap;
 
-    std::shared_ptr<std::vector<std::shared_ptr<CGameObject>>> m_gameObjects;
+    std::shared_ptr<std::vector<std::shared_ptr<CGameObject>>> m_GameObjects;
 };
