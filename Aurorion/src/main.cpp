@@ -7,7 +7,13 @@ int main(int argc, char *args[]) {
         return 1;
     if (!TheGame::Instance().Init("Aurorion", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, false))
         std::cout << "Initialization failed" << std::endl;
-    TheGame::Instance().LoadGame(args[1]);
+    try {
+        TheGame::Instance().LoadGame(args, argc);
+    }
+    catch (const std::exception &e) {
+        std::cout << "Loading failed: " << e.what() << std::endl;
+        return 1;
+    }
     while (TheGame::Instance().IsRunning()) {
         TheTimer::Instance().Tick();
         TheInputHandler::Instance().Listen();
