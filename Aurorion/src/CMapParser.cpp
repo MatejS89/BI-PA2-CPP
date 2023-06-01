@@ -103,7 +103,7 @@ CTileLayer CMapParser::ParseTileLayer(xmlNodePtr ptr, std::shared_ptr<TilesetLis
     return CTileLayer(tileSize, rowCount, colCount, tileMap, tileSets);
 }
 
-std::shared_ptr<CMap> CMapParser::GetMaps(const std::string &id) {
+std::shared_ptr<CMap> CMapParser::GetMap(const std::string &id) {
     return m_Maps[id];
 }
 

@@ -6,6 +6,8 @@ CTimer CTimer::m_Instance;
 
 CTimer::CTimer() = default;
 
+CTimer::~CTimer() = default;
+
 CTimer &CTimer::Instance() {
     return m_Instance;
 }

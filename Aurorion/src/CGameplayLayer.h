@@ -30,16 +30,5 @@ public:
 private:
     std::shared_ptr<CMap> m_LevelMap;
 
-//    json LoadJsonFromFile(const std::string &filePath) {
-//        std::ifstream file(filePath);
-//        if (!file.is_open()) {
-//            throw std::runtime_error("Failed to open file: " + filePath);
-//        }
-//        json jsonData;
-//        file >> jsonData;
-//        file.close();
-//        return jsonData;
-//    }
-
     std::shared_ptr<std::vector<std::shared_ptr<CGameObject>>> m_gameObjects;
 };

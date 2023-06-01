@@ -59,7 +59,7 @@ CEntity::CEntity() : CGameObject(), m_RigidBody(std::make_shared<CRigidBody>()),
                      m_LastSafePos(std::make_shared<CVector2D>()) {}
 
 void CEntity::Load(const json &jsonData) {
-
+    // TODO
 }
 
 CEntity::~CEntity() = default;

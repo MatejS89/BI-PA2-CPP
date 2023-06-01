@@ -71,7 +71,7 @@ void CGame::Clean() {
     std::cout << "Game quit and cleaned" << std::endl;
 }
 
-bool CGame::Running() {
+bool CGame::IsRunning() {
     return m_isRunning;
 }
 
@@ -96,7 +96,7 @@ int CGame::GetMapWidth() const {
 }
 
 int CGame::GetMapHeight() const {
-    return m_GameLayers[0]->GetMap()->GetMapHeight();
+    return m_GameLayers.front()->GetMap()->GetMapHeight();
 }
 
 void CGame::Save() {
@@ -104,8 +104,8 @@ void CGame::Save() {
         std::cout << "Save Folder Created" << std::endl;
     } else
         std::cout << "Save Folder Failed" << std::endl;
-    for (const auto &item: m_GameLayers) {
-        item->SaveLayer();
+    for (const auto &gameLayer: m_GameLayers) {
+        gameLayer->SaveLayer();
     }
 }
 

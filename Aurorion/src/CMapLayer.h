@@ -9,6 +9,10 @@ using TileMap = std::vector<std::vector<int>>;
 
 using json = nlohmann::json;
 
+/**
+ * @class CMapLayer
+ * @brief Base class for map layers in the game.
+ */
 class CMapLayer {
 public:
     virtual void LayerRender();

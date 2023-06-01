@@ -4,9 +4,15 @@
 #include <memory>
 #include "CMapLayer.h"
 
+/**
+ * @class CMap
+ * @brief Represents a map consisting of multiple layers.
+ */
 class CMap {
 public:
     CMap();
+
+    ~CMap();
 
     void MapRender();
 

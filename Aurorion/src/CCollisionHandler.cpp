@@ -3,9 +3,7 @@
 CCollisionHandler CCollisionHandler::m_Instance;
 
 bool CCollisionHandler::CheckCollisionGameObjects(const SDL_Rect &left, const SDL_Rect &right) const {
-    bool x_overlaps = (left.x < right.x + right.w) && (left.x + left.w > right.x);
-    bool y_overlaps = (left.y < right.y + right.h) && (left.y + left.h > right.y);
-    return (x_overlaps && y_overlaps);
+    return SDL_HasIntersection(&left, &right);
 }
 
 bool CCollisionHandler::MapCollision(const SDL_Rect &rect, int &hp) {

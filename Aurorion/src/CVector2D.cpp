@@ -64,9 +64,3 @@ CVector2D &CVector2D::operator/=(int scalar) {
     m_Y /= scalar;
     return *this;
 }
-
-void CVector2D::normalize() {
-    float len = length();
-    if (len > 0)
-        *this *= 1 / len;
-}

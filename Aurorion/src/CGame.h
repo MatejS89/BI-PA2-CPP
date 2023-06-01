@@ -57,7 +57,7 @@ public:
      * @brief Checks if the game is currently running.
      * @return True if the game is running, false otherwise.
      */
-    bool Running();
+    bool IsRunning();
 
     /**
      * @brief Saves the game.
@@ -81,7 +81,7 @@ public:
 
     /**
      * @brief Loads the game from a source.
-     * @param source The source of the game.
+     * @param source Load directory name.
      */
     void LoadGame(const std::string &source);
 
@@ -100,7 +100,7 @@ private:
     /**
      * @brief Parses the arguments.
      * @param args The arguments to parse.
-     * @return The parsed arguments.
+     * @return Load directory name.
      */
     std::string parseArgs(const std::string &args);
 

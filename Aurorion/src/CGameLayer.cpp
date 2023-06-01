@@ -4,9 +4,6 @@ std::shared_ptr<CMap> CGameLayer::GetMap() {
     return nullptr;
 }
 
-void CGameLayer::SaveLayer() {
-}
-
 json CGameLayer::LoadJsonFromFile(const std::string &filePath) const {
     std::ifstream file(filePath);
     if (!file.is_open()) {

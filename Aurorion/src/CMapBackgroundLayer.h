@@ -9,24 +9,23 @@
 
 using json = nlohmann::json;
 
-enum class BackgroundState {
-    DAY,
-    NIGHT
-};
-
 class CMapBackgroundLayer : public CMapLayer {
 public:
     CMapBackgroundLayer();
+
+    void Init();
 
     void LayerUpdate() override;
 
     std::shared_ptr<TileMap> GetTileMap() override;
 
-    void Init();
-
     void SaveMapLayer() override;
 
 private:
+    enum class BackgroundState {
+        DAY,
+        NIGHT
+    };
 
     json LoadJsonFromFile(const std::string &filePath) const;
 

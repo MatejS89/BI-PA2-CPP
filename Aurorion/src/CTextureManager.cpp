@@ -21,16 +21,8 @@ bool CTextureManager::Load(const std::string &fileName, std::string id) {
     return false;
 }
 
-void CTextureManager::Draw(const std::string &id, int x, int y, int width, int height,
-                           SDL_RendererFlip flip) {
-    SDL_Rect srcRect{0, 0, width, height};
-    SDL_Rect destRect{x, y, width, height};
-    SDL_RenderCopyEx(TheGame::Instance().GetRenderer(), m_textureMap[id], &srcRect, &destRect, 0, 0, flip);
-}
-
-void
-CTextureManager::DrawFrame(const std::string &id, int x, int y, int width, int height, int currentRow, int currentFrame,
-                           SDL_RendererFlip flip) {
+void CTextureManager::DrawFrame(const std::string &id, int x, int y, int width, int height, int currentRow,
+                                int currentFrame, SDL_RendererFlip flip) {
     const CVector2D &cam = TheCamera::Instance().GetPosition();
     SDL_Rect srcRect{width * currentFrame,
                      height * (currentRow - 1),

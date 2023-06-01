@@ -1,5 +1,9 @@
 #pragma once
 
+/**
+ * @enum BlockType
+ * @brief Enumerates the types of blocks.
+ */
 enum BlockType {
     EMPTY = 0,
     LAVA = 601,

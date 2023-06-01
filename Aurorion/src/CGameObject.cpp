@@ -2,7 +2,7 @@
 
 CGameObject::~CGameObject() = default;
 
-std::shared_ptr<CVector2D> CGameObject::GetCentre() {
+std::shared_ptr<CVector2D> CGameObject::GetCentre() const {
     return m_Centre;
 }
 

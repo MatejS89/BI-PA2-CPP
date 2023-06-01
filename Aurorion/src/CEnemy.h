@@ -28,6 +28,7 @@ public:
     /**
      * @brief Creates a shared pointer to a new CEnemy instance.
      * @return A shared pointer to the created CEnemy instance.
+     * @note Used in the CGameObjectFactory class
      */
     static std::shared_ptr<CGameObject> Create();
 

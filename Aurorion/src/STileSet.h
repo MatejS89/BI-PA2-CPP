@@ -1,9 +1,11 @@
 #pragma once
 
 #include <string>
-#include <vector>
-#include <map>
 
+/**
+ * @struct STileSet
+ * @brief Represents a tile set.
+ */
 struct STileSet {
 
     std::string m_TileSetName;

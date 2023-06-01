@@ -32,9 +32,6 @@ public:
 
     CVector2D &operator/=(int scalar);
 
-    // Creates a normalized vector ( unit vector ) which is used to describe the direction
-    void normalize();
-
 private:
     int m_X;
     int m_Y;

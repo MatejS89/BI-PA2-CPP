@@ -1,5 +1,4 @@
 #include <SDL2/SDL_events.h>
-#include <iostream>
 #include "CInputHandler.h"
 #include "CGame.h"
 
@@ -47,7 +46,7 @@ void CInputHandler::Listen() {
     }
 }
 
-bool CInputHandler::IsKeyDown(SDL_Scancode key) {
+bool CInputHandler::IsKeyDown(const SDL_Scancode &key) const {
     return m_KeyStates[key];
 }
 

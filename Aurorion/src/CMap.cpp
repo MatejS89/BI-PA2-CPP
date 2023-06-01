@@ -1,5 +1,9 @@
 #include "CMap.h"
 
+CMap::CMap() = default;
+
+CMap::~CMap() = default;
+
 void CMap::MapRender() {
     for (const auto &layer: m_MapLayers) {
         layer->LayerRender();
@@ -15,8 +19,6 @@ void CMap::MapUpdate() {
 std::vector<std::shared_ptr<CMapLayer>> CMap::GetMapLayers() {
     return m_MapLayers;
 }
-
-CMap::CMap() = default;
 
 int CMap::GetMapWidth() const {
     return m_MapWidth;

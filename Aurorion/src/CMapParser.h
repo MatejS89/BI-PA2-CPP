@@ -19,9 +19,9 @@ class CMapParser {
 public:
     bool Load();
 
-    std::shared_ptr<CMap> GetMaps(const std::string &id);
+    std::shared_ptr<CMap> GetMap(const std::string &id);
 
-    CMapParser(CMapParser &other) = delete;
+    CMapParser(const CMapParser &other) = delete;
 
     static CMapParser &Instance();
 

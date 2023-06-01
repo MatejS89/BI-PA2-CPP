@@ -1,6 +1,6 @@
 #include "CGameplayLayer.h"
 
-CGameplayLayer::CGameplayLayer() : m_LevelMap(TheMapParser::Instance().GetMaps("MAP")),
+CGameplayLayer::CGameplayLayer() : m_LevelMap(TheMapParser::Instance().GetMap("MAP")),
                                    m_gameObjects(std::make_shared<std::vector<std::shared_ptr<CGameObject>>>()) {}
 
 void CGameplayLayer::Init(std::shared_ptr<CHudLayer> hud) {

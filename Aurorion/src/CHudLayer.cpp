@@ -18,8 +18,13 @@ void CHudLayer::DrawLayer() {
 }
 
 void CHudLayer::UpdateLayer() {
+    return;
 }
 
 void CHudLayer::AddTarget(std::shared_ptr<CGameObject> target) {
     m_Target = target;
+}
+
+void CHudLayer::SaveLayer() {
+    return;
 }

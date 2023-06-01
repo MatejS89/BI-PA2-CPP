@@ -22,16 +22,22 @@ public:
 
     std::shared_ptr<TileMap> GetTileMap() override;
 
+private:
     int GenerateRandomCoordX() const;
 
-private:
-    const float GROW_TIME = 2000.0F;
-    size_t m_TileSize;
-    int m_RowCount;
-    int m_ColCount;
-    std::shared_ptr<TileMap> m_TileMap;
-    std::shared_ptr<TilesetList> m_TileSets;
-    float m_GrowDelay;
-
     const STileSet &FindTileSet(int tileId) const;
+
+    const float GROW_TIME = 2000.0F;
+
+    size_t m_TileSize;
+
+    int m_RowCount;
+
+    int m_ColCount;
+
+    std::shared_ptr<TileMap> m_TileMap;
+
+    std::shared_ptr<TilesetList> m_TileSets;
+
+    float m_GrowDelay;
 };

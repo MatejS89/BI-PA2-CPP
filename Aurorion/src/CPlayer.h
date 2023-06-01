@@ -29,6 +29,7 @@ public:
     /**
      * @brief Creates a shared pointer to a new CPlayer instance.
      * @return A shared pointer to the created CPlayer instance.
+     * @note Used in the CGameObjectFactory class
      */
     static std::shared_ptr<CGameObject> Create();
 
@@ -54,7 +55,7 @@ private:
     int ATTACK_DMG = 200;
 
     int ATTACK_RANGE = 30;
-    
+
     float ATTACK_DELAY = 100.0F;
 
     float m_AttackTimer;

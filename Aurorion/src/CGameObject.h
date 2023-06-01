@@ -44,7 +44,7 @@ public:
      */
     virtual void Load(const json &jsonData) = 0;
 
-    std::shared_ptr<CVector2D> GetCentre();
+    std::shared_ptr<CVector2D> GetCentre() const;
 
     virtual const SDL_Rect &GetCollider() const = 0;
 

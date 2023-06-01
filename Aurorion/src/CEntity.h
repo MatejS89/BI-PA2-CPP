@@ -17,12 +17,12 @@ using json = nlohmann::json;
  */
 class CEntity : public CGameObject {
 public:
-    CEntity();
-
-    ~CEntity() override;
-
     virtual void Draw();
 
+    /**
+     * @brief Updates the game object.
+     * @return True if the update m_CurrHP > 0, false otherwise.
+     */
     virtual bool Update();
 
     void ReduceHp(int dmg) override;
@@ -44,6 +44,10 @@ public:
     virtual void Load(const json &jsonData);
 
 protected:
+    CEntity();
+
+    ~CEntity() override;
+
     int m_W;
 
     int m_H;

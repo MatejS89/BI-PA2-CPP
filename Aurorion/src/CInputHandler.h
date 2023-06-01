@@ -12,7 +12,7 @@ public:
 
     void Listen();
 
-    bool IsKeyDown(SDL_Scancode key);
+    bool IsKeyDown(const SDL_Scancode &key) const;
 
     const CVector2D &GetMousePos() const;
 
