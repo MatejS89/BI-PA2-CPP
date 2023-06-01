@@ -53,7 +53,7 @@ void CTileLayer::LayerUpdate() {
         int xCoord = floor(GenerateRandomCoordX() / m_TileSize);
         for (int i = floor(TheGame::Instance().GetMapHeight() / m_TileSize) - 1; i >= 0; i--) {
             auto &currentTile = (*m_TileMap)[i][xCoord];
-            if (currentTile == LAVA || currentTile == WATER)
+            if (currentTile == LAVA || currentTile == WATER || currentTile == MUSHROOM)
                 break;
             if (currentTile == EMPTY) {
                 currentTile = MUSHROOM;

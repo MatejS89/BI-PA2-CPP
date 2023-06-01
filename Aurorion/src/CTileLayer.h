@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CMapLayer.h"
-#include "CTileLayer.h"
 #include "CTimer.h"
 #include "STileSet.h"
 #include <random>
