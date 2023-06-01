@@ -2,7 +2,7 @@
 
 CCollisionHandler CCollisionHandler::m_Instance;
 
-bool CCollisionHandler::CheckCollision(const SDL_Rect &left, const SDL_Rect &right) const {
+bool CCollisionHandler::CheckCollisionGameObjects(const SDL_Rect &left, const SDL_Rect &right) const {
     bool x_overlaps = (left.x < right.x + right.w) && (left.x + left.w > right.x);
     bool y_overlaps = (left.y < right.y + right.h) && (left.y + left.h > right.y);
     return (x_overlaps && y_overlaps);
@@ -90,7 +90,7 @@ bool CCollisionHandler::CheckCollisionWithEnemies() const {
     const auto &player = (*m_GameObjects)[0];
     for (size_t i = 1; i < m_GameObjects->size(); i++) {
         const auto &enemy = (*m_GameObjects)[i];
-        if (CheckCollision(player->GetCollider(), enemy->GetCollider()))
+        if (CheckCollisionGameObjects(player->GetCollider(), enemy->GetCollider()))
             return true;
     }
     return false;
@@ -107,7 +107,7 @@ void CCollisionHandler::PlayerAttack(int dmg, int range, const Rotation &rotatio
     }
     for (size_t i = 1; i < m_GameObjects->size(); i++) {
         const auto &enemy = (*m_GameObjects)[i];
-        if (CheckCollision(tmp.GetCollider(), enemy->GetCollider()))
+        if (CheckCollisionGameObjects(tmp.GetCollider(), enemy->GetCollider()))
             enemy->ReduceHp(dmg);
     }
 }
@@ -120,13 +120,13 @@ void CCollisionHandler::EnemyAttack(int dmg, int range, const Rotation &rotation
         tmp.Set(tmp.GetCollider().x - range, tmp.GetCollider().y, tmp.GetCollider().w,
                 tmp.GetCollider().h);
     }
-    if (CheckCollision(tmp.GetCollider(), player->GetCollider()))
+    if (CheckCollisionGameObjects(tmp.GetCollider(), player->GetCollider()))
         player->ReduceHp(dmg);
 }
 
 bool CCollisionHandler::CheckCollisionWithPlayer(const CCollider &collider) const {
     const auto &player = (*m_GameObjects)[0];
-    if (CheckCollision(collider.GetCollider(), player->GetCollider()))
+    if (CheckCollisionGameObjects(collider.GetCollider(), player->GetCollider()))
         return true;
     return false;
 }

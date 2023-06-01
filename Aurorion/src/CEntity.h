@@ -11,6 +11,10 @@
 
 using json = nlohmann::json;
 
+/**
+ * @class CEntity
+ * @brief The base class for game entities, derived from CGameObject.
+ */
 class CEntity : public CGameObject {
 public:
     CEntity();
@@ -22,8 +26,6 @@ public:
     virtual bool Update();
 
     void ReduceHp(int dmg) override;
-
-    std::shared_ptr<CVector2D> GetPosition();
 
     int GetCurrHp() const override;
 
@@ -43,9 +45,11 @@ public:
 
 protected:
     int m_W;
+
     int m_H;
 
     int m_currentRow;
+
     int m_currentFrame;
 
     std::string m_texture;

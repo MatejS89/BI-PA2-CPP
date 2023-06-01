@@ -10,6 +10,10 @@
 
 using json = nlohmann::json;
 
+/**
+ * @class CPlayer
+ * @brief The class representing a player entity, derived from CEntity.
+ */
 class CPlayer : public CEntity {
 public:
     CPlayer();
@@ -22,17 +26,13 @@ public:
 
     json Save() const override;
 
+    /**
+     * @brief Creates a shared pointer to a new CPlayer instance.
+     * @return A shared pointer to the created CPlayer instance.
+     */
     static std::shared_ptr<CGameObject> Create();
 
 private:
-    int JUMP_FORCE = 10;
-    int JUMP_TIME = 15;
-    int MOVEMENT_SPEED = 3;
-    int ATTACK_DMG = 200;
-    int ATTACK_RANGE = 30;
-    float ATTACK_DELAY = 100.0F;
-    float m_AttackTimer;
-
     void HandleInput();
 
     void PlayerCheckCollision();
@@ -44,4 +44,18 @@ private:
     void HandleVerticalCollisions();
 
     void HandleHorizontalCollisions();
+
+    int JUMP_FORCE = 10;
+
+    int JUMP_TIME = 15;
+
+    int MOVEMENT_SPEED = 3;
+
+    int ATTACK_DMG = 200;
+
+    int ATTACK_RANGE = 30;
+    
+    float ATTACK_DELAY = 100.0F;
+
+    float m_AttackTimer;
 };

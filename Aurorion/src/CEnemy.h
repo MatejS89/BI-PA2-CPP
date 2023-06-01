@@ -7,6 +7,10 @@
 #include "CPlayer.h"
 #include <random>
 
+/**
+ * @class CEnemy
+ * @brief The class representing an enemy entity, derived from CEntity.
+ */
 class CEnemy : public CEntity {
 public:
     CEnemy();
@@ -21,10 +25,13 @@ public:
 
     void Load(const json &jsonData) override;
 
+    /**
+     * @brief Creates a shared pointer to a new CEnemy instance.
+     * @return A shared pointer to the created CEnemy instance.
+     */
     static std::shared_ptr<CGameObject> Create();
 
 private:
-
     float GenerateRandomNum();
 
     void RandomJump();
@@ -43,20 +50,29 @@ private:
 
     void HandleVerticalCollisions();
 
-    int JUMP_FORCE;
-    int JUMP_TIME;
-    float MOVEMENT_SPEED;
-    int RADIUS;
-    int ATTACK_DMG;
-    int ATTACK_RANGE;
-    float ATTACK_DELAY;
-    float m_JumpDelay;
-    float m_JumpTimer;
-    float m_AttackTimer;
-
     bool IsPlayerInRange();
 
     void PerformAttack();
 
     void MoveTowardsPlayer();
+
+    int JUMP_FORCE;
+
+    int JUMP_TIME;
+
+    float MOVEMENT_SPEED;
+
+    int RADIUS;
+
+    int ATTACK_DMG;
+
+    int ATTACK_RANGE;
+
+    float ATTACK_DELAY;
+
+    float m_JumpDelay;
+
+    float m_JumpTimer;
+
+    float m_AttackTimer;
 };

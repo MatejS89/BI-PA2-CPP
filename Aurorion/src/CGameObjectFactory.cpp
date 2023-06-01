@@ -22,4 +22,6 @@ void CGameObjectFactory::RegisterObjects() {
     RegisterObject("Enemy", CEnemy::Create);
 }
 
+CGameObjectFactory::~CGameObjectFactory() = default;
+
 CGameObjectFactory::CGameObjectFactory() = default;

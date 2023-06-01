@@ -10,30 +10,33 @@ bool CPlayer::Update() {
 
 void CPlayer::HandleInput() {
     CEntity::m_RigidBody->UnsetForce();
-    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_UP) &&
-        TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_DOWN))
+    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_W) &&
+        TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_S))
         return;
-    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_RIGHT) &&
-        TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_LEFT)) {
+    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_D) &&
+        TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_A)) {
         return;
     }
-    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_DOWN))
+    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_S))
         CEntity::m_RigidBody->ApplyForceY(MOVEMENT_SPEED * DOWN);
-    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_RIGHT)) {
+
+    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_D)) {
         CEntity::m_RigidBody->ApplyForceX(MOVEMENT_SPEED * RIGHT);
         m_Rotation = Rotation::RIGHT;
     }
-    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_LEFT)) {
+
+    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_A)) {
         CEntity::m_RigidBody->ApplyForceX(MOVEMENT_SPEED * LEFT);
         m_Rotation = Rotation::LEFT;
     }
-    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_UP) && m_IsGrounded) {
+
+    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_W) && m_IsGrounded) {
         CEntity::m_RigidBody->ApplyForceY(JUMP_FORCE * UP);
         m_IsGrounded = false;
         m_IsJumping = true;
         m_JumpTime = JUMP_TIME;
     }
-    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_UP) && m_IsJumping && m_JumpTime > 0) {
+    if (TheInputHandler::Instance().IsKeyDown(SDL_SCANCODE_W) && m_IsJumping && m_JumpTime > 0) {
         m_JumpTime -= TheTimer::Instance().GetDeltaTime();
         m_RigidBody->ApplyForceY(UP * JUMP_FORCE);
     } else {

@@ -6,15 +6,15 @@ void CEntity::Draw() {
                                           m_Pos->GetY(), m_W, m_H, m_currentRow,
                                           m_currentFrame,
                                           m_Rotation == Rotation::RIGHT ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
-    SDL_Color tmp;
-    SDL_GetRenderDrawColor(TheGame::Instance().GetRenderer(), &tmp.r, &tmp.g, &tmp.b, &tmp.a);
-    SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), 255, 0, 0, 255);
-    const CVector2D &cam = TheCamera::Instance().GetPosition();
-    SDL_Rect colli = m_Collider.GetCollider();
-    colli.x -= (cam.GetX());
-    colli.y -= (cam.GetY());
-    SDL_RenderDrawRect(TheGame::Instance().GetRenderer(), &colli);
-    SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), tmp.r, tmp.g, tmp.b, tmp.a);
+//    SDL_Color tmp;
+//    SDL_GetRenderDrawColor(TheGame::Instance().GetRenderer(), &tmp.r, &tmp.g, &tmp.b, &tmp.a);
+//    SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), 255, 0, 0, 255);
+//    const CVector2D &cam = TheCamera::Instance().GetPosition();
+//    SDL_Rect colli = m_Collider.GetCollider();
+//    colli.x -= (cam.GetX());
+//    colli.y -= (cam.GetY());
+//    SDL_RenderDrawRect(TheGame::Instance().GetRenderer(), &colli);
+//    SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), tmp.r, tmp.g, tmp.b, tmp.a);
 }
 
 bool CEntity::Update() {
@@ -22,10 +22,6 @@ bool CEntity::Update() {
         return false;
     *m_Centre = *m_Pos + CVector2D(m_W / 2, m_H / 2);
     return true;
-}
-
-std::shared_ptr<CVector2D> CEntity::GetPosition() {
-    return m_RigidBody->GetPosition();
 }
 
 int CEntity::GetCurrHp() const {
