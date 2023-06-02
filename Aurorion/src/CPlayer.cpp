@@ -139,15 +139,8 @@ json CPlayer::Save() const {
 }
 
 void CPlayer::Load(const json &jsonData) {
-    m_W = jsonData["WIDTH"];
-    m_H = jsonData["HEIGHT"];
-    m_currentRow = jsonData["CURRENT_ROW"];
-    m_currentFrame = jsonData["CURRENT_FRAME"];
-    m_texture = jsonData["TEXTURE"];
-    m_Pos->SetX(jsonData["POS_X"]);
-    m_Pos->SetY(jsonData["POS_Y"]);
-    m_LastSafePos->SetX(jsonData["LAST_SAFE_POSX"]);
-    m_LastSafePos->SetY(jsonData["LAST_SAFE_POSY"]);
+    m_Collider.SetBuffer(20, 10, 40, 30);
+    CEntity::Load(jsonData);
     m_IsJumping = jsonData["IS_JUMPING"];
     m_IsGrounded = jsonData["IS_GROUNDED"];
     m_FallTime = jsonData["FALL_TIME"];
@@ -156,14 +149,10 @@ void CPlayer::Load(const json &jsonData) {
     JUMP_FORCE = jsonData["JUMP_FORCE"];
     JUMP_TIME = jsonData["JUMP_TIME"];
     MOVEMENT_SPEED = jsonData["MOVEMENT_SPEED"];
-    m_CurrHP = jsonData["CURR_HP"];
-    m_MaxHP = jsonData["MAX_HP"];
     ATTACK_DMG = jsonData["ATTACK_DMG"];
     ATTACK_RANGE = jsonData["ATTACK_RANGE"];
     ATTACK_DELAY = jsonData["ATTACK_DELAY"];
     m_AttackTimer = jsonData["ATTACK_TIMER"];
-    m_Collider.SetBuffer(20, 10, 40, 30);
-    m_Collider.Set(m_Pos->GetX(), m_Pos->GetY(), m_W, m_H);
 }
 
 CPlayer::CPlayer() : CEntity() {
