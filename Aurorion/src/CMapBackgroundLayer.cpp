@@ -8,8 +8,7 @@ void CMapBackgroundLayer::LayerUpdate() {
     if (m_StateTimer <= 0) {
 //        SDL_Color m_CurrColor;
 //        SDL_GetRenderDrawColor(TheGame::Instance().GetRenderer(), &m_CurrColor.r, &m_CurrColor.g, &m_CurrColor.b, &m_CurrColor.a);
-        if (IsDay(m_CurrColor) || IsNight(m_CurrColor))
-            NextState();
+
         switch (m_BackgroundState) {
             case BackgroundState::DAY:
                 ChangeIntoDay(m_CurrColor);
@@ -21,6 +20,8 @@ void CMapBackgroundLayer::LayerUpdate() {
                 break;
         }
         m_StateTimer = STATE_TIME;
+        if (IsDay(m_CurrColor) || IsNight(m_CurrColor))
+            NextState();
     } else {
         m_StateTimer -= TheTimer::Instance().GetDeltaTime();
     }
