@@ -5,7 +5,6 @@ std::shared_ptr<TileMap> CMapBackgroundLayer::GetTileMap() {
 }
 
 void CMapBackgroundLayer::LayerUpdate() {
-
     if (m_StateTimer <= 0) {
 //        SDL_Color m_CurrColor;
 //        SDL_GetRenderDrawColor(TheGame::Instance().GetRenderer(), &m_CurrColor.r, &m_CurrColor.g, &m_CurrColor.b, &m_CurrColor.a);
@@ -114,7 +113,7 @@ void CMapBackgroundLayer::Init() {
                     jsonData["TARGET_COLOR.A"]};
     m_CurrColor = {jsonData["CURR_COLOR.R"],
                    jsonData["CURR_COLOR.G"],
-                   jsonData["CURR_COLOR.B"]};
+                   jsonData["CURR_COLOR.B"], 255};
     if (m_CurrColor.r != 0 && m_CurrColor.g != 0 && m_CurrColor.b != 0)
         m_BackgroundState = BackgroundState::DAY;
     else
