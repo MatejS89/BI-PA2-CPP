@@ -181,6 +181,11 @@ void CEnemy::Load(const json &jsonData) {
     m_JumpTimer = jsonData["JUMP_TIMER"];
     m_Collider.SetBuffer(0, 0, 7, 2);
     m_Collider.Set(m_Pos->GetX(), m_Pos->GetY(), m_W, m_H);
+    while (TheCollisionHandler::Instance().MapCollision(m_Collider.GetCollider(), m_CurrHP)) {
+        m_Pos->SetY(m_Pos->GetY() + 10);
+        m_Collider.Set(m_Pos->GetX(), m_Pos->GetY(), m_W, m_H);
+    }
+    m_CurrHP = jsonData["CURR_HP"];
 }
 
 std::shared_ptr<CGameObject> CEnemy::Create() {
