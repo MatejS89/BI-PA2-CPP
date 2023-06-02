@@ -101,7 +101,7 @@ int CGame::GetMapHeight() const {
 
 void CGame::Save() {
     if (std::filesystem::create_directory(m_NextSaveDir)) {
-        std::cout << "Save Folder Created" << std::endl;
+        std::cout << "Save Folder Created: " << m_NextSaveDir << std::endl;
     }
     for (const auto &gameLayer: m_GameLayers) {
         gameLayer->SaveLayer();
@@ -181,6 +181,8 @@ void CGame::ParseArgs(char *args[], const int argc) {
 void CGame::NewGame() {
     m_SourceSave = "examples/NewGame/";
     m_NextSaveDir = "examples/SaveGame" + std::to_string(GetNextSaveNumber()) + "/";
+    CheckSourceSave();
+    std::cout << "Loaded new game." << std::endl;
 }
 
 void CGame::CheckSourceSave() {
@@ -191,6 +193,8 @@ void CGame::CheckSourceSave() {
           std::filesystem::exists(m_SourceSave + "BackGroundLayer.json") &&
           std::filesystem::is_regular_file(m_SourceSave + "BackGroundLayer.json") &&
           std::filesystem::exists(m_SourceSave + "map.tmx") &&
-          std::filesystem::is_regular_file(m_SourceSave + "map.tmx")))
+          std::filesystem::is_regular_file(m_SourceSave + "map.tmx") &&
+          std::filesystem::exists(m_SourceSave + "EnemyConfig.json") &&
+          std::filesystem::is_regular_file(m_SourceSave + "EnemyConfig.json")))
         throw std::logic_error("Save directory corrupted");
 }
