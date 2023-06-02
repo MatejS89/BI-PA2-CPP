@@ -10,6 +10,7 @@
 #include "CCollisionHandler.h"
 #include "CGameObjectFactory.h"
 #include "json.hpp"
+#include <random>
 
 using json = nlohmann::json;
 
@@ -28,7 +29,17 @@ public:
     void SaveLayer() override;
 
 private:
+    int GenerateRandomXCoord() const;
+
+    void SpawnEnemy(json &jsonData);
+
+    const float SPAWN_DELAY = 3000.0F;
+
     std::shared_ptr<CMap> m_LevelMap;
 
+    json m_EnemyConfig;
+
     std::shared_ptr<std::vector<std::shared_ptr<CGameObject>>> m_GameObjects;
+
+    float m_SpawnTimer;
 };
