@@ -59,7 +59,25 @@ CEntity::CEntity() : CGameObject(), m_RigidBody(std::make_shared<CRigidBody>()),
                      m_LastSafePos(std::make_shared<CVector2D>()) {}
 
 void CEntity::Load(const json &jsonData) {
-    // TODO
+    m_W = jsonData["WIDTH"];
+    m_H = jsonData["HEIGHT"];
+    m_currentRow = jsonData["CURRENT_ROW"];
+    m_currentFrame = jsonData["CURRENT_FRAME"];
+    m_texture = jsonData["TEXTURE"];
+    m_Pos->SetX(jsonData["POS_X"]);
+    m_Pos->SetY(jsonData["POS_Y"]);
+    m_LastSafePos->SetX(jsonData["LAST_SAFE_POSX"]);
+    m_LastSafePos->SetY(jsonData["LAST_SAFE_POSY"]);
+    m_ImmuneToFall = jsonData["IMMUNE_TO_FALL"];
+    m_Rotation = jsonData["ROTATION"];
+    m_CurrHP = jsonData["CURR_HP"];
+    m_MaxHP = jsonData["MAX_HP"];
+    m_Collider.Set(m_Pos->GetX(), m_Pos->GetY(), m_W, m_H);
+    while (TheCollisionHandler::Instance().MapCollision(m_Collider.GetCollider(), m_CurrHP)) {
+        m_Pos->SetY(m_Pos->GetY() - 10);
+        m_Collider.Set(m_Pos->GetX(), m_Pos->GetY(), m_W, m_H);
+    }
+    m_CurrHP = jsonData["CURR_HP"];
 }
 
 CEntity::~CEntity() = default;

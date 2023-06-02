@@ -8,6 +8,7 @@
 #include "json.hpp"
 #include "EDirection.h"
 #include "ERotation.h"
+#include "CCollisionHandler.h"
 
 using json = nlohmann::json;
 
