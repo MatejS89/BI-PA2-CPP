@@ -80,4 +80,23 @@ void CEntity::Load(const json &jsonData) {
     m_CurrHP = jsonData["CURR_HP"];
 }
 
+void CEntity::SaveEntityData(json &jsonData) const {
+    jsonData["WIDTH"] = m_W;
+    jsonData["HEIGHT"] = m_H;
+    jsonData["CURRENT_ROW"] = m_currentRow;
+    jsonData["CURRENT_FRAME"] = m_currentFrame;
+    jsonData["TEXTURE"] = m_texture;
+    jsonData["POS_X"] = m_Pos->GetX();
+    jsonData["POS_Y"] = m_Pos->GetY();
+    jsonData["LAST_SAFE_POSX"] = m_LastSafePos->GetX();
+    jsonData["LAST_SAFE_POSY"] = m_LastSafePos->GetY();
+    jsonData["IS_JUMPING"] = m_IsJumping;
+    jsonData["IS_GROUNDED"] = m_IsGrounded;
+    jsonData["FALL_TIME"] = m_FallTime;
+    jsonData["IMMUNE_TO_FALL"] = m_ImmuneToFall;
+    jsonData["ROTATION"] = m_Rotation;
+    jsonData["CURR_HP"] = m_CurrHP;
+    jsonData["MAX_HP"] = m_MaxHP;
+}
+
 CEntity::~CEntity() = default;

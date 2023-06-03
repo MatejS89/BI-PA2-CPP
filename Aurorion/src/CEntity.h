@@ -49,6 +49,8 @@ protected:
 
     ~CEntity() override;
 
+    void SaveEntityData(json &jsonData) const;
+
     int m_W;
 
     int m_H;
