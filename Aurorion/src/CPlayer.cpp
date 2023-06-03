@@ -109,32 +109,14 @@ std::shared_ptr<CGameObject> CPlayer::Create() {
 
 json CPlayer::Save() const {
     json jsonData;
-    jsonData["WIDTH"] = m_W;
-    jsonData["HEIGHT"] = m_H;
-    jsonData["CURRENT_ROW"] = m_currentRow;
-    jsonData["CURRENT_FRAME"] = m_currentFrame;
-    jsonData["TEXTURE"] = m_texture;
-    jsonData["POS_X"] = m_Pos->GetX();
-    jsonData["POS_Y"] = m_Pos->GetY();
-    jsonData["LAST_SAFE_POSX"] = m_LastSafePos->GetX();
-    jsonData["LAST_SAFE_POSY"] = m_LastSafePos->GetY();
-    m_RigidBody->SetPosition(*m_Pos);
-    jsonData["IS_JUMPING"] = m_IsJumping;
-    jsonData["IS_GROUNDED"] = m_IsGrounded;
-    jsonData["FALL_TIME"] = m_FallTime;
-    jsonData["IMMUNE_TO_FALL"] = m_ImmuneToFall;
-    jsonData["ROTATION"] = m_Rotation;
+    SaveEntityData(jsonData);
     jsonData["JUMP_FORCE"] = JUMP_FORCE;
     jsonData["JUMP_TIME"] = JUMP_TIME;
     jsonData["MOVEMENT_SPEED"] = MOVEMENT_SPEED;
-    jsonData["CURR_HP"] = m_CurrHP;
-    jsonData["MAX_HP"] = m_MaxHP;
     jsonData["ATTACK_DMG"] = ATTACK_DMG;
     jsonData["ATTACK_RANGE"] = ATTACK_RANGE;
     jsonData["ATTACK_DELAY"] = ATTACK_DELAY;
     jsonData["ATTACK_TIMER"] = m_AttackTimer;
-    m_Centre->SetX(m_Pos->GetX() + m_W / 2);
-    m_Centre->SetY(m_Pos->GetY() + m_H / 2);
     return jsonData;
 }
 
