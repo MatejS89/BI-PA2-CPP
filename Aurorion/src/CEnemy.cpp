@@ -2,12 +2,35 @@
 #include "CTimer.h"
 
 CEnemy::CEnemy() : CEntity() {
+    // TODO add loading of source_texture to Load method
     TheTextureManager::Instance().Load
             ("assets/Mob/Boar/Idle/Idle-Sheet.png", "BoarIdle");
 }
 
-void CEnemy::Draw() {
-    CEntity::Draw();
+CEnemy::~CEnemy() = default;
+
+std::shared_ptr<CGameObject> CEnemy::Create() {
+    return std::make_shared<CEnemy>();
+}
+
+void CEnemy::Load(const json &jsonData) {
+    m_Collider.SetBuffer(0, 0, 7, 2);
+    CEntity::Load(jsonData);
+    m_IsJumping = jsonData["IS_JUMPING"];
+    m_IsGrounded = jsonData["IS_GROUNDED"];
+    m_FallTime = jsonData["FALL_TIME"];
+    m_ImmuneToFall = jsonData["IMMUNE_TO_FALL"];
+    m_Rotation = jsonData["ROTATION"];
+    JUMP_FORCE = jsonData["JUMP_FORCE"];
+    JUMP_TIME = jsonData["JUMP_TIME"];
+    MOVEMENT_SPEED = jsonData["MOVEMENT_SPEED"];
+    RADIUS = jsonData["RADIUS"];
+    ATTACK_DMG = jsonData["ATTACK_DMG"];
+    ATTACK_RANGE = jsonData["ATTACK_RANGE"];
+    ATTACK_DELAY = jsonData["ATTACK_DELAY"];
+    m_AttackTimer = jsonData["ATTACK_TIMER"];
+    m_JumpDelay = jsonData["JUMP_DELAY"];
+    m_JumpTimer = jsonData["JUMP_TIMER"];
 }
 
 bool CEnemy::Update() {
@@ -23,11 +46,20 @@ bool CEnemy::Update() {
     return CEntity::Update();
 }
 
-float CEnemy::GenerateRandomNum() {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<float> distribution(100.0F, 200.0F);
-    return distribution(gen);
+json CEnemy::Save() const {
+    json jsonData;
+    SaveEntityData(jsonData);
+    jsonData["JUMP_FORCE"] = JUMP_FORCE;
+    jsonData["JUMP_TIME"] = JUMP_TIME;
+    jsonData["MOVEMENT_SPEED"] = MOVEMENT_SPEED;
+    jsonData["ATTACK_DMG"] = ATTACK_DMG;
+    jsonData["ATTACK_RANGE"] = ATTACK_RANGE;
+    jsonData["ATTACK_DELAY"] = ATTACK_DELAY;
+    jsonData["ATTACK_TIMER"] = m_AttackTimer;
+    jsonData["JUMP_DELAY"] = m_JumpDelay;
+    jsonData["RADIUS"] = RADIUS;
+    jsonData["JUMP_TIMER"] = m_JumpTimer;
+    return jsonData;
 }
 
 void CEnemy::RandomJump() {
@@ -40,30 +72,6 @@ void CEnemy::RandomJump() {
         m_JumpTimer -= TheTimer::Instance().GetDeltaTime();
     else if (m_JumpTimer <= 0.0F)
         ResetJump();
-}
-
-bool CEnemy::IsPlayerInRange() {
-    float distanceToPlayer = abs(TheCamera::Instance().GetTarget()->GetX() - m_Pos->GetX());
-    return (distanceToPlayer <= RADIUS);
-}
-
-void CEnemy::MoveTowardsPlayer() {
-    if (TheCamera::Instance().GetTarget()->GetX() > m_Centre->GetX()) {
-        m_RigidBody->ApplyForceX(MOVEMENT_SPEED * RIGHT);
-        m_Rotation = Rotation::LEFT;
-    } else if (TheCamera::Instance().GetTarget()->GetX() < m_Centre->GetX()) {
-        m_RigidBody->ApplyForceX(MOVEMENT_SPEED * LEFT);
-        m_Rotation = Rotation::RIGHT;
-    }
-}
-
-void CEnemy::PerformAttack() {
-    if (m_AttackTimer <= 0.0F) {
-        TheCollisionHandler::Instance().EnemyAttack(ATTACK_DMG, ATTACK_RANGE, m_Rotation, m_Collider);
-        m_AttackTimer = ATTACK_DELAY;
-    } else {
-        m_AttackTimer -= TheTimer::Instance().GetDeltaTime();
-    }
 }
 
 void CEnemy::PerformJump() {
@@ -118,44 +126,33 @@ void CEnemy::HandleVerticalCollisions() {
     }
 }
 
-json CEnemy::Save() const {
-    json jsonData;
-    SaveEntityData(jsonData);
-    jsonData["JUMP_FORCE"] = JUMP_FORCE;
-    jsonData["JUMP_TIME"] = JUMP_TIME;
-    jsonData["MOVEMENT_SPEED"] = MOVEMENT_SPEED;
-    jsonData["ATTACK_DMG"] = ATTACK_DMG;
-    jsonData["ATTACK_RANGE"] = ATTACK_RANGE;
-    jsonData["ATTACK_DELAY"] = ATTACK_DELAY;
-    jsonData["ATTACK_TIMER"] = m_AttackTimer;
-    jsonData["JUMP_DELAY"] = m_JumpDelay;
-    jsonData["RADIUS"] = RADIUS;
-    jsonData["JUMP_TIMER"] = m_JumpTimer;
-    return jsonData;
+bool CEnemy::IsPlayerInRange() const {
+    float distanceToPlayer = abs(TheCamera::Instance().GetTarget()->GetX() - m_Pos->GetX());
+    return (distanceToPlayer <= RADIUS);
 }
 
-void CEnemy::Load(const json &jsonData) {
-    m_Collider.SetBuffer(0, 0, 7, 2);
-    CEntity::Load(jsonData);
-    m_IsJumping = jsonData["IS_JUMPING"];
-    m_IsGrounded = jsonData["IS_GROUNDED"];
-    m_FallTime = jsonData["FALL_TIME"];
-    m_ImmuneToFall = jsonData["IMMUNE_TO_FALL"];
-    m_Rotation = jsonData["ROTATION"];
-    JUMP_FORCE = jsonData["JUMP_FORCE"];
-    JUMP_TIME = jsonData["JUMP_TIME"];
-    MOVEMENT_SPEED = jsonData["MOVEMENT_SPEED"];
-    RADIUS = jsonData["RADIUS"];
-    ATTACK_DMG = jsonData["ATTACK_DMG"];
-    ATTACK_RANGE = jsonData["ATTACK_RANGE"];
-    ATTACK_DELAY = jsonData["ATTACK_DELAY"];
-    m_AttackTimer = jsonData["ATTACK_TIMER"];
-    m_JumpDelay = jsonData["JUMP_DELAY"];
-    m_JumpTimer = jsonData["JUMP_TIMER"];
+void CEnemy::MoveTowardsPlayer() {
+    if (TheCamera::Instance().GetTarget()->GetX() > m_Centre->GetX()) {
+        m_RigidBody->ApplyForceX(MOVEMENT_SPEED * RIGHT);
+        m_Rotation = Rotation::LEFT;
+    } else if (TheCamera::Instance().GetTarget()->GetX() < m_Centre->GetX()) {
+        m_RigidBody->ApplyForceX(MOVEMENT_SPEED * LEFT);
+        m_Rotation = Rotation::RIGHT;
+    }
 }
 
-std::shared_ptr<CGameObject> CEnemy::Create() {
-    return std::make_shared<CEnemy>();
+void CEnemy::PerformAttack() {
+    if (m_AttackTimer <= 0.0F) {
+        TheCollisionHandler::Instance().EnemyAttack(ATTACK_DMG, ATTACK_RANGE, m_Rotation, m_Collider);
+        m_AttackTimer = ATTACK_DELAY;
+    } else {
+        m_AttackTimer -= TheTimer::Instance().GetDeltaTime();
+    }
 }
 
-CEnemy::~CEnemy() = default;
+float CEnemy::GenerateRandomNum() const {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<float> distribution(100.0F, 200.0F);
+    return distribution(gen);
+}
