@@ -1,9 +1,11 @@
 #include "CCollisionHandler.h"
 
+CCollisionHandler::CCollisionHandler() = default;
+
 CCollisionHandler CCollisionHandler::m_Instance;
 
-bool CCollisionHandler::CheckCollisionGameObjects(const SDL_Rect &left, const SDL_Rect &right) const {
-    return SDL_HasIntersection(&left, &right);
+CCollisionHandler &CCollisionHandler::Instance() {
+    return m_Instance;
 }
 
 bool CCollisionHandler::MapCollision(const SDL_Rect &rect, int &hp) {
@@ -37,10 +39,6 @@ bool CCollisionHandler::MapCollision(const SDL_Rect &rect, int &hp) {
     return false;
 }
 
-CCollisionHandler &CCollisionHandler::Instance() {
-    return m_Instance;
-}
-
 void CCollisionHandler::LoadCollisionLayer(std::shared_ptr<TileMap> tileLayer) {
     m_TileLayer = tileLayer;
     m_TileSize = 16;
@@ -48,52 +46,13 @@ void CCollisionHandler::LoadCollisionLayer(std::shared_ptr<TileMap> tileLayer) {
     m_ColCount = tileLayer->front().size();
 }
 
-void CCollisionHandler::DestroyBlock() {
-    CVector2D mousePos = TranslateMouse();
-    if (mousePos.GetX() >= m_ColCount || mousePos.GetY() >= m_RowCount || mousePos.GetX() < 0 || mousePos.GetY() < 0)
-        return;
-    auto &selectedBlock = (*m_TileLayer)[mousePos.GetY()][mousePos.GetX()];
-    if (selectedBlock != LAVA && selectedBlock != WATER && selectedBlock != BEDROCK) {
-        selectedBlock = EMPTY;
-    }
-}
-
-void CCollisionHandler::BuildBlock() {
-    CVector2D mousePos = TranslateMouse();
-    if (mousePos.GetX() >= m_ColCount || mousePos.GetY() >= m_RowCount || mousePos.GetX() < 0 || mousePos.GetY() < 0)
-        return;
-    auto &selectedBlock = (*m_TileLayer)[mousePos.GetY()][mousePos.GetX()];
-    if (selectedBlock == EMPTY ||
-        selectedBlock == WATER ||
-        selectedBlock == LAVA ||
-        selectedBlock == MUSHROOM) {
-        selectedBlock = DIRT;
-    }
-}
-
-CVector2D CCollisionHandler::TranslateMouse() const {
-    return CVector2D(floor(
-            (TheInputHandler::Instance().GetMousePos().GetX() + TheCamera::Instance().GetPosition().GetX()) /
-            m_TileSize), floor(
-            (TheInputHandler::Instance().GetMousePos().GetY() + TheCamera::Instance().GetPosition().GetY()) /
-            m_TileSize)
-    );
+bool CCollisionHandler::CheckCollisionGameObjects(const SDL_Rect &left, const SDL_Rect &right) const {
+    return SDL_HasIntersection(&left, &right);
 }
 
 void CCollisionHandler::LoadGameObjects(std::shared_ptr<std::vector<std::shared_ptr<CGameObject>>> gameObjects) {
     m_GameObjects = gameObjects;
 }
-
-bool CCollisionHandler::CheckCollisionWithEnemies() const {
-    const auto &player = (*m_GameObjects)[0];
-    for (size_t i = 1; i < m_GameObjects->size(); i++) {
-        const auto &enemy = (*m_GameObjects)[i];
-        if (CheckCollisionGameObjects(player->GetCollider(), enemy->GetCollider()))
-            return true;
-    }
-    return false;
-}
-
 
 void CCollisionHandler::PlayerAttack(int dmg, int range, const Rotation &rotation) {
     const auto &player = (*m_GameObjects)[0];
@@ -122,6 +81,40 @@ void CCollisionHandler::EnemyAttack(int dmg, int range, const Rotation &rotation
         player->ReduceHp(dmg);
 }
 
+void CCollisionHandler::DestroyBlock() {
+    CVector2D mousePos = TranslateMouse();
+    if (mousePos.GetX() >= m_ColCount || mousePos.GetY() >= m_RowCount || mousePos.GetX() < 0 || mousePos.GetY() < 0)
+        return;
+    auto &selectedBlock = (*m_TileLayer)[mousePos.GetY()][mousePos.GetX()];
+    if (selectedBlock != LAVA && selectedBlock != WATER && selectedBlock != BEDROCK) {
+        selectedBlock = EMPTY;
+    }
+}
+
+void CCollisionHandler::BuildBlock() {
+    CVector2D mousePos = TranslateMouse();
+    if (mousePos.GetX() >= m_ColCount || mousePos.GetY() >= m_RowCount || mousePos.GetX() < 0 || mousePos.GetY() < 0)
+        return;
+    auto &selectedBlock = (*m_TileLayer)[mousePos.GetY()][mousePos.GetX()];
+    if (selectedBlock == EMPTY ||
+        selectedBlock == WATER ||
+        selectedBlock == LAVA ||
+        selectedBlock == MUSHROOM) {
+        selectedBlock = DIRT;
+    }
+}
+
+
+bool CCollisionHandler::CheckCollisionWithEnemies() const {
+    const auto &player = (*m_GameObjects)[0];
+    for (size_t i = 1; i < m_GameObjects->size(); i++) {
+        const auto &enemy = (*m_GameObjects)[i];
+        if (CheckCollisionGameObjects(player->GetCollider(), enemy->GetCollider()))
+            return true;
+    }
+    return false;
+}
+
 bool CCollisionHandler::CheckCollisionWithPlayer(const CCollider &collider) const {
     const auto &player = (*m_GameObjects)[0];
     if (CheckCollisionGameObjects(collider.GetCollider(), player->GetCollider()))
@@ -129,4 +122,11 @@ bool CCollisionHandler::CheckCollisionWithPlayer(const CCollider &collider) cons
     return false;
 }
 
-CCollisionHandler::CCollisionHandler() = default;
+CVector2D CCollisionHandler::TranslateMouse() const {
+    return CVector2D(floor(
+            (TheInputHandler::Instance().GetMousePos().GetX() + TheCamera::Instance().GetPosition().GetX()) /
+            m_TileSize), floor(
+            (TheInputHandler::Instance().GetMousePos().GetY() + TheCamera::Instance().GetPosition().GetY()) /
+            m_TileSize)
+    );
+}
