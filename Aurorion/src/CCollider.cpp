@@ -1,7 +1,10 @@
 #include "CCollider.h"
 
-CCollider::CCollider(int x, int y, int w, int h) : m_Box({x, y, w, h}), m_Buffer({0, 0, 0, 0}) {
-}
+CCollider::CCollider() = default;
+
+CCollider::CCollider(int x, int y, int w, int h) : m_Box({x, y, w, h}), m_Buffer({0, 0, 0, 0}) {}
+
+CCollider::~CCollider() = default;
 
 const SDL_Rect &CCollider::GetCollider() const {
     return m_Box;
@@ -19,5 +22,3 @@ void CCollider::Set(int x, int y, int w, int h) {
             h - m_Buffer.h
     };
 }
-
-CCollider::CCollider() = default;
