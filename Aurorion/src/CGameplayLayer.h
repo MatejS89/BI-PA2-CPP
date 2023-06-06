@@ -54,11 +54,11 @@ private:
      */
     void SpawnEnemy(json &jsonData);
 
+    std::shared_ptr<CMap> m_LevelMap;
+
     const float SPAWN_DELAY = 3000.0F;
 
     float m_SpawnTimer;
-
-    std::shared_ptr<CMap> m_LevelMap;
 
     /**
      * Config used for spawning new enemies.

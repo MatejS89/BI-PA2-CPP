@@ -4,8 +4,8 @@
 #include <random>
 
 CGameplayLayer::CGameplayLayer() : m_LevelMap(TheMapParser::Instance().GetMap("MAP")),
-                                   m_GameObjects(std::make_shared<std::vector<std::shared_ptr<CGameObject>>>()),
-                                   m_SpawnTimer(SPAWN_DELAY) {}
+                                   m_SpawnTimer(SPAWN_DELAY),
+                                   m_GameObjects(std::make_shared<std::vector<std::shared_ptr<CGameObject>>>()) {}
 
 void CGameplayLayer::Init(std::shared_ptr<CHudLayer> hud) {
     TheCollisionHandler::Instance().LoadGameObjects(m_GameObjects);
