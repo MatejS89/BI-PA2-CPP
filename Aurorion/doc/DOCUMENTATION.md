@@ -45,6 +45,8 @@ each SaveGame has a unique directory to store its state.
 Similarly, when loading from a SaveGame, the game state is saved in the directory of the loaded SaveGame (if the player
 did not die). This allows you to continue your progress from where you left off.
 
+Each SaveGame contains a EnemyConfig.json file which is used to configure the attributes of enemies spawned on the map.
+
 ## Controls
 
 The controls for playing Aurorion are as follows:
@@ -56,5 +58,6 @@ The controls for playing Aurorion are as follows:
 - 'space': Attack
 - 'mouse button left': Destroy block
 - 'mouse button right': Build block
+- 'escape': Close and save the game
 
 Use these controls to navigate the world, interact with objects, attack enemies, and manipulate blocks.
