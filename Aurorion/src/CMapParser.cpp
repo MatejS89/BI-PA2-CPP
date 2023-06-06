@@ -1,10 +1,14 @@
 #include "CMapParser.h"
 
+CMapParser::CMapParser() = default;
+
 CMapParser CMapParser::m_Instance;
 
 CMapParser &CMapParser::Instance() {
     return m_Instance;
 }
+
+CMapParser::~CMapParser() = default;
 
 void CMapParser::Load() {
     if (!Parse("MAP", TheGame::Instance().GetSource() + "map.tmx"))
@@ -23,26 +27,20 @@ bool CMapParser::Parse(const char *name, const std::string &source) {
     int rowCount = stoi(GetAttributeContent(root, "height"));
     int tileWidth = stoi(GetAttributeContent(root, "tilewidth"));
     std::shared_ptr<TilesetList> tileSets = std::make_shared<TilesetList>();
-    for (xmlNodePtr elem = xmlFirstElementChild(root); elem != nullptr; elem = xmlNextElementSibling(elem)) {
-        if (xmlStrcmp(elem->name, reinterpret_cast<const xmlChar *> ("tileset")) == 0) {
-            tileSets->push_back(ParseTileSet(elem));
-        }
-    }
+    ParseTilesets(root, tileSets);
+
     CMap gameMap;
     CMapBackgroundLayer backgroundLayer;
     backgroundLayer.Init();
     gameMap.m_MapLayers.push_back(std::make_shared<CMapBackgroundLayer>(backgroundLayer));
-    for (xmlNodePtr elem = xmlFirstElementChild(root); elem != nullptr; elem = xmlNextElementSibling(elem)) {
-        if (xmlStrcmp(elem->name, reinterpret_cast<const xmlChar *> ("layer")) == 0) {
-            CTileLayer layer = ParseTileLayer(elem, tileSets, tileWidth,
-                                              rowCount, colCount);
-            gameMap.m_MapLayers.push_back(std::make_shared<CTileLayer>(layer));
-        }
-    }
+
+    ParseTileLayers(root, tileSets, tileWidth, rowCount, colCount, gameMap);
+
     gameMap.m_MapWidth = colCount * tileWidth;
     gameMap.m_MapHeight = rowCount * tileWidth;
     m_Maps[name] = std::make_shared<CMap>(gameMap);
     xmlFreeDoc(doc);
+    xmlCleanupParser();
     return true;
 }
 
@@ -81,13 +79,10 @@ CTileLayer CMapParser::ParseTileLayer(xmlNodePtr ptr, std::shared_ptr<TilesetLis
     if (data == nullptr)
         throw std::logic_error("CHYBA");
     xmlChar *content = xmlNodeGetContent(data);
-
     std::shared_ptr<TileMap> tileMap = std::make_shared<TileMap>();
-
     std::string csvData(reinterpret_cast<char *>(content));
     std::stringstream ss(csvData);
     std::string token;
-
     while (std::getline(ss, token, '\n')) {
         std::stringstream row(token);
         std::string num;
@@ -99,7 +94,6 @@ CTileLayer CMapParser::ParseTileLayer(xmlNodePtr ptr, std::shared_ptr<TilesetLis
             continue;
         tileMap->push_back(rowData);
     }
-
     xmlFree(content);
     return CTileLayer(tileSize, rowCount, colCount, tileMap, tileSets);
 }
@@ -108,11 +102,21 @@ std::shared_ptr<CMap> CMapParser::GetMap(const std::string &id) {
     return m_Maps[id];
 }
 
-CMapParser::~CMapParser() {
-    xmlCleanupParser();
+void CMapParser::ParseTilesets(xmlNodePtr root, std::shared_ptr<TilesetList> tileSets) {
+    for (xmlNodePtr elem = xmlFirstElementChild(root); elem != nullptr; elem = xmlNextElementSibling(elem)) {
+        if (xmlStrcmp(elem->name, reinterpret_cast<const xmlChar *>("tileset")) == 0) {
+            tileSets->push_back(ParseTileSet(elem));
+        }
+    }
 }
 
-
-CMapParser::CMapParser() = default;
-
-
+void CMapParser::ParseTileLayers(xmlNodePtr root, std::shared_ptr<TilesetList> tileSets, int tileWidth, int rowCount,
+                                 int colCount, CMap &gameMap) {
+    for (xmlNodePtr elem = xmlFirstElementChild(root); elem != nullptr; elem = xmlNextElementSibling(elem)) {
+        if (xmlStrcmp(elem->name, reinterpret_cast<const xmlChar *> ("layer")) == 0) {
+            CTileLayer layer = ParseTileLayer(elem, tileSets, tileWidth,
+                                              rowCount, colCount);
+            gameMap.m_MapLayers.push_back(std::make_shared<CTileLayer>(layer));
+        }
+    }
+}
