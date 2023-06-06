@@ -1,4 +1,6 @@
 #include "CPlayer.h"
+#include "CInputHandler.h"
+#include "CTimer.h"
 
 bool CPlayer::Update() {
     HandleInput();
