@@ -18,6 +18,7 @@ void CEntity::Draw() {
 }
 
 bool CEntity::Update() {
+    m_currentFrame = (SDL_GetTicks() / 100) % 4;
     if (m_CurrHP <= 0)
         return false;
     *m_Centre = *m_Pos + CVector2D(m_W / 2, m_H / 2);
