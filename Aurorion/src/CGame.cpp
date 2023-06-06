@@ -43,6 +43,17 @@ bool CGame::Init(const char *title, int xPos, int yPos, int width, int height, b
     return true;
 }
 
+void CGame::LoadGame(char *args[], const int argc) {
+    ParseArgs(args, argc);
+    TheMapParser::Instance().Load();
+    TheObjectFactory::Instance().RegisterObjects();
+    std::shared_ptr<CHudLayer> hud = std::make_shared<CHudLayer>();
+    std::shared_ptr<CGameplayLayer> gameplayLayer = std::make_shared<CGameplayLayer>();
+    gameplayLayer->Init(hud);
+    m_GameLayers.push_back(gameplayLayer);
+    m_GameLayers.push_back(hud);
+}
+
 void CGame::Update() {
     for (const auto &item: m_GameLayers) {
         item->UpdateLayer();
@@ -97,17 +108,6 @@ void CGame::Save() {
     for (const auto &gameLayer: m_GameLayers) {
         gameLayer->SaveLayer();
     }
-}
-
-void CGame::LoadGame(char *args[], const int argc) {
-    ParseArgs(args, argc);
-    TheMapParser::Instance().Load();
-    TheObjectFactory::Instance().RegisterObjects();
-    std::shared_ptr<CHudLayer> hud = std::make_shared<CHudLayer>();
-    std::shared_ptr<CGameplayLayer> gameplayLayer = std::make_shared<CGameplayLayer>();
-    gameplayLayer->Init(hud);
-    m_GameLayers.push_back(gameplayLayer);
-    m_GameLayers.push_back(hud);
 }
 
 std::string CGame::GetSource() const {
