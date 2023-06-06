@@ -36,19 +36,8 @@ void CGameplayLayer::DrawLayer() {
 
 void CGameplayLayer::UpdateLayer() {
     m_LevelMap->MapUpdate();
-    for (size_t i = 0; i < m_GameObjects->size(); i++) {
-        if (!(*m_GameObjects)[i]->Update()) {
-            m_GameObjects->erase(m_GameObjects->begin() + i);
-            if (i == 0)
-                TheGame::Instance().Quit();
-        }
-    }
-    if (m_SpawnTimer <= 0) {
-        m_EnemyConfig["POS_X"] = GenerateRandomXCoord();
-        SpawnEnemy(m_EnemyConfig);
-        m_SpawnTimer = SPAWN_DELAY;
-    } else
-        m_SpawnTimer -= TheTimer::Instance().GetDeltaTime();
+    UpdateGameObjects();
+    SpawnNewEnemy();
 }
 
 std::shared_ptr<CMap> CGameplayLayer::GetMap() {
@@ -99,4 +88,23 @@ int CGameplayLayer::GenerateRandomXCoord() const {
     std::mt19937 gen(rd());
     std::uniform_int_distribution<int> distribution(0, TheGame::Instance().GetMapWidth());
     return distribution(gen);
+}
+
+void CGameplayLayer::SpawnNewEnemy() {
+    if (m_SpawnTimer <= 0) {
+        m_EnemyConfig["POS_X"] = GenerateRandomXCoord();
+        SpawnEnemy(m_EnemyConfig);
+        m_SpawnTimer = SPAWN_DELAY;
+    } else
+        m_SpawnTimer -= TheTimer::Instance().GetDeltaTime();
+}
+
+void CGameplayLayer::UpdateGameObjects() {
+    for (size_t i = 0; i < m_GameObjects->size(); i++) {
+        if (!(*m_GameObjects)[i]->Update()) {
+            m_GameObjects->erase(m_GameObjects->begin() + i);
+            if (i == 0)
+                TheGame::Instance().Quit();
+        }
+    }
 }

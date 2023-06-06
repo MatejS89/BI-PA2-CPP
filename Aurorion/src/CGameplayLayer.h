@@ -4,7 +4,6 @@
 #include "CMap.h"
 #include "CHudLayer.h"
 #include "CGameObjectFactory.h"
-#include "json.hpp"
 
 using json = nlohmann::json;
 
@@ -44,6 +43,10 @@ public:
 
 private:
     int GenerateRandomXCoord() const;
+
+    void SpawnNewEnemy();
+
+    void UpdateGameObjects();
 
     /**
      * @brief Spawns a new enemy.
