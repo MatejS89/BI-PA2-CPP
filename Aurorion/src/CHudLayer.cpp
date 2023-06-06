@@ -8,7 +8,6 @@ void CHudLayer::DrawLayer() {
     int currHp = static_cast<int>(perc);
     if (currHp <= 0)
         currHp = 0;
-//    std::cout << m_Target->GetCurrHp() << "   " << m_Target->GetMaxHp() << "  " << currHp << std::endl;
     SDL_Rect a = {50, 50, currHp, 10};
     SDL_RenderFillRect(TheGame::Instance().GetRenderer(), &a);
     SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), 128, 0, 0, 255);
