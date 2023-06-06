@@ -6,7 +6,6 @@
 #include <functional>
 #include "CPlayer.h"
 #include "CEnemy.h"
-#include "CGameObject.h"
 
 /**
  * @class CGameObjectFactory
