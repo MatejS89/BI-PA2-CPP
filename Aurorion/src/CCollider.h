@@ -7,8 +7,8 @@
  * @brief Represents a collider object used for collision detection.
  *
  * The CCollider class provides functionality to define and manipulate a rectangular collider.
- * It encapsulates an SDL_Rect object to represent the collider's position and size.
- * It also encapsulates an SDL_Rect representing the buffer of a collider in order to crop the size of the collider.
+ * Encapsulates an SDL_Rect object to represent the colliders position and size.
+ * Also encapsulates an SDL_Rect representing the buffer of a collider in order to crop the size of the collider.
  */
 class CCollider {
 public:
