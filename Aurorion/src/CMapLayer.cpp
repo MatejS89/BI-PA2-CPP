@@ -5,8 +5,5 @@ std::shared_ptr<TileMap> CMapLayer::GetTileMap() {
 }
 
 void CMapLayer::LayerRender() {
-}
-
-void CMapLayer::SaveMapLayer() {
-
+    return;
 }
