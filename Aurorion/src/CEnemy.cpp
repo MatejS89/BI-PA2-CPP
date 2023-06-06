@@ -1,5 +1,7 @@
 #include "CEnemy.h"
 #include "CTimer.h"
+#include "CCamera.h"
+#include <random>
 
 CEnemy::CEnemy() : CEntity() {
     // TODO add loading of source_texture to Load method

@@ -1,11 +1,6 @@
 #pragma once
 
 #include "CEntity.h"
-#include "CRigidBody.h"
-#include "CCamera.h"
-#include "CCollisionHandler.h"
-#include "CPlayer.h"
-#include <random>
 
 /**
  * @class CEnemy
