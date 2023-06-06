@@ -16,14 +16,6 @@ void CHudLayer::DrawLayer() {
     SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), tmp.r, tmp.g, tmp.b, tmp.a);
 }
 
-void CHudLayer::UpdateLayer() {
-    return;
-}
-
 void CHudLayer::AddTarget(std::shared_ptr<CGameObject> target) {
     m_Target = target;
-}
-
-void CHudLayer::SaveLayer() {
-    return;
 }

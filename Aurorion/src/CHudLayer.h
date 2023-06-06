@@ -22,10 +22,6 @@ public:
      */
     void AddTarget(std::shared_ptr<CGameObject> target);
 
-    void UpdateLayer() override;
-
-    void SaveLayer() override;
-
 private:
     std::shared_ptr<CGameObject> m_Target;
 };
