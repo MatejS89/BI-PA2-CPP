@@ -4,7 +4,6 @@
 #include "CVector2D.h"
 #include "CRigidBody.h"
 #include "CCollider.h"
-#include "json.hpp"
 #include "EDirection.h"
 #include "ERotation.h"
 #include "CCollisionHandler.h"
