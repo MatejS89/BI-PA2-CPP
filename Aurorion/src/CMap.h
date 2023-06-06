@@ -14,6 +14,9 @@ public:
 
     ~CMap();
 
+    /**
+     * @brief Renders all layers of the map
+     */
     void MapRender();
 
     void MapUpdate();
@@ -21,8 +24,6 @@ public:
     std::vector<std::shared_ptr<CMapLayer>> GetMapLayers();
 
     int GetMapWidth() const;
-
-    int GetMapHeight() const;
 
     void SaveMap();
 
