@@ -1,6 +1,6 @@
 #include "CTextureManager.h"
 
-CTextureManager CTextureManager::m_instance;
+CTextureManager CTextureManager::m_Instance;
 
 CTextureManager::CTextureManager() = default;
 
@@ -15,7 +15,7 @@ bool CTextureManager::Load(const std::string &fileName, std::string id) {
     SDL_FreeSurface(tmpSurface);
 
     if (texture != nullptr) {
-        m_textureMap[id] = texture;
+        m_TextureMap[id] = texture;
         return true;
     }
     return false;
@@ -28,11 +28,11 @@ void CTextureManager::DrawFrame(const std::string &id, int x, int y, int width, 
                      height * (currentRow - 1),
                      width, height};
     SDL_Rect destRect = {static_cast<int>(x - cam.GetX()), static_cast<int>(y - cam.GetY()), width, height};
-    SDL_RenderCopyEx(TheGame::Instance().GetRenderer(), m_textureMap[id], &srcRect, &destRect, 0, 0, flip);
+    SDL_RenderCopyEx(TheGame::Instance().GetRenderer(), m_TextureMap[id], &srcRect, &destRect, 0, 0, flip);
 }
 
 CTextureManager &CTextureManager::Instance() {
-    return m_instance;
+    return m_Instance;
 }
 
 void CTextureManager::DrawTile(const std::string &tileSetId, int tileSize, int x, int y, int row, int frame,
@@ -40,13 +40,13 @@ void CTextureManager::DrawTile(const std::string &tileSetId, int tileSize, int x
     const CVector2D &cam = TheCamera::Instance().GetPosition();
     SDL_Rect destRect = {static_cast<int>(x - cam.GetX()), static_cast<int>(y - cam.GetY()), tileSize, tileSize};
     SDL_Rect srcRect = {tileSize * frame, tileSize * row, tileSize, tileSize};
-    SDL_RenderCopyEx(TheGame::Instance().GetRenderer(), m_textureMap[tileSetId], &srcRect, &destRect, 0, 0, flip);
+    SDL_RenderCopyEx(TheGame::Instance().GetRenderer(), m_TextureMap[tileSetId], &srcRect, &destRect, 0, 0, flip);
 }
 
 CTextureManager::~CTextureManager() = default;
 
 void CTextureManager::Clean() {
-    for (const auto &textureMap: m_textureMap) {
-        SDL_DestroyTexture(textureMap.second);
+    for (const auto &texture: m_TextureMap) {
+        SDL_DestroyTexture(texture.second);
     }
 }
