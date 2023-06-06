@@ -4,8 +4,11 @@
 #include <vector>
 #include "CMap.h"
 
+/**
+ * @class CGameLayer
+ * @brief Used to represent layers of the game, a base class for game layers.
+ */
 class CGameLayer {
-
 public:
     virtual void UpdateLayer() = 0;
 
