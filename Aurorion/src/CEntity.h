@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CGameObject.h"
-#include "SParamLoader.h"
 #include "CVector2D.h"
 #include "CRigidBody.h"
 #include "CCollider.h"
@@ -38,10 +37,21 @@ public:
 
     void DealFallDamage();
 
+    /**
+     * @brief Updates the collider based on current position.
+     */
     void UpdateCollider();
 
+    /**
+     * @brief Used to save attributes of classes derived from CEntity.
+     * @return A json element containing the save data.
+     */
     virtual json Save() const = 0;
 
+    /**
+     * @brief Loads the entity from a JSON object.
+     * @param jsonData The JSON data to load from.
+     */
     virtual void Load(const json &jsonData);
 
 protected:
