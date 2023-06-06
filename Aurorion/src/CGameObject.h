@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CGame.h"
-#include "SParamLoader.h"
 #include "json.hpp"
 
 using json = nlohmann::json;
