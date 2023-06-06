@@ -14,7 +14,7 @@
 
 /**
  * @class CMapParser
- * @brief The CMapParser class is responsible for parsing map files in the TMX format.
+ * @brief Singleton class, responsible for parsing map files in the TMX format.
  * The CMapParser class parses TMX map files and extracts the necessary attribute data to create game maps.
  * It supports multiple layers and tilesets within the map file. The parsed maps can be accessed
  * using their unique IDs.
@@ -84,12 +84,6 @@ private:
     CTileLayer ParseTileLayer(xmlNodePtr ptr, std::shared_ptr<TilesetList> tileSets, int tileSize,
                               int rowCount, int colCount);
 
-    std::string GetAttributeContent(xmlNodePtr ptr, const char *needle);
-
-    std::map<std::string, std::shared_ptr<CMap>> m_Maps;
-
-    static CMapParser m_Instance;
-
     /**
      * @brief Parses tilesets from the root XML node.
      * Each tileset is represented by the <tileset> node in the map.tmx file.
@@ -113,6 +107,12 @@ private:
      */
     void ParseTileLayers(xmlNodePtr root, std::shared_ptr<TilesetList> tileSets, int tileWidth,
                          int rowCount, int colCount, CMap &gameMap);
+
+    std::string GetAttributeContent(xmlNodePtr ptr, const char *needle);
+
+    std::map<std::string, std::shared_ptr<CMap>> m_Maps;
+
+    static CMapParser m_Instance;
 };
 
 typedef CMapParser TheMapParser;
