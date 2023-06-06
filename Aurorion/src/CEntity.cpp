@@ -1,6 +1,11 @@
 #include "CEntity.h"
 #include "CGame.h"
 
+CEntity::CEntity() : CGameObject(), m_RigidBody(std::make_shared<CRigidBody>()), m_Pos(std::make_shared<CVector2D>()),
+                     m_LastSafePos(std::make_shared<CVector2D>()) {}
+
+CEntity::~CEntity() = default;
+
 void CEntity::Draw() {
     CTextureManager::Instance().DrawFrame(m_texture, m_Pos->GetX(),
                                           m_Pos->GetY(), m_W, m_H, m_currentRow,
@@ -18,7 +23,6 @@ void CEntity::Draw() {
 }
 
 bool CEntity::Update() {
-    m_currentFrame = (SDL_GetTicks() / 100) % 4;
     if (m_CurrHP <= 0)
         return false;
     *m_Centre = *m_Pos + CVector2D(m_W / 2, m_H / 2);
@@ -55,9 +59,6 @@ void CEntity::DealFallDamage() {
 void CEntity::UpdateCollider() {
     m_Collider.Set(m_Pos->GetX(), m_Pos->GetY(), m_W, m_H);
 }
-
-CEntity::CEntity() : CGameObject(), m_RigidBody(std::make_shared<CRigidBody>()), m_Pos(std::make_shared<CVector2D>()),
-                     m_LastSafePos(std::make_shared<CVector2D>()) {}
 
 void CEntity::Load(const json &jsonData) {
     m_W = jsonData["WIDTH"];
@@ -99,5 +100,3 @@ void CEntity::SaveEntityData(json &jsonData) const {
     jsonData["CURR_HP"] = m_CurrHP;
     jsonData["MAX_HP"] = m_MaxHP;
 }
-
-CEntity::~CEntity() = default;
