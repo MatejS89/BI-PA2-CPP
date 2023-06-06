@@ -1,6 +1,5 @@
 #pragma once
 
-#include "SDL2/SDL.h"
 #include "CVector2D.h"
 #include "CGame.h"
 #include <memory>
