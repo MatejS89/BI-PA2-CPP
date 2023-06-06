@@ -9,12 +9,17 @@
 
 /**
  * @class CGameObjectFactory
- * @brief A factory class for creating game objects.
+ * @brief A factory class for creating game objects of different types.
  */
 class CGameObjectFactory {
     typedef std::function<std::shared_ptr<CGameObject>()> CreateObjectFunc;
 
 public:
+    /**
+     * @brief Deleted copy constructor to prevent copying of CGameObjectFactory instances.
+     */
+    CGameObjectFactory(const CGameObjectFactory &other) = delete;
+
     static CGameObjectFactory &Instance();
 
     /**
@@ -23,11 +28,6 @@ public:
     * @param func The creation function for the game object.
     */
     void RegisterObject(const std::string &type, CreateObjectFunc func);
-
-    /**
-     * @brief Deleted copy constructor to prevent copying of CGameObjectFactory instances.
-     */
-    CGameObjectFactory(const CGameObjectFactory &other) = delete;
 
     /**
      * @brief Registers the available game objects.
