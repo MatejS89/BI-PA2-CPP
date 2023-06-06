@@ -6,8 +6,9 @@ CMapParser &CMapParser::Instance() {
     return m_Instance;
 }
 
-bool CMapParser::Load() {
-    return Parse("MAP", TheGame::Instance().GetSource() + "map.tmx");
+void CMapParser::Load() {
+    if (!Parse("MAP", TheGame::Instance().GetSource() + "map.tmx"))
+        throw std::logic_error("Map failed to load.");
 }
 
 bool CMapParser::Parse(const char *name, const std::string &source) {

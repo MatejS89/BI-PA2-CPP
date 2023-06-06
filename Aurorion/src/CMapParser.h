@@ -17,7 +17,7 @@
 
 class CMapParser {
 public:
-    bool Load();
+    void Load();
 
     std::shared_ptr<CMap> GetMap(const std::string &id);
 
