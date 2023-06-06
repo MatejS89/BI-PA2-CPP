@@ -1,5 +1,6 @@
 #include "CGameplayLayer.h"
 #include "CMapParser.h"
+#include "CCollisionHandler.h"
 #include <random>
 
 CGameplayLayer::CGameplayLayer() : m_LevelMap(TheMapParser::Instance().GetMap("MAP")),
@@ -16,7 +17,8 @@ void CGameplayLayer::Init(std::shared_ptr<CHudLayer> hud) {
         hud->AddTarget(plr);
         TheCamera::Instance().SetTarget(plr->GetCentre());
         m_GameObjects->insert(m_GameObjects->begin(), plr);
-    }
+    } else
+        throw std::logic_error("Save data corrupted");
     if (jsonData.contains("Enemies") && jsonData["Enemies"].is_array()) {
         for (auto &enemyData: jsonData["Enemies"]) {
             SpawnEnemy(enemyData);
