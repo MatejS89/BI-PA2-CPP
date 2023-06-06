@@ -56,10 +56,10 @@ public:
      * @brief Checks if the game is currently running.
      * @return True if the game is running, false otherwise.
      */
-    bool IsRunning();
+    bool IsRunning() const;
 
     /**
-     * @brief Saves the game.
+     * @brief Saves the game by calling the appropriate save methods for game layers.
      */
     void Save();
 
@@ -104,7 +104,7 @@ private:
 
     int GetNextSaveNumber() const;
 
-    static SDL_Renderer *m_Renderer;
+    SDL_Renderer *m_Renderer;
 
     static CGame m_Instance;
 
@@ -114,7 +114,7 @@ private:
 
     bool m_IsRunning;
 
-    static SDL_Window *m_Window;
+    SDL_Window *m_Window;
 
     std::string m_SourceSave;
 

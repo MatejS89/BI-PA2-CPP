@@ -5,10 +5,6 @@
 #include "CHudLayer.h"
 #include "CGameplayLayer.h"
 
-SDL_Window *CGame::m_Window = nullptr;
-
-SDL_Renderer *CGame::m_Renderer = nullptr;
-
 CGame::CGame() {}
 
 CGame::~CGame() {}
@@ -71,7 +67,7 @@ void CGame::Clean() {
     std::cout << "Game quit and cleaned" << std::endl;
 }
 
-bool CGame::IsRunning() {
+bool CGame::IsRunning() const {
     return m_IsRunning;
 }
 
@@ -110,9 +106,7 @@ void CGame::Save() {
 
 void CGame::LoadGame(char *args[], const int argc) {
     ParseArgs(args, argc);
-    if (!TheMapParser::Instance().Load()) {
-        std::cout << "FAILED LOAD" << std::endl;
-    }
+    TheMapParser::Instance().Load();
     TheObjectFactory::Instance().RegisterObjects();
     std::shared_ptr<CHudLayer> hud = std::make_shared<CHudLayer>();
     std::shared_ptr<CGameplayLayer> gameplayLayer = std::make_shared<CGameplayLayer>();
