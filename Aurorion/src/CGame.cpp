@@ -33,7 +33,6 @@ bool CGame::Init(const char *title, int xPos, int yPos, int width, int height, b
             std::cout << "Renderer created." << std::endl;
         } else
             return false;
-        m_SourceSave = "examples/NewGame/";
         m_IsRunning = true;
         m_Height = height;
         m_Width = width;
@@ -89,10 +88,6 @@ int CGame::GetWindowWidth() const {
 
 int CGame::GetMapWidth() const {
     return m_GameLayers.front()->GetMap()->GetMapWidth();
-}
-
-int CGame::GetMapHeight() const {
-    return m_GameLayers.front()->GetMap()->GetMapHeight();
 }
 
 void CGame::Save() {

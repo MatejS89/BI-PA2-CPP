@@ -76,8 +76,6 @@ public:
 
     int GetMapWidth() const;
 
-    int GetMapHeight() const;
-
     /**
      * @brief Loads the game from a source.
      * @param source Load directory name.
