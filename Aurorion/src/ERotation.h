@@ -2,7 +2,7 @@
 
 /**
  * @enum Rotation
- * @brief Enumerates rotation of sprite.
+ * @brief Enumerates rotation of a texture.
  */
 enum class Rotation {
     RIGHT,
