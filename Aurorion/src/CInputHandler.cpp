@@ -43,6 +43,10 @@ void CInputHandler::Listen() {
                 m_MouseState.m_ButtonState = EMouseButtonState::NONE;
                 break;
         }
+        if (IsKeyDown(SDL_SCANCODE_ESCAPE)) {
+            TheGame::Instance().Save();
+            TheGame::Instance().Quit();
+        }
     }
 }
 
