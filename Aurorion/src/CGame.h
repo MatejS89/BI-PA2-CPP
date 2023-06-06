@@ -3,7 +3,6 @@
 #include <iostream>
 #include <string>
 #include "CTextureManager.h"
-#include "CVector2D.h"
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 #include "vector"
