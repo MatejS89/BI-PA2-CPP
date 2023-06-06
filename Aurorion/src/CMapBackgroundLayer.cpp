@@ -1,37 +1,26 @@
 #include "CMapBackgroundLayer.h"
 
-std::shared_ptr<TileMap> CMapBackgroundLayer::GetTileMap() {
-    return nullptr;
-}
+CMapBackgroundLayer::CMapBackgroundLayer() = default;
 
 void CMapBackgroundLayer::LayerUpdate() {
     if (m_StateTimer <= 0) {
-//        SDL_Color m_CurrColor;
-//        SDL_GetRenderDrawColor(TheGame::Instance().GetRenderer(), &m_CurrColor.r, &m_CurrColor.g, &m_CurrColor.b, &m_CurrColor.a);
-
         switch (m_BackgroundState) {
             case BackgroundState::DAY:
-                ChangeIntoDay(m_CurrColor);
+                ChangeIntoNight();
                 break;
             case BackgroundState::NIGHT:
-                ChangeIntoNight(m_CurrColor);
+                ChangeIntoDay();
                 break;
             default:
                 break;
         }
         m_StateTimer = STATE_TIME;
-        if (IsDay(m_CurrColor) || IsNight(m_CurrColor))
+        if (IsDay() || IsNight())
             NextState();
     } else {
         m_StateTimer -= TheTimer::Instance().GetDeltaTime();
     }
 }
-
-CMapBackgroundLayer::CMapBackgroundLayer()
-//m_BackgroundState(BackgroundState::DAY), m_StateTimer(0) {
-//    SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), TARGET_COLOR.r, TARGET_COLOR.g, TARGET_COLOR.b,
-//                           TARGET_COLOR.a);
-{}
 
 void CMapBackgroundLayer::NextState() {
     switch (m_BackgroundState) {
@@ -46,17 +35,17 @@ void CMapBackgroundLayer::NextState() {
     }
 }
 
-void CMapBackgroundLayer::ChangeIntoDay(SDL_Color &tmp) {
+void CMapBackgroundLayer::ChangeIntoNight() {
     Uint8 currR = m_CurrColor.r - floor(m_CurrColor.r / GRADIENT);
     Uint8 currG = m_CurrColor.g - floor(m_CurrColor.g / GRADIENT);
     Uint8 currB = m_CurrColor.b - floor(m_CurrColor.b / GRADIENT);
     m_CurrColor = {currR, currG, currB, m_CurrColor.a};
-    GraduallyDecrease(m_CurrColor);
+    GraduallyDecrease();
     SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), m_CurrColor.r, m_CurrColor.g, m_CurrColor.b,
                            m_CurrColor.a);
 }
 
-void CMapBackgroundLayer::ChangeIntoNight(SDL_Color &tmp) {
+void CMapBackgroundLayer::ChangeIntoDay() {
     Uint8 currR = m_CurrColor.r + floor(TARGET_COLOR.r / GRADIENT);
     Uint8 currG = m_CurrColor.g + floor(TARGET_COLOR.g / GRADIENT);
     Uint8 currB = m_CurrColor.b + floor(TARGET_COLOR.b / GRADIENT);
@@ -65,18 +54,18 @@ void CMapBackgroundLayer::ChangeIntoNight(SDL_Color &tmp) {
                            m_CurrColor.a);
 }
 
-bool CMapBackgroundLayer::IsNight(const SDL_Color &tmp) {
+bool CMapBackgroundLayer::IsNight() {
     return (m_CurrColor.r <= 30 && m_CurrColor.b <= 30 &&
             m_CurrColor.g <= 30);
 }
 
-bool CMapBackgroundLayer::IsDay(const SDL_Color &tmp) {
+bool CMapBackgroundLayer::IsDay() {
     return (m_CurrColor.r >= TARGET_COLOR.r &&
             m_CurrColor.g >= TARGET_COLOR.g &&
             m_CurrColor.b >= TARGET_COLOR.b);
 }
 
-void CMapBackgroundLayer::GraduallyDecrease(SDL_Color &tmp) {
+void CMapBackgroundLayer::GraduallyDecrease() {
     if (m_CurrColor.r < GRADIENT && m_CurrColor.g < GRADIENT && m_CurrColor.b < GRADIENT) {
         m_CurrColor.r -= 1;
         m_CurrColor.g -= 1;
