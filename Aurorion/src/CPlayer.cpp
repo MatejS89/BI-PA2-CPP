@@ -3,6 +3,7 @@
 #include "CTimer.h"
 
 bool CPlayer::Update() {
+    m_currentFrame = (SDL_GetTicks() / 100) % 4;
     HandleInput();
     PlayerCheckCollision();
     IncreaseFallCounter();
