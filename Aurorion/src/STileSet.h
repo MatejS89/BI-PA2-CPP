@@ -7,7 +7,6 @@
  * @brief Represents a tile set.
  */
 struct STileSet {
-
     std::string m_TileSetName;
 
     std::string m_TileSetSource;
