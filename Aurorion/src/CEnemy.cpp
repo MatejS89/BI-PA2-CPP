@@ -34,9 +34,8 @@ void CEnemy::Load(const json &jsonData) {
 }
 
 bool CEnemy::Update() {
-    m_currentFrame = (SDL_GetTicks() / 100) % 4;
-    RandomJump();
     if (IsPlayerInRange()) {
+        RandomJump();
         MoveTowardsPlayer();
         PerformAttack();
     } else {
