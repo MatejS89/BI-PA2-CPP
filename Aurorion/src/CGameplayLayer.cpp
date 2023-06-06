@@ -1,4 +1,6 @@
 #include "CGameplayLayer.h"
+#include "CMapParser.h"
+#include <random>
 
 CGameplayLayer::CGameplayLayer() : m_LevelMap(TheMapParser::Instance().GetMap("MAP")),
                                    m_GameObjects(std::make_shared<std::vector<std::shared_ptr<CGameObject>>>()),

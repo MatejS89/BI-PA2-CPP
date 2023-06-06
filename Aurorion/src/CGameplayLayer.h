@@ -2,15 +2,10 @@
 
 #include "CGameLayer.h"
 #include "CMap.h"
-#include "CGameObject.h"
-#include "CMapParser.h"
-#include "CPlayer.h"
-#include "CEnemy.h"
 #include "CHudLayer.h"
 #include "CCollisionHandler.h"
 #include "CGameObjectFactory.h"
 #include "json.hpp"
-#include <random>
 
 using json = nlohmann::json;
 
