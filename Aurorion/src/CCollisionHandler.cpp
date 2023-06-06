@@ -1,4 +1,6 @@
 #include "CCollisionHandler.h"
+#include "CInputHandler.h"
+#include "CGame.h"
 
 CCollisionHandler::CCollisionHandler() = default;
 

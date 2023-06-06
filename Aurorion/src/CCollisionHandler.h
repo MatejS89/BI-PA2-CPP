@@ -2,8 +2,6 @@
 
 #include <vector>
 #include "CTileLayer.h"
-#include "CGame.h"
-#include "CInputHandler.h"
 #include "CEntity.h"
 
 /**
