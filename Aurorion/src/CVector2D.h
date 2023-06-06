@@ -1,5 +1,10 @@
 #pragma once
 
+/** @class CVector2D
+* @brief The CVector2D class represents a 2D vector.
+* The CVector2D class provides functionality for working with 2D vectors,
+* including basic arithmetic operations and length calculation.
+*/
 class CVector2D {
 public:
     CVector2D();
@@ -13,8 +18,6 @@ public:
     void SetX(int x);
 
     void SetY(int y);
-
-    double length() const;
 
     CVector2D operator+(const CVector2D &other) const;
 

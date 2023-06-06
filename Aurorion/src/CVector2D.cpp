@@ -1,4 +1,3 @@
-#include <cmath>
 #include "CVector2D.h"
 
 CVector2D::CVector2D() : m_X(0), m_Y(0) {}
@@ -19,10 +18,6 @@ void CVector2D::SetX(int x) {
 
 void CVector2D::SetY(int y) {
     m_Y = y;
-}
-
-double CVector2D::length() const {
-    return hypot(m_X, m_Y);
 }
 
 CVector2D CVector2D::operator+(const CVector2D &other) const {
