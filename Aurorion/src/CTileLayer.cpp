@@ -1,5 +1,4 @@
 #include "CTileLayer.h"
-
 #include "CTextureManager.h"
 #include "CGame.h"
 #include <iostream>
@@ -10,8 +9,7 @@ CTileLayer::CTileLayer(int tileSize, int rowCount, int colCount,
                        std::shared_ptr<TileMap> tileMap, std::shared_ptr<TilesetList> tileSets) :
         m_TileSize(tileSize), m_RowCount(rowCount),
         m_ColCount(colCount), m_TileMap(tileMap),
-        m_TileSets(tileSets),
-        m_GrowDelay(0.0F) {
+        m_TileSets(tileSets), m_GrowTimer(GROW_TIME) {
     for (const auto &item: *m_TileSets) {
         TheTextureManager::Instance().Load(item.m_TileSetSource, item.m_TileSetName);
     }
@@ -48,10 +46,10 @@ const STileSet &CTileLayer::FindTileSet(int tileId) const {
 }
 
 void CTileLayer::LayerUpdate() {
-    if (m_GrowDelay <= 0) {
-        m_GrowDelay = GROW_TIME;
-        int xCoord = floor(GenerateRandomCoordX() / m_TileSize);
-        for (int i = floor(TheGame::Instance().GetMapHeight() / m_TileSize) - 1; i >= 0; i--) {
+    if (m_GrowTimer <= 0) {
+        m_GrowTimer = GROW_TIME;
+        int xCoord = GenerateRandomCoordX();
+        for (int i = m_RowCount - 1; i >= 0; i--) {
             auto &currentTile = (*m_TileMap)[i][xCoord];
             if (currentTile == LAVA || currentTile == WATER || currentTile == MUSHROOM)
                 break;
@@ -61,7 +59,7 @@ void CTileLayer::LayerUpdate() {
             }
         }
     } else
-        m_GrowDelay -= TheTimer::Instance().GetDeltaTime();
+        m_GrowTimer -= TheTimer::Instance().GetDeltaTime();
 }
 
 std::shared_ptr<TileMap> CTileLayer::GetTileMap() {
@@ -71,12 +69,12 @@ std::shared_ptr<TileMap> CTileLayer::GetTileMap() {
 int CTileLayer::GenerateRandomCoordX() const {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<int> distribution(0, TheGame::Instance().GetMapWidth());
+    std::uniform_int_distribution<int> distribution(0, m_ColCount - 1);
     return distribution(gen);
 }
 
 void CTileLayer::SaveMapLayer() {
-    std::string inputFile = "assets/map/tmp.tmx";
+    std::string inputFile = TheGame::Instance().GetSource() + "map.tmx";
     std::string outputFile = TheGame::Instance().GetNextSaveDir() + "map.tmx";
 
     std::ifstream inFile(inputFile);
