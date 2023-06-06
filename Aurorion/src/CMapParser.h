@@ -12,17 +12,34 @@
 #include "CTileLayer.h"
 #include "CMapBackgroundLayer.h"
 
+/**
+ * @class CMapParser
+ * @brief The CMapParser class is responsible for parsing map files in the TMX format.
+ * The CMapParser class parses TMX map files and extracts the necessary attribute data to create game maps.
+ * It supports multiple layers and tilesets within the map file. The parsed maps can be accessed
+ * using their unique IDs.
+ */
 class CMapParser {
 public:
     /**
+     * @brief Deleted copy constructor to prevent copying of CMapParser objects.
+     */
+    CMapParser(const CMapParser &other) = delete;
+
+    /**
      * @brief Parses the map.tmx file in the CGame::m_SourceSave directory.
+     * This method loads and parses the map.tmx file in the CGame::m_SourceSave directory.
      * @throws std::logic_error if map.tmx file is not found.
      */
     void Load();
 
+    /**
+     * @brief Retrieves a map by its ID.
+     * Retrieves a shared pointer to a CMap object based on its unique ID.
+     * @param id The ID of the map.
+     * @return A shared pointer to the CMap object.
+     */
     std::shared_ptr<CMap> GetMap(const std::string &id);
-
-    CMapParser(const CMapParser &other) = delete;
 
     static CMapParser &Instance();
 
