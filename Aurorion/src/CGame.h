@@ -102,6 +102,11 @@ private:
 
     int GetNextSaveNumber() const;
 
+    /**
+     * @brief Checks if all the required files are located in the source directory.
+     */
+    void CheckSourceSave();
+
     SDL_Renderer *m_Renderer;
 
     static CGame m_Instance;
@@ -119,8 +124,6 @@ private:
     std::string m_NextSaveDir;
 
     std::vector<std::shared_ptr<CGameLayer>> m_GameLayers;
-
-    void CheckSourceSave();
 };
 
 typedef CGame TheGame;
