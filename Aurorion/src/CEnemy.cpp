@@ -4,9 +4,8 @@
 #include <random>
 
 CEnemy::CEnemy() : CEntity() {
-    // TODO add loading of source_texture to Load method
     TheTextureManager::Instance().Load
-            ("assets/Mob/Boar/Idle/Idle-Sheet.png", "BoarIdle");
+            ("assets/Enemy.png", "BoarIdle");
 }
 
 CEnemy::~CEnemy() = default;
@@ -36,7 +35,7 @@ void CEnemy::Load(const json &jsonData) {
 }
 
 bool CEnemy::Update() {
-    m_currentFrame = (SDL_GetTicks() / 100) % 4;
+    m_CurrentFrame = (SDL_GetTicks() / 100) % 4;
     if (IsPlayerInRange()) {
         RandomJump();
         MoveTowardsPlayer();

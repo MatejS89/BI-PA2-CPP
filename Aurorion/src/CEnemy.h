@@ -78,6 +78,7 @@ private:
     /**
      * @brief Checks if a player is within the radius,
      * used to manage enemy movement, jumping and attacking.
+     * The attack and jump is only performed when their respective timers run out.
      * @return True if player is within the radius, false otherwise.
      */
     bool IsPlayerInRange() const;

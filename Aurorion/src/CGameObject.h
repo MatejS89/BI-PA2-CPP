@@ -9,7 +9,6 @@ using json = nlohmann::json;
  * @class CGameObject
  * @brief The base class for game objects.
  */
-
 class CGameObject {
 public:
     virtual ~CGameObject();

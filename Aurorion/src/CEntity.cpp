@@ -7,9 +7,9 @@ CEntity::CEntity() : CGameObject(), m_RigidBody(std::make_shared<CRigidBody>()),
 CEntity::~CEntity() = default;
 
 void CEntity::Draw() {
-    CTextureManager::Instance().DrawFrame(m_texture, m_Pos->GetX(),
-                                          m_Pos->GetY(), m_W, m_H, m_currentRow,
-                                          m_currentFrame,
+    CTextureManager::Instance().DrawFrame(m_Texture, m_Pos->GetX(),
+                                          m_Pos->GetY(), m_W, m_H, m_CurrentRow,
+                                          m_CurrentFrame,
                                           m_Rotation == Rotation::RIGHT ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
 //    SDL_Color tmp;
 //    SDL_GetRenderDrawColor(TheGame::Instance().GetRenderer(), &tmp.r, &tmp.g, &tmp.b, &tmp.a);
@@ -63,9 +63,9 @@ void CEntity::UpdateCollider() {
 void CEntity::Load(const json &jsonData) {
     m_W = jsonData["WIDTH"];
     m_H = jsonData["HEIGHT"];
-    m_currentRow = jsonData["CURRENT_ROW"];
-    m_currentFrame = jsonData["CURRENT_FRAME"];
-    m_texture = jsonData["TEXTURE"];
+    m_CurrentRow = jsonData["CURRENT_ROW"];
+    m_CurrentFrame = jsonData["CURRENT_FRAME"];
+    m_Texture = jsonData["TEXTURE"];
     m_Pos->SetX(jsonData["POS_X"]);
     m_Pos->SetY(jsonData["POS_Y"]);
     m_LastSafePos->SetX(jsonData["LAST_SAFE_POSX"]);
@@ -85,9 +85,9 @@ void CEntity::Load(const json &jsonData) {
 void CEntity::SaveEntityData(json &jsonData) const {
     jsonData["WIDTH"] = m_W;
     jsonData["HEIGHT"] = m_H;
-    jsonData["CURRENT_ROW"] = m_currentRow;
-    jsonData["CURRENT_FRAME"] = m_currentFrame;
-    jsonData["TEXTURE"] = m_texture;
+    jsonData["CURRENT_ROW"] = m_CurrentRow;
+    jsonData["CURRENT_FRAME"] = m_CurrentFrame;
+    jsonData["TEXTURE"] = m_Texture;
     jsonData["POS_X"] = m_Pos->GetX();
     jsonData["POS_Y"] = m_Pos->GetY();
     jsonData["LAST_SAFE_POSX"] = m_LastSafePos->GetX();

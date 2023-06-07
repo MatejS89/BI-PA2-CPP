@@ -24,6 +24,7 @@ public:
     /**
      * @brief Moves the player according to the input. Checks for collisions
      * and deals fall damage if applicable. Manages player attacks, breaking and building of blocks.
+     * The attack is performed only when the attack timer runs out.
      * @return True if player is alive, false otherwise.
      */
     bool Update() override;

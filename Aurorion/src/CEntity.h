@@ -16,6 +16,9 @@ using json = nlohmann::json;
  */
 class CEntity : public CGameObject {
 public:
+    /**
+     * @brief Draws the entity to the screen with the given texture id stored in m_Texture.
+     */
     virtual void Draw();
 
     /**
@@ -64,11 +67,11 @@ protected:
 
     int m_H;
 
-    int m_currentRow;
+    int m_CurrentRow;
 
-    int m_currentFrame;
+    int m_CurrentFrame;
 
-    std::string m_texture;
+    std::string m_Texture;
 
     std::shared_ptr<CRigidBody> m_RigidBody;
 

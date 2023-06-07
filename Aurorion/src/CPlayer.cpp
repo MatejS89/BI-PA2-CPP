@@ -3,7 +3,7 @@
 #include "CTimer.h"
 
 bool CPlayer::Update() {
-    m_currentFrame = (SDL_GetTicks() / 100) % 4;
+    m_CurrentFrame = (SDL_GetTicks() / 100) % 4;
     HandleInput();
     PlayerCheckCollision();
     IncreaseFallCounter();
@@ -141,7 +141,7 @@ void CPlayer::Load(const json &jsonData) {
 
 CPlayer::CPlayer() : CEntity() {
     TheTextureManager::Instance().Load
-            ("assets/Character/Idle/Idle-Sheet.png", "idle");
+            ("assets/Player.png", "idle");
 }
 
 CPlayer::~CPlayer() = default;

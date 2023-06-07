@@ -21,6 +21,7 @@ public:
      * @brief Initializes the gameplay layer.
      * @param hud A shared pointer to the CHudLayer object,
      * used to add a target of which the hud layer should keep track of.
+     * Creates the appropriate GameObjects from the GameObjectData.json file and loads their data.
      */
     void Init(std::shared_ptr<CHudLayer> hud);
 

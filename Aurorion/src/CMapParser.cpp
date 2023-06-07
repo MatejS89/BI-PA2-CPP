@@ -55,7 +55,7 @@ STileSet CMapParser::ParseTileSet(xmlNodePtr ptr) {
     tileSet.m_NumRows = tileSet.m_TileCount / tileSet.m_NumCol;
     xmlNodePtr image = xmlFirstElementChild(ptr);
     if (xmlStrcmp(image->name, reinterpret_cast<const xmlChar *> ("image")) == 0) {
-        tileSet.m_TileSetSource = "assets/map/" + GetAttributeContent(image, "source");
+        tileSet.m_TileSetSource = "assets/" + GetAttributeContent(image, "source");
     }
     return tileSet;
 }
