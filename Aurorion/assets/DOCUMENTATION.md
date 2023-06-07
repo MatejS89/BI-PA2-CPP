@@ -61,3 +61,10 @@ The controls for playing Aurorion are as follows:
 - 'escape': Close and save the game
 
 Use these controls to navigate the world, interact with objects, attack enemies, and manipulate blocks.
+
+## Sources
+
+The textures were downloaded from: https://anokolisa.itch.io/sidescroller-pixelart-sprites-asset-pack-forest-16x16.
+The map was created using the Tiled app: https://www.mapeditor.org/.
+The game design was inspired by: https://lazyfoo.net/tutorials/SDL/ and by the book SDL Game Development (Packt
+Publishing) by Shaun Mitchell.
