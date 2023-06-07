@@ -15,6 +15,4 @@ json CGameLayer::LoadJsonFromFile(const std::string &filePath) const {
     return jsonData;
 }
 
-void CGameLayer::UpdateLayer() {}
-
 void CGameLayer::SaveLayer() {}
