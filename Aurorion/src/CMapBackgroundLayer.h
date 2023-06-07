@@ -28,14 +28,14 @@ public:
     /**
      * @brief Renders the current color of the background.
      */
-    void LayerRender() override;
+    void MapLayerRender() override;
 
     /**
      * @brief Updates the background layer.
      * This function is called to update the background layer, performing any necessary state transitions
      * and color changes based on the elapsed time.
      */
-    void LayerUpdate() override;
+    void MapLayerUpdate() override;
 
     /**
      * @brief Saves the current state of the background in a BackGroundLayer.json file.

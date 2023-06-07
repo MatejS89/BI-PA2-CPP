@@ -2,7 +2,7 @@
 
 CMapBackgroundLayer::CMapBackgroundLayer() = default;
 
-void CMapBackgroundLayer::LayerUpdate() {
+void CMapBackgroundLayer::MapLayerUpdate() {
     if (m_StateTimer <= 0) {
         switch (m_BackgroundState) {
             case BackgroundState::DAY:
@@ -122,7 +122,7 @@ json CMapBackgroundLayer::LoadJsonFromFile(const std::string &filePath) const {
     return jsonData;
 }
 
-void CMapBackgroundLayer::LayerRender() {
+void CMapBackgroundLayer::MapLayerRender() {
     SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), m_CurrColor.r, m_CurrColor.g, m_CurrColor.b,
                            m_CurrColor.a);
 }
