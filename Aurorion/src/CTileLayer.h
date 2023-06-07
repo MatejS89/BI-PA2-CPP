@@ -24,7 +24,7 @@ public:
      * @param tileMap A shared pointer to the tile map data.
      * @param tileSets A shared pointer to the list of tileSets.
      */
-    CTileLayer(int tileSize, int rowCount, int colCount, std::shared_ptr<TileMap> tileMap,
+    CTileLayer(int rowCount, int colCount, std::shared_ptr<TileMap> tileMap,
                std::shared_ptr<TilesetList> tileSets);
 
     /**
@@ -32,14 +32,14 @@ public:
      * in the TheTextureManager::DrawTile method. This is done based on the position of the
      * tile in the matrix(m_TileMap).
      */
-    void LayerRender() override;
+    void MapLayerRender() override;
 
     /**
      * @brief Updates the current state of the TileLayer. Manages the growth of mushrooms on the map
      * by generating a random x coordinate and checking if a mushroom can be placed on this x coordinate when
      * the timer runs out.
      */
-    void LayerUpdate() override;
+    void MapLayerUpdate() override;
 
     /**
      * @brief Creates a copy of the XML file from which the game has been loaded from and replaces
@@ -53,15 +53,13 @@ private:
     int GenerateRandomCoordX() const;
 
     /**
-     * @brief Finds the TileSet to which the tileId belongs to. Used in the LayerRender method.
+     * @brief Finds the TileSet to which the tileId belongs to. Used in the MapLayerRender method.
      * @param tileId The tileId to be found.
      * @return TileSet to which the tileId belongs to.
      */
     const STileSet &FindTileSet(int tileId) const;
 
     const float GROW_TIME = 2000.0F;
-
-    int m_TileSize;
 
     int m_RowCount;
 

@@ -5,17 +5,19 @@
 #include <fstream>
 #include <string>
 
-CTileLayer::CTileLayer(int tileSize, int rowCount, int colCount,
-                       std::shared_ptr<TileMap> tileMap, std::shared_ptr<TilesetList> tileSets) :
-        m_TileSize(tileSize), m_RowCount(rowCount),
-        m_ColCount(colCount), m_TileMap(tileMap),
-        m_TileSets(tileSets), m_GrowTimer(GROW_TIME) {
+CTileLayer::CTileLayer(int rowCount, int colCount,
+                       std::shared_ptr<TileMap> tileMap, std::shared_ptr<TilesetList> tileSets) : m_RowCount(rowCount),
+                                                                                                  m_ColCount(colCount),
+                                                                                                  m_TileMap(tileMap),
+                                                                                                  m_TileSets(tileSets),
+                                                                                                  m_GrowTimer(
+                                                                                                          GROW_TIME) {
     for (const auto &item: *m_TileSets) {
         TheTextureManager::Instance().Load(item.m_TileSetSource, item.m_TileSetName);
     }
 }
 
-void CTileLayer::LayerRender() {
+void CTileLayer::MapLayerRender() {
     for (int i = 0; i < m_RowCount; i++) {
         for (int j = 0; j < m_ColCount; j++) {
             int tileId = (*m_TileMap)[i][j];
@@ -45,7 +47,7 @@ const STileSet &CTileLayer::FindTileSet(int tileId) const {
     throw std::runtime_error("Tile set not found for tileId: " + std::to_string(tileId));
 }
 
-void CTileLayer::LayerUpdate() {
+void CTileLayer::MapLayerUpdate() {
     if (m_GrowTimer <= 0) {
         m_GrowTimer = GROW_TIME;
         int xCoord = GenerateRandomCoordX();
