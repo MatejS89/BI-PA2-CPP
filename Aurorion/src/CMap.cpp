@@ -6,13 +6,13 @@ CMap::~CMap() = default;
 
 void CMap::MapRender() {
     for (const auto &layer: m_MapLayers) {
-        layer->LayerRender();
+        layer->MapLayerRender();
     }
 }
 
 void CMap::MapUpdate() {
     for (const auto &layer: m_MapLayers) {
-        layer->LayerUpdate();
+        layer->MapLayerUpdate();
     }
 }
 
@@ -25,7 +25,7 @@ int CMap::GetMapWidth() const {
 }
 
 void CMap::SaveMap() {
-    for (const auto &item: m_MapLayers) {
-        item->SaveMapLayer();
+    for (const auto &layer: m_MapLayers) {
+        layer->SaveMapLayer();
     }
 }
