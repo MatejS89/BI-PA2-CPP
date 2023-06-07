@@ -26,6 +26,11 @@ public:
     void Init();
 
     /**
+     * @brief Renders the current color of the background.
+     */
+    void LayerRender() override;
+
+    /**
      * @brief Updates the background layer.
      * This function is called to update the background layer, performing any necessary state transitions
      * and color changes based on the elapsed time.

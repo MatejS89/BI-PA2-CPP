@@ -41,8 +41,8 @@ void CMapBackgroundLayer::ChangeIntoNight() {
     Uint8 currB = m_CurrColor.b - floor(m_CurrColor.b / GRADIENT);
     m_CurrColor = {currR, currG, currB, m_CurrColor.a};
     GraduallyDecrease();
-    SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), m_CurrColor.r, m_CurrColor.g, m_CurrColor.b,
-                           m_CurrColor.a);
+//    SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), m_CurrColor.r, m_CurrColor.g, m_CurrColor.b,
+//                           m_CurrColor.a);
 }
 
 void CMapBackgroundLayer::ChangeIntoDay() {
@@ -50,8 +50,8 @@ void CMapBackgroundLayer::ChangeIntoDay() {
     Uint8 currG = m_CurrColor.g + floor(TARGET_COLOR.g / GRADIENT);
     Uint8 currB = m_CurrColor.b + floor(TARGET_COLOR.b / GRADIENT);
     m_CurrColor = {currR, currG, currB, m_CurrColor.a};
-    SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), m_CurrColor.r, m_CurrColor.g, m_CurrColor.b,
-                           m_CurrColor.a);
+//    SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), m_CurrColor.r, m_CurrColor.g, m_CurrColor.b,
+//                           m_CurrColor.a);
 }
 
 bool CMapBackgroundLayer::IsNight() {
@@ -82,7 +82,6 @@ void CMapBackgroundLayer::SaveMapLayer() {
     jsonData["TARGET_COLOR.G"] = TARGET_COLOR.g;
     jsonData["TARGET_COLOR.B"] = TARGET_COLOR.g;
     jsonData["TARGET_COLOR.A"] = TARGET_COLOR.a;
-//    jsonData["BACKGROUND_STATE"] = m_BackgroundState;
     jsonData["CURR_COLOR.R"] = m_CurrColor.r;
     jsonData["CURR_COLOR.G"] = m_CurrColor.g;
     jsonData["CURR_COLOR.B"] = m_CurrColor.b;
@@ -108,8 +107,8 @@ void CMapBackgroundLayer::Init() {
         m_BackgroundState = BackgroundState::DAY;
     else
         m_BackgroundState = BackgroundState::NIGHT;
-    SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), m_CurrColor.r, m_CurrColor.g, m_CurrColor.b,
-                           m_CurrColor.a);
+//    SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), m_CurrColor.r, m_CurrColor.g, m_CurrColor.b,
+//                           m_CurrColor.a);
 }
 
 json CMapBackgroundLayer::LoadJsonFromFile(const std::string &filePath) const {
@@ -121,4 +120,9 @@ json CMapBackgroundLayer::LoadJsonFromFile(const std::string &filePath) const {
     file >> jsonData;
     file.close();
     return jsonData;
+}
+
+void CMapBackgroundLayer::LayerRender() {
+    SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), m_CurrColor.r, m_CurrColor.g, m_CurrColor.b,
+                           m_CurrColor.a);
 }
