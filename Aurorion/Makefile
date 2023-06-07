@@ -32,4 +32,4 @@ doc: Doxyfile $(HEADERS)
 
 .PHONY: clean
 clean:
-	rm -rf sedlam53 build/ doc/html/ doc/latex/
+	rm -rf sedlam53 build/ doc/
