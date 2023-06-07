@@ -1,28 +1,35 @@
-CC = g++
-CFLAGS = -Wall -std=c++17 -c -g -pedantic -O3
+CXXFLAGS = -Wall -pedantic -std=c++17
+
 LDLIBS = -lSDL2 -lSDL2_image -lxml2
-INCLUDES = $(shell pkg-config --cflags libxml-2.0)
+INCLUDES = -I/usr/include/libxml2 -I/usr/include/SDL2
+HEADERS = $(wildcard src/*.h src/*.hpp)
+SOURCES = $(wildcard src/*.cpp)
+OBJECTS = $(SOURCES:src/%.cpp=build/%.o)
 
-SOURCES := $(wildcard src/*.cpp)
-OBJECTS := $(SOURCES:src/%.cpp=obj/%.o)
+.PHONY: all
+all: compile doc
 
-EXECUTABLE = Aurorion
+.PHONY: run
+run: compile
+	./sedlam53 $(MODE)
 
-all: $(SOURCES) $(EXECUTABLE)
+.PHONY: compile
+compile: sedlam53
 
-$(EXECUTABLE): $(OBJECTS)
-	$(CC) $(OBJECTS) -o $@ $(LDLIBS)
+sedlam53: build/main
+	cp $< $@
 
-obj/%.o: src/%.cpp
-	$(CC) $(CFLAGS) $(INCLUDES) $< -o $@
+build/main: $(OBJECTS)
+	mkdir -p $(@D)
+	g++ $^ -o $@ $(LDLIBS)
 
+build/%.o: src/%.cpp
+	mkdir -p $(@D)
+	g++ $(CXXFLAGS) $(INCLUDES) $< -c -o $@
+.PHONY: doc
+doc: Doxyfile $(HEADERS)
+	doxygen Doxyfile
+
+.PHONY: clean
 clean:
-	rm -f obj/*.o $(EXECUTABLE)
-
-run: $(EXECUTABLE)
-	./$(EXECUTABLE) $(MODE)
-
-deps:
-	$(CC) -MM $(SOURCES) > Makefile.d
-
--include Makefile.d
+	rm -rf sedlam53 build/ doc/html/ doc/latex/
