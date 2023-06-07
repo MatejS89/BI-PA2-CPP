@@ -15,7 +15,7 @@ using json = nlohmann::json;
  */
 class CMapLayer {
 public:
-    virtual void LayerRender();
+    virtual void LayerRender() = 0;
 
     virtual void LayerUpdate() = 0;
 
