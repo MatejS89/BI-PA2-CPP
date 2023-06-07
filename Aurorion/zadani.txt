@@ -90,3 +90,26 @@ Metóda UpdateLayer:
     vo vzťahu s jeho maximálnymi HP. Táto hodnota je uložená v m_CurrPerc a používa sa v CHudLayer::DrawLayer.
 
     Polymorfné volanie metódy sa nachádza v metóde CGame::Update, ktorá updatuje všetky layery hry uložené v m_GameLayers.
+
+3. Polymorfizmus je aplikovaný v hierarchii CMapLayer, CMapBackgroundLayer, CTileLayer
+Metóda MapLayerUpdate:
+    - Trieda CMapBackgroundLayer má polymorfnú metódu MapLayerUpdate, ktorá vypočíta momentálnu farbu pozadia na základe
+    uplynulého času.
+    - Trieda CTileLayer má polymorfnú metódu MapLayerUpdate, ktorá zaistí rast húb na náhodnej x pozícii na mape v
+    zadanom časovom intervale.
+
+    Polymorfné volanie metódy sa nacházda v metóde CMap::MapUpdate, ktorá updatuje všetky layery mapy uložené v m_MapLayers.
+
+Metóda MapLayerRender:
+    - Trieda CMapBackgroundLayer má polymorfnú metódu MapLayerRender, ktorá vykreslí momentálnu farbu pozadia.
+    - Trieda CTileLayer má polymorfnú metódu MapLayerRender, ktorá vykreslí celú mapu.
+
+    Polymorfné volanie metódy sa nacházda v metóde CMap::MapRender, ktorá vykreslí všetky layery mapy uložené v m_MapLayers.
+
+Metóda SaveMapLayer:
+    - Trieda CMapBackgroundLayer má polymorfnú metódu SaveMapLayer, ktorá uloží momentálny stav pozadia
+    do súboru BackGroundLayer.json.
+    - Trieda CTileLayer má polymorfnú metódu SaveMapLayer, ktorá uloží momentálny stav mapy do súboru map.tmx.
+
+    Polymorfné volanie metódy sa nachádza v metóde CMap::SaveMap, ktorá uloží stav všetkých layerov do ich príslušných
+    súborov.
