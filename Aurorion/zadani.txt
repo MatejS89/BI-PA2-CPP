@@ -1,0 +1,92 @@
+Téma: Hra: Sandbox hra
+
+Zadanie:
+1. Implementujte hráče (př. postava, vesmírná loď, …), jeho stav (př. energie, životy, brnění, …) a umožněte interagovat s prostředím (př. těžit, kopat, stavět, …).
+
+2. Vytvořte (soubojový) model zranění, který bude mít alespoň 3 různé příčiny (př. pád z výšky, souboj s nepřítelem, pobyt v lávě, …).
+
+3. Vytvořte jednoduchý model prostředí, implementujte alespoň 3 různé mechaniky (př. gravitace, přelévání vody, růst stromů, …).
+
+4. Hra musí být konfigurovatelná ze souboru:
+
+    mapa (nebo ještě lépe její generátor),
+
+    definice jednotlivých nepřátel, názvy předmětů či jejich atributy.
+
+5. Hra musí umožnit uložit a následně načíst rozehranou hru.
+------------------------------------------------------------------------------------------------------------------------
+Popis:
+
+Hra bude v podobnom štýle ako Terraria.
+
+1. Hráč má vlastnú textúru, môže útočiť, stavať a ničiť bloky na mape.
+Hráč sa pohybuje pomocou kláves WASD, útočí pomocou SPACE a ESC zatvorí a uloží rozohranú hru.
+Hráč dokáže ničiť bloky pomocou ľavého tlačítka myši a stavať bloky pomocou pravého tlačítka myši.
+
+2. Hráč dostáva damage pri súboji s nepriateľom, keď spadne z výšky a keď sa dotkne lávy.
+
+3. Do prostredia je naimplementovaná gravitácia. Počas behu hry sa postupne objavujú nový nepriatelia, ktorých atributy
+sú načítané zo súboru EnemyConfig.json v príslušnom zdrojovom priečinku. Taktiež sa objavujú huby na zemi. Hra má denný a
+nočný cyklus, ktorý je realizovaný pomocou postupného prechodu z požadovanej farby na takmer čiernu a naspäť.
+
+4/5 V priečinku examples/ je viacero podpriečinkov, ktoré držia stav uložených hier. Vzor pre novú hru je priečinok NewGame.
+Priečinky SaveGame sa vytvárajú automaticky po zatvorení hry ak hráč nezomrel. Ak hráč načíta hru z priečinku SaveGameX
+tak sa stav hry uloží do toho istého priečinku SaveGameX. Stav mapy sa uloží do súboru map.tmx; stav pozadia do BackGroundLayer.json; stav GameObjectov do GameObjectData.json
+a atributy pre spawnovanie nových Enemies do EnemyConfig.json. Ak sa nejaký z týchto súborov v zdrojovom priečinku nenachádza, hra to vyhodnotí ako chybu a nezapne sa.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Polymorfizmus:
+
+1. Polymorfizmus je aplikovaný v rámci hierarchie tried CGameObject, CEntity, CPlayer a CEnemy.
+Metóda Update:
+    - Trieda CPlayer má polymorfnú
+    metódu Update, v ktorej sa pohyb a interakcie hráča ovládajú pomocou klávesnice.
+    - Trieda CEnemy má polymorfnú metódu Update, v ktorej je pohyb nepriateľa a útoky riadené na základe aktuálnej pozície hráča.
+    Ak je hráč v špecifickom polomere od nepriateľa, nepriateľ začne hráča nasledovať, skáče a útočí.
+
+    Obe tieto metódy používajú zdedenú metódu CEntity::Update(), ktorá obsahuje logiku na to či má byť konkrétna entita nažive.
+    K polymorfnému volaniu nastáva v metóde CGamePlayerLayer::Update(), ktorá sa stará o to aby entity, ktoré nie sú nažive
+    boli vymazané.
+
+Metóda Save:
+    - Trieda CPlayer má polymorfnú metódu Save, ktorá uloží potrebné dáta z inštancie CPlayer do json elementu.
+    - Trieda CEnemy má polymorfnú metódu Save, ktorá uloží potrebné dáta z inštancie CEnemy do json elementu.
+
+    Obe tieto metódy používajú zdedenú metódu CEntity::Save(json &jsonData), ktorá uloží potrebné dáta z CEntity do json elementu,
+    ktorý dostane ako parameter. Následne vrátia json element, ktorý je spracovaný v metóde CGamePlayerLayer::SaveLayer().
+
+Metóda Load:
+    - Trieda CPlayer má polymorfnú metódu Load, načíta potrebné dáta pre CPlayer z json elementu, ktorý dostane ako parameter.
+    - Trieda CEnemy má polymorfnú metódu Load, načíta potrebné dáta pre CEnemy z json elementu, ktorý dostane ako parameter.
+
+    Obe tieto metódy používajú zdedenú metódu CEntity::Load(const json &jsonData), ktorá dostane ako parameter
+    json element, ktorý obsahuje potrebné dáta.
+
+    Polymorfné použitie metódy sa využíva v CGamePlayerLayer::Init metóde.
+
+2. Polymorfizmus je aplikovaný v rámci hierarchie tried CGameLayer, CGameplayLayer a CHudLayer.
+Metóda DrawLayer:
+    - Trieda CGameplayLater má polymorfnú metódu DrawLayer, ktorá volá metódu CMap::MapRender(), ktorá vykreslí mapu.
+    Tiež volá metódu CGameObject::Draw() pre všetku GameObjecty uložené m_GameObjects v z hierarchie CGameObject,
+    CEntity, ktorá vykreslí entitu s uloženou textúrou.
+    - Trieda CHudLayer má polymorfnú metódu DrawLayer, ktorá vykreslí Hud pozostávajúci z health baru.
+
+    Polymorfné volanie metódy sa nachádza v metóde CGame::Render, ktorá používa metódu DrawLayer pre každý layer uložený
+    v m_GameLayers.
+
+Metóda SaveLayer:
+    - Trieda CGameplayLayer má polymorfnú metódu SaveLayer, ktorá uloží stav mapy pomocou metódy CMap::SaveMap
+    a stav GameObjectov pomocou metódy CGameObject::Save.
+    - Trieda CHudLayer metódu nemá naimplementovanú keďže jej momentálny stav je založený čisto na momentálnom stave
+    hráča takže jej stav nemusíme ukladať.
+
+    Polymorfné volanie metódy sa nachádza v metóde CGame::Save, ktorá uloží stav layerov uložených v m_GameLayers.
+
+Metóda UpdateLayer:
+    - Trieda CGameplayLayer má polymorfnú metódu UpdateLayer, ktorá zaistí update mapy pomocou volania metódy
+    CMap::MapUpdate a update GameObjectov uložených v m_GameObjects pomocou metódy CGameObject::Update.
+    - Trieda CHudLayer má polymorfnú metódu UpdateLayer, ktorá vypočíta percentuálnu hodnotu momentálneho HP hráča
+    vo vzťahu s jeho maximálnymi HP. Táto hodnota je uložená v m_CurrPerc a používa sa v CHudLayer::DrawLayer.
+
+    Polymorfné volanie metódy sa nachádza v metóde CGame::Update, ktorá updatuje všetky layery hry uložené v m_GameLayers.
