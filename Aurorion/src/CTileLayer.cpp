@@ -22,7 +22,7 @@ void CTileLayer::LayerRender() {
             if (tileId == 0)
                 continue;
             STileSet tileSet = FindTileSet(tileId);
-            int tileRow = tileId / tileSet.m_NumCol;
+            int tileRow = tileId / tileSet.m_NumRows;
             int tileCol = tileId % tileSet.m_NumCol - 1;
             if (tileCol < 0) {
                 tileRow--;
