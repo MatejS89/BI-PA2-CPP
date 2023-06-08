@@ -14,7 +14,7 @@
 
 /**
  * @class CGame
- * @brief The main game class responsible for game initialization, update, rendering, and cleanup.
+ * @brief Singleton class, main game class responsible for game initialization, update, rendering, and cleanup.
  */
 class CGame {
 public:
