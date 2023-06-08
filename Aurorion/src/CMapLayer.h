@@ -15,6 +15,8 @@ using json = nlohmann::json;
  */
 class CMapLayer {
 public:
+    virtual ~CMapLayer();
+
     virtual void MapLayerUpdate() = 0;
 
     virtual void MapLayerRender() = 0;
@@ -22,4 +24,7 @@ public:
     virtual void SaveMapLayer() = 0;
 
     virtual std::shared_ptr<TileMap> GetTileMap();
+
+protected:
+    CMapLayer();
 };
