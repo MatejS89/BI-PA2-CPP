@@ -14,15 +14,7 @@ public:
 
     virtual ~CRigidBody();
 
-    void SetMass(float mass);
-
-    void SetGravity(float gravity);
-
     float GetGravity() const;
-
-    float GetMass() const;
-
-    void ApplyForce(const CVector2D &force);
 
     void ApplyForceX(int force);
 
@@ -30,21 +22,11 @@ public:
 
     void UnsetForce();
 
-    void ApplyFriction(const CVector2D &friction);
-
-    void UnsetFriction();
-
     void Update();
-
-    void SetPosition(const CVector2D &pos);
-
-    void SetVelocity(const CVector2D &vel);
 
     std::shared_ptr<CVector2D> GetPosition();
 
     CVector2D &GetVelocity();
-
-    CVector2D &GetAcceleration();
 
 private:
     const float CONST_MASS = 1.0F;
