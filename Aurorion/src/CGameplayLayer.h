@@ -17,6 +17,8 @@ class CGameplayLayer : public CGameLayer {
 public:
     CGameplayLayer();
 
+    ~CGameplayLayer() override;
+
     /**
      * @brief Initializes the gameplay layer.
      * @param hud A shared pointer to the CHudLayer object,

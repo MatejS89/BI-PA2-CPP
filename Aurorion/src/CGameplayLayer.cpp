@@ -3,9 +3,11 @@
 #include "CCollisionHandler.h"
 #include <random>
 
-CGameplayLayer::CGameplayLayer() : m_LevelMap(TheMapParser::Instance().GetMap("MAP")),
+CGameplayLayer::CGameplayLayer() : CGameLayer(), m_LevelMap(TheMapParser::Instance().GetMap("MAP")),
                                    m_SpawnTimer(SPAWN_DELAY),
                                    m_GameObjects(std::make_shared<std::vector<std::shared_ptr<CGameObject>>>()) {}
+
+CGameplayLayer::~CGameplayLayer() = default;
 
 void CGameplayLayer::Init(std::shared_ptr<CHudLayer> hud) {
     TheCollisionHandler::Instance().LoadGameObjects(m_GameObjects);
