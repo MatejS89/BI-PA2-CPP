@@ -22,6 +22,10 @@ public:
 
     void UnsetForce();
 
+    /**
+     * @brief Updates the current position of the rigid body based on on the acceleration, velocity, gravity, friction
+     * and mass.
+     */
     void Update();
 
     std::shared_ptr<CVector2D> GetPosition();
