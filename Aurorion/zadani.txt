@@ -8,9 +8,7 @@ Zadanie:
 3. Vytvořte jednoduchý model prostředí, implementujte alespoň 3 různé mechaniky (př. gravitace, přelévání vody, růst stromů, …).
 
 4. Hra musí být konfigurovatelná ze souboru:
-
     mapa (nebo ještě lépe její generátor),
-
     definice jednotlivých nepřátel, názvy předmětů či jejich atributy.
 
 5. Hra musí umožnit uložit a následně načíst rozehranou hru.
