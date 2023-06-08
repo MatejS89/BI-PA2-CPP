@@ -27,6 +27,8 @@ public:
     CTileLayer(int rowCount, int colCount, std::shared_ptr<TileMap> tileMap,
                std::shared_ptr<TilesetList> tileSets);
 
+    ~CTileLayer() override;
+
     /**
      * @brief Renders every tile on this map. Does calculation of the src_rect to be used
      * in the TheTextureManager::DrawTile method. This is done based on the position of the

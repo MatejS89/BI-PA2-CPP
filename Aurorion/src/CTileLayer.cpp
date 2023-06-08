@@ -6,7 +6,8 @@
 #include <string>
 
 CTileLayer::CTileLayer(int rowCount, int colCount,
-                       std::shared_ptr<TileMap> tileMap, std::shared_ptr<TilesetList> tileSets) : m_RowCount(rowCount),
+                       std::shared_ptr<TileMap> tileMap, std::shared_ptr<TilesetList> tileSets) : CMapLayer(),
+                                                                                                  m_RowCount(rowCount),
                                                                                                   m_ColCount(colCount),
                                                                                                   m_TileMap(tileMap),
                                                                                                   m_TileSets(tileSets),
@@ -16,6 +17,8 @@ CTileLayer::CTileLayer(int rowCount, int colCount,
         TheTextureManager::Instance().Load(item.m_TileSetSource, item.m_TileSetName);
     }
 }
+
+CTileLayer::~CTileLayer() = default;
 
 void CTileLayer::MapLayerRender() {
     for (int i = 0; i < m_RowCount; i++) {
