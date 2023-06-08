@@ -9,7 +9,7 @@
 
 /**
  * @class CGameObjectFactory
- * @brief A factory class for creating game objects of different types.
+ * @brief Singleton class for creating game objects of different types.
  */
 class CGameObjectFactory {
     typedef std::function<std::shared_ptr<CGameObject>()> CreateObjectFunc;
