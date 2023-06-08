@@ -4,7 +4,7 @@
 
 /**
  * @class CTimer
- * @brief Manages the game timer and provides timing-related functionality.
+ * @brief Singleton class, manages the game timer and provides timing-related functionality.
  */
 class CTimer {
 public:
