@@ -6,8 +6,7 @@
 
 /**
  * @class CCollisionHandler
- * @brief Handles collision detection and response for game objects and the game map.
- * It follows the singleton design pattern, allowing only a single instance of the collision handler to exist.
+ * @brief Singleton class, handles collision detection and response for game objects and the game map.
  */
 class CCollisionHandler {
 public:
