@@ -1,5 +1,7 @@
 #include "CGameLayer.h"
 
+CGameLayer::~CGameLayer() = default;
+
 std::shared_ptr<CMap> CGameLayer::GetMap() {
     return nullptr;
 }

@@ -10,6 +10,8 @@
  */
 class CGameLayer {
 public:
+    virtual ~CGameLayer();
+
     virtual void UpdateLayer() = 0;
 
     virtual void DrawLayer() = 0;
