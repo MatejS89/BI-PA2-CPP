@@ -18,6 +18,8 @@ class CMapBackgroundLayer : public CMapLayer {
 public:
     CMapBackgroundLayer();
 
+    ~CMapBackgroundLayer() override;
+
     /**
      * @brief Initializes the background layer.
      * This function initializes the background layer by setting up the initial state and color values

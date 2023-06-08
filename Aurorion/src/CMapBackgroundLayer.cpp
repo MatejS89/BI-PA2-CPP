@@ -1,6 +1,24 @@
 #include "CMapBackgroundLayer.h"
 
-CMapBackgroundLayer::CMapBackgroundLayer() = default;
+CMapBackgroundLayer::CMapBackgroundLayer() : CMapLayer() {}
+
+CMapBackgroundLayer::~CMapBackgroundLayer() = default;
+
+void CMapBackgroundLayer::Init() {
+    json jsonData = LoadJsonFromFile(TheGame::Instance().GetSource() + "BackGroundLayer.json");
+    GRADIENT = jsonData["GRADIENT"];
+    STATE_TIME = jsonData["STATE_TIME"];
+    m_StateTimer = jsonData["STATE_TIMER"];
+    TARGET_COLOR = {jsonData["TARGET_COLOR.R"], jsonData["TARGET_COLOR.G"], jsonData["TARGET_COLOR.B"],
+                    jsonData["TARGET_COLOR.A"]};
+    m_CurrColor = {jsonData["CURR_COLOR.R"],
+                   jsonData["CURR_COLOR.G"],
+                   jsonData["CURR_COLOR.B"], 255};
+    if (m_CurrColor.r != 0 && m_CurrColor.g != 0 && m_CurrColor.b != 0)
+        m_BackgroundState = BackgroundState::DAY;
+    else
+        m_BackgroundState = BackgroundState::NIGHT;
+}
 
 void CMapBackgroundLayer::MapLayerUpdate() {
     if (m_StateTimer <= 0) {
@@ -22,6 +40,11 @@ void CMapBackgroundLayer::MapLayerUpdate() {
     }
 }
 
+void CMapBackgroundLayer::MapLayerRender() {
+    SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), m_CurrColor.r, m_CurrColor.g, m_CurrColor.b,
+                           m_CurrColor.a);
+}
+
 void CMapBackgroundLayer::NextState() {
     switch (m_BackgroundState) {
         case BackgroundState::DAY:
@@ -41,8 +64,6 @@ void CMapBackgroundLayer::ChangeIntoNight() {
     Uint8 currB = m_CurrColor.b - floor(m_CurrColor.b / GRADIENT);
     m_CurrColor = {currR, currG, currB, m_CurrColor.a};
     GraduallyDecrease();
-//    SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), m_CurrColor.r, m_CurrColor.g, m_CurrColor.b,
-//                           m_CurrColor.a);
 }
 
 void CMapBackgroundLayer::ChangeIntoDay() {
@@ -50,8 +71,6 @@ void CMapBackgroundLayer::ChangeIntoDay() {
     Uint8 currG = m_CurrColor.g + floor(TARGET_COLOR.g / GRADIENT);
     Uint8 currB = m_CurrColor.b + floor(TARGET_COLOR.b / GRADIENT);
     m_CurrColor = {currR, currG, currB, m_CurrColor.a};
-//    SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), m_CurrColor.r, m_CurrColor.g, m_CurrColor.b,
-//                           m_CurrColor.a);
 }
 
 bool CMapBackgroundLayer::IsNight() {
@@ -93,24 +112,6 @@ void CMapBackgroundLayer::SaveMapLayer() {
         throw std::logic_error("Failed to save GameObjects");
 }
 
-void CMapBackgroundLayer::Init() {
-    json jsonData = LoadJsonFromFile(TheGame::Instance().GetSource() + "BackGroundLayer.json");
-    GRADIENT = jsonData["GRADIENT"];
-    STATE_TIME = jsonData["STATE_TIME"];
-    m_StateTimer = jsonData["STATE_TIMER"];
-    TARGET_COLOR = {jsonData["TARGET_COLOR.R"], jsonData["TARGET_COLOR.G"], jsonData["TARGET_COLOR.B"],
-                    jsonData["TARGET_COLOR.A"]};
-    m_CurrColor = {jsonData["CURR_COLOR.R"],
-                   jsonData["CURR_COLOR.G"],
-                   jsonData["CURR_COLOR.B"], 255};
-    if (m_CurrColor.r != 0 && m_CurrColor.g != 0 && m_CurrColor.b != 0)
-        m_BackgroundState = BackgroundState::DAY;
-    else
-        m_BackgroundState = BackgroundState::NIGHT;
-//    SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), m_CurrColor.r, m_CurrColor.g, m_CurrColor.b,
-//                           m_CurrColor.a);
-}
-
 json CMapBackgroundLayer::LoadJsonFromFile(const std::string &filePath) const {
     std::ifstream file(filePath);
     if (!file.is_open()) {
@@ -120,9 +121,4 @@ json CMapBackgroundLayer::LoadJsonFromFile(const std::string &filePath) const {
     file >> jsonData;
     file.close();
     return jsonData;
-}
-
-void CMapBackgroundLayer::MapLayerRender() {
-    SDL_SetRenderDrawColor(TheGame::Instance().GetRenderer(), m_CurrColor.r, m_CurrColor.g, m_CurrColor.b,
-                           m_CurrColor.a);
 }
