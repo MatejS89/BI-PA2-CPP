@@ -1,5 +1,9 @@
 #include "CHudLayer.h"
 
+CHudLayer::CHudLayer() : CGameLayer() {}
+
+CHudLayer::~CHudLayer() = default;
+
 void CHudLayer::AddTarget(std::shared_ptr<CGameObject> target) {
     m_Target = target;
 }

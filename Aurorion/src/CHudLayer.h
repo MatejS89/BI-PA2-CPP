@@ -10,6 +10,10 @@
  */
 class CHudLayer : public CGameLayer {
 public:
+    CHudLayer();
+
+    ~CHudLayer() override;
+
     /**
      * @brief Adds a target to track the hp of.
      * @param target The desired target.
