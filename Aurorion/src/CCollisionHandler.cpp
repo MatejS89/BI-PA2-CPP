@@ -106,7 +106,6 @@ void CCollisionHandler::BuildBlock() {
     }
 }
 
-
 bool CCollisionHandler::CheckCollisionWithEnemies() const {
     const auto &player = (*m_GameObjects)[0];
     for (size_t i = 1; i < m_GameObjects->size(); i++) {
