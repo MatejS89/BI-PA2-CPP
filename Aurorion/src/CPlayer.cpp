@@ -2,6 +2,13 @@
 #include "CInputHandler.h"
 #include "CTimer.h"
 
+CPlayer::CPlayer() : CEntity() {
+    TheTextureManager::Instance().Load
+            ("assets/Player.png", "idle");
+}
+
+CPlayer::~CPlayer() = default;
+
 bool CPlayer::Update() {
     m_CurrentFrame = (SDL_GetTicks() / 100) % 4;
     HandleInput();
@@ -138,10 +145,3 @@ void CPlayer::Load(const json &jsonData) {
     ATTACK_DELAY = jsonData["ATTACK_DELAY"];
     m_AttackTimer = jsonData["ATTACK_TIMER"];
 }
-
-CPlayer::CPlayer() : CEntity() {
-    TheTextureManager::Instance().Load
-            ("assets/Player.png", "idle");
-}
-
-CPlayer::~CPlayer() = default;
