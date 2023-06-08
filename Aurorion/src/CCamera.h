@@ -6,10 +6,9 @@
 
 /**
  * @class CCamera
- * @brief Represents a camera object that can be used to view a scene.
+ * @brief Singleton class, represents a camera object that can be used to view a scene.
  * The CCamera class provides functionality to control the position and target of a camera in a 2D space.
  * This is done to keep the target centered on screen.
- * It follows the singleton design pattern, allowing only a single instance of the camera to exist.
  */
 class CCamera {
 public:
