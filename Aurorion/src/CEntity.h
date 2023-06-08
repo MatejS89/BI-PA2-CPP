@@ -16,6 +16,8 @@ using json = nlohmann::json;
  */
 class CEntity : public CGameObject {
 public:
+    ~CEntity() override;
+
     /**
      * @brief Draws the entity to the screen with the given texture id stored in m_Texture.
      */
@@ -58,8 +60,6 @@ public:
 
 protected:
     CEntity();
-
-    ~CEntity() override;
 
     void SaveEntityData(json &jsonData) const;
 
