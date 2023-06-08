@@ -1,0 +1,12 @@
+{
+    "CURR_COLOR.B": 124,
+    "CURR_COLOR.G": 124,
+    "CURR_COLOR.R": 99,
+    "GRADIENT": 50,
+    "STATE_TIME": 50.0,
+    "STATE_TIMER": 32.0,
+    "TARGET_COLOR.A": 255,
+    "TARGET_COLOR.B": 204,
+    "TARGET_COLOR.G": 204,
+    "TARGET_COLOR.R": 153
+}
